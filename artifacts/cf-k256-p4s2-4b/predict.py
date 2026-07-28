@@ -18,6 +18,6 @@ def predict(x):
  x=x.astype(np.float32)/255
  o=np.empty(len(x),np.int64)
  for i in range(0,len(x),500):
-  f=feats(x[i:i+500])
+  z=x[i:i+500];f=feats(z)+feats(z[:,:,::-1])
   o[i:i+500]=np.argmax(f@W[:-1]+W[-1],1)
  return o

@@ -1,38 +1,38 @@
 {
   "name": "cf-k128-p4s2-4b",
-  "method": "random 4x4 conv features (k=128) + ridge head, 4-bit codebook",
+  "method": "random 4x4 conv features (k=128) + ridge head, 4-bit codebook, flip TTA",
   "notes": "filters from 4-byte seed 1; 1152-d pooled features; 11,530-param head shipped; lambda=100.0",
   "split": "test",
-  "accuracy": 0.5771,
+  "accuracy": 0.6085,
   "n": 10000,
   "per_class": [
-    0.63,
-    0.862,
-    0.316,
-    0.277,
-    0.597,
-    0.578,
-    0.841,
-    0.507,
-    0.648,
-    0.515
+    0.509,
+    0.777,
+    0.52,
+    0.343,
+    0.691,
+    0.637,
+    0.617,
+    0.727,
+    0.762,
+    0.502
   ],
   "size": {
-    "raw": 6771,
-    "gzip": 6178,
-    "xz": 6177,
+    "raw": 6794,
+    "gzip": 6226,
+    "xz": 6228,
     "n_files": 2,
-    "description_length": 6177,
-    "best_codec": "xz"
+    "description_length": 6226,
+    "best_codec": "gzip"
   },
-  "description_length": 6177,
-  "inference_seconds": 5.85,
-  "eval_wall_seconds": 6.03,
-  "train_seconds": 34.85679607599741,
+  "description_length": 6226,
+  "inference_seconds": 13.67,
+  "eval_wall_seconds": 13.93,
+  "train_seconds": 76.0879346139991,
   "self_contained": true,
   "violations": [],
   "files": {
-    "predict.py": 953,
+    "predict.py": 976,
     "w": 5798
   }
 }

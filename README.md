@@ -5,6 +5,26 @@
 the **size ↔ accuracy Pareto frontier** — aim for a **10 KB** point, and push
 smaller. Rig prefix `tc-`. Status: exploratory (2026-07-28).
 
+## Status
+
+See **[LEADERBOARD.md](LEADERBOARD.md)** for the current frontier and
+**[docs/harness.md](docs/harness.md)** for how size is measured and how to
+submit a point. Method research is in [docs/method-survey.md](docs/method-survey.md)
+(the enumerated families, plus what hlb-CIFAR10 has to teach) and
+[docs/exotic-methods.md](docs/exotic-methods.md) (the non-obvious space).
+
+```bash
+python -m tinycifar.leaderboard          # rebuild the board from results/
+python experiments/conv_features.py      # the current best family
+python tests/test_artifact.py            # the metric's own tests
+```
+
+The frontier so far is built entirely from closed-form ridge regression — no
+backprop anywhere — on features that cost nothing to ship. The single idea
+carrying most of it: **a PRNG seed is four bytes no matter how much it draws**,
+so random convolutional filters are free and only the classifier head is real
+weight.
+
 ## Framing — this is a Minimum Description Length problem
 
 The deliverable at each Pareto point is a self-contained artifact (quantized
