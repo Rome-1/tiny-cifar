@@ -497,11 +497,23 @@ catastrophically off the frontier.
 | FRePo (arXiv 2206.00719) | 46.8 | 65.5 | 71.7 |
 | DATM (arXiv 2310.05773) | 46.9 | 66.8 | 76.1 |
 | **NCFM (CVPR'25, arXiv 2502.20653)** | **49.5** | **71.8** | **77.4** |
-| Random real subset (IDC recipe) | — | 37.2 | 56.5 |
-| Herding | — | 41.7 | 59.8 |
+| Random real subset (DC paper protocol) | 14.4 | 26.0 | 43.4 |
+| Herding (DC paper protocol) | 21.5 | 31.6 | 40.4 |
+| K-Center | 21.5 | 14.7 | 27.0 |
+| Forgetting | 13.5 | 23.3 | 23.3 |
+| Random real subset (**IDC** protocol) | — | **37.2** | **56.5** |
 
-*MTT, DATM, NCFM, FRePo verified from primary PDFs. DC/DSA/DM cross-verified from three
-secondary tables that agree exactly, not primary-fetched — high confidence, flagged.*
+*MTT, DATM, NCFM, FRePo verified from primary PDFs. DC and all four coreset baselines
+verified from the DC paper's own Table 1 (arXiv 2006.05929), which also confirms the
+84.8±0.1 whole-dataset reference. DSA/DM cross-verified from three agreeing secondary
+tables, not primary-fetched — high confidence, flagged.*
+
+**Two cautions from that table.** Herding beats random at IPC 1 and 10 but *loses* at IPC 50
+(40.4 vs 43.4), and K-Center is non-monotone (21.5 → 14.7 → 27.0) — the classical coreset
+baselines are weak, not a real frontier. More importantly, **the training recipe moves the
+random-real baseline by ~11 points** (26.0 under DC's protocol vs 37.2 under IDC's at the
+same IPC=10), which is larger than many published method-vs-method gaps. Any frontier row we
+publish must state its protocol.
 
 **Storage-matched factorized methods** (these already are bytes-axis numbers, at fp32):
 
@@ -607,6 +619,7 @@ pays. Verified anchors *[verified]*:
 
 | Front-end | CIFAR-10 | Front-end storage | Head |
 |---|---|---|---|
+| 1-NN raw pixels, L1 / L2 | **38.6% / 35.4%** | 0 (Regime B only) | 0 |
 | Linear SVM, raw pixels | 42.3% | 0 | 30,720 params |
 | Random Fourier features, n=16,384 | 62.4% | **seed only** | 163,840 params |
 | Random Gaussian conv dict (1600) + soft threshold | 73.2% | **seed only** | ~131k params |
@@ -806,9 +819,17 @@ Coates & Ng (PMLR v15), Saxe et al. (ICML 2011), Le et al. (PMLR v28), 1904.1195
 Read at HTML/abstract level only, **not line-verified**: 2603.02411 (QuADD), 2603.13346,
 2411.11329, 2403.12040 (PoDD), 2603.03808, 2604.18135, Ko et al. DATE 2017.
 
-Unverified and flagged in-text: DC/DSA/DM primary tables (cross-verified from three
-agreeing secondary tables); the DC-paper Random/Herding/K-Center/Forgetting row; kNN and
-nearest-class-mean on raw CIFAR-10 pixels (**the ~35% / ~27-28% figures in circulation have
-no source attached — do not use them**); µNAS's LEMONADE comparison row, which appears to
+Verified in a second pass: DC's Table 1 (arXiv 2006.05929) for DC itself and all four
+coreset baselines plus the 84.8±0.1 whole-dataset reference; **1-NN on raw CIFAR-10 pixels,
+38.6% (L1) and 35.4% (L2)** — but the source is the Stanford CS231n course notes
+(cs231n.github.io/classification/), not a peer-reviewed paper, and it is k=1 only; CS231n
+states **no test accuracy for cross-validated k**.
+
+**Nearest-class-mean on raw CIFAR-10 pixels: searched and genuinely absent.** No citable
+number exists. The ~27-28% figure in circulation is folklore with no source — do not use it.
+It is a one-line computation if we want the anchor.
+
+Unverified and flagged in-text: DSA/DM primary tables (cross-verified from three
+agreeing secondary tables); µNAS's LEMONADE comparison row, which appears to
 be off by ~10x on the size axis when checked against LEMONADE's own Figure 3; TinBiNN;
 NCFM's soft-label status; RDED's final CVPR camera-ready numbers.
