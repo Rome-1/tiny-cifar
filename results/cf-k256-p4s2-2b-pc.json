@@ -1,0 +1,38 @@
+{
+  "name": "cf-k256-p4s2-2b-pc",
+  "method": "random 4x4 conv features (k=256) + ridge head, 2-bit percol codebook, flip TTA",
+  "notes": "filters from 4-byte seed 1; 2304-d pooled features; 23,050-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.4323,
+  "n": 10000,
+  "per_class": [
+    0.288,
+    0.608,
+    0.202,
+    0.477,
+    0.27,
+    0.08,
+    0.906,
+    0.237,
+    0.659,
+    0.596
+  ],
+  "size": {
+    "raw": 6872,
+    "gzip": 6280,
+    "xz": 6301,
+    "n_files": 2,
+    "description_length": 6280,
+    "best_codec": "gzip"
+  },
+  "description_length": 6280,
+  "inference_seconds": 25.43,
+  "eval_wall_seconds": 25.72,
+  "train_seconds": 110.92448244499974,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1008,
+    "w": 5844
+  }
+}

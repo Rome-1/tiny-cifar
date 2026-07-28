@@ -1,0 +1,38 @@
+{
+  "name": "cf-k512-p4s2-3b-pc",
+  "method": "random 4x4 conv features (k=512) + ridge head, 3-bit percol codebook, flip TTA",
+  "notes": "filters from 4-byte seed 1; 4608-d pooled features; 46,090-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.5862,
+  "n": 10000,
+  "per_class": [
+    0.663,
+    0.52,
+    0.329,
+    0.335,
+    0.59,
+    0.463,
+    0.755,
+    0.721,
+    0.567,
+    0.919
+  ],
+  "size": {
+    "raw": 18474,
+    "gzip": 17866,
+    "xz": 17840,
+    "n_files": 2,
+    "description_length": 17840,
+    "best_codec": "xz"
+  },
+  "description_length": 17840,
+  "inference_seconds": 36.64,
+  "eval_wall_seconds": 36.94,
+  "train_seconds": 196.70546292599465,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1008,
+    "w": 17445
+  }
+}
