@@ -1,0 +1,38 @@
+{
+  "name": "rf-rgb8-k1024-6b",
+  "method": "random ReLU features (k=1024) on rgb8, 6-bit codebook",
+  "notes": "projection from 4-byte seed 1; only the 10,250-param head is shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.4535,
+  "n": 10000,
+  "per_class": [
+    0.486,
+    0.554,
+    0.29,
+    0.227,
+    0.351,
+    0.36,
+    0.663,
+    0.424,
+    0.673,
+    0.507
+  ],
+  "size": {
+    "raw": 8574,
+    "gzip": 8362,
+    "xz": 8328,
+    "n_files": 2,
+    "description_length": 8328,
+    "best_codec": "xz"
+  },
+  "description_length": 8328,
+  "inference_seconds": 0.73,
+  "eval_wall_seconds": 0.99,
+  "train_seconds": 4.246587233996252,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 737,
+    "w": 7817
+  }
+}

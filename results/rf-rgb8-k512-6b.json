@@ -1,0 +1,38 @@
+{
+  "name": "rf-rgb8-k512-6b",
+  "method": "random ReLU features (k=512) on rgb8, 6-bit codebook",
+  "notes": "projection from 4-byte seed 1; only the 5,130-param head is shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.4396,
+  "n": 10000,
+  "per_class": [
+    0.509,
+    0.504,
+    0.287,
+    0.245,
+    0.337,
+    0.318,
+    0.651,
+    0.377,
+    0.664,
+    0.504
+  ],
+  "size": {
+    "raw": 4731,
+    "gzip": 4548,
+    "xz": 4491,
+    "n_files": 2,
+    "description_length": 4491,
+    "best_codec": "xz"
+  },
+  "description_length": 4491,
+  "inference_seconds": 0.58,
+  "eval_wall_seconds": 0.79,
+  "train_seconds": 3.3971754550002515,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 734,
+    "w": 3977
+  }
+}
