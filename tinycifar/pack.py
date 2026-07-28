@@ -36,11 +36,19 @@ def quantize(w: np.ndarray, bits: int = 8, symmetric: bool = False):
     levels = (1 << bits) - 1
 
     if symmetric:
-        m = float(np.abs(w).max()) or 1.0
         half = levels // 2
-        scale = m / half if half else 1.0
-        codes = np.clip(np.rint(w / scale) + half, 0, levels)
-        zero = -half * scale
+        if half == 0:
+            # 1-bit has no level on either side of zero, so a centered grid is
+            # degenerate. Fall back to the two-point sign code {-a, +a}, whose
+            # MSE-optimal a is mean|w| (the binary-network reconstruction).
+            a = float(np.abs(w).mean()) or 1.0
+            codes = (w > 0).astype(np.float64)
+            scale, zero = 2 * a, -a
+        else:
+            m = float(np.abs(w).max()) or 1.0
+            scale = m / half
+            codes = np.clip(np.rint(w / scale) + half, 0, levels)
+            zero = -half * scale
     else:
         lo, hi = float(w.min()), float(w.max())
         scale = (hi - lo) / levels if hi > lo else 1.0

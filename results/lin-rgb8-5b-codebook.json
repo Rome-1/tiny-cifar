@@ -1,0 +1,38 @@
+{
+  "name": "lin-rgb8-5b-codebook",
+  "method": "ridge linear on rgb8 (192d), 5-bit codebook",
+  "notes": "weight reconstruction rel. error 0.0794",
+  "split": "test",
+  "accuracy": 0.3971,
+  "n": 10000,
+  "per_class": [
+    0.502,
+    0.551,
+    0.102,
+    0.325,
+    0.375,
+    0.298,
+    0.312,
+    0.544,
+    0.558,
+    0.404
+  ],
+  "size": {
+    "raw": 1753,
+    "gzip": 1708,
+    "xz": 1650,
+    "n_files": 2,
+    "description_length": 1650,
+    "best_codec": "xz"
+  },
+  "description_length": 1650,
+  "inference_seconds": 0.56,
+  "eval_wall_seconds": 0.8,
+  "train_seconds": 3.1755491240037372,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 461,
+    "w": 1272
+  }
+}

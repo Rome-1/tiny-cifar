@@ -1,0 +1,38 @@
+{
+  "name": "lin-gray4-6b-affine",
+  "method": "ridge linear on gray4 (16d), 6-bit affine",
+  "notes": "weight reconstruction rel. error 0.0251",
+  "split": "test",
+  "accuracy": 0.2629,
+  "n": 10000,
+  "per_class": [
+    0.418,
+    0.193,
+    0.064,
+    0.104,
+    0.146,
+    0.376,
+    0.289,
+    0.079,
+    0.458,
+    0.502
+  ],
+  "size": {
+    "raw": 603,
+    "gzip": 525,
+    "xz": 503,
+    "n_files": 2,
+    "description_length": 503,
+    "best_codec": "xz"
+  },
+  "description_length": 503,
+  "inference_seconds": 0.33,
+  "eval_wall_seconds": 0.5,
+  "train_seconds": 1.8540104040002916,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 446,
+    "w": 137
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "lin-rgb4-4b-symmetric",
+  "method": "ridge linear on rgb4 (48d), 4-bit symmetric",
+  "notes": "weight reconstruction rel. error 0.1605",
+  "split": "test",
+  "accuracy": 0.3152,
+  "n": 10000,
+  "per_class": [
+    0.731,
+    0.315,
+    0.021,
+    0.508,
+    0.453,
+    0.035,
+    0.429,
+    0.187,
+    0.096,
+    0.377
+  ],
+  "size": {
+    "raw": 714,
+    "gzip": 568,
+    "xz": 577,
+    "n_files": 2,
+    "description_length": 568,
+    "best_codec": "gzip"
+  },
+  "description_length": 568,
+  "inference_seconds": 0.35,
+  "eval_wall_seconds": 0.58,
+  "train_seconds": 1.9132664189964999,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 440,
+    "w": 254
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "lin-rgb4-5b-affine",
+  "method": "ridge linear on rgb4 (48d), 5-bit affine",
+  "notes": "weight reconstruction rel. error 0.0705",
+  "split": "test",
+  "accuracy": 0.34,
+  "n": 10000,
+  "per_class": [
+    0.42,
+    0.272,
+    0.055,
+    0.135,
+    0.204,
+    0.36,
+    0.685,
+    0.13,
+    0.555,
+    0.584
+  ],
+  "size": {
+    "raw": 776,
+    "gzip": 714,
+    "xz": 683,
+    "n_files": 2,
+    "description_length": 683,
+    "best_codec": "xz"
+  },
+  "description_length": 683,
+  "inference_seconds": 0.39,
+  "eval_wall_seconds": 0.97,
+  "train_seconds": 1.9132664189964999,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 440,
+    "w": 316
+  }
+}

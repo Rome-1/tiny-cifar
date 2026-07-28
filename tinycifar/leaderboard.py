@@ -28,8 +28,25 @@ def load_results() -> list[dict]:
     return [r for r in rows if r.get("split") == "test"]
 
 
+def dedupe(rows: list[dict]) -> list[dict]:
+    """Collapse artifacts identical in both size and accuracy.
+
+    Different experiment scripts legitimately emit byte-identical artifacts
+    (e.g. an affine-quantized point reachable from two sweeps). Listing both
+    would pad the frontier without adding information.
+    """
+    seen, out = {}, []
+    for r in sorted(rows, key=lambda r: r["name"]):
+        key = (r["description_length"], round(r["accuracy"], 6))
+        if key not in seen:
+            seen[key] = r
+            out.append(r)
+    return out
+
+
 def pareto(rows: list[dict]) -> list[dict]:
     """Points not dominated by a smaller-or-equal artifact with >= accuracy."""
+    rows = dedupe(rows)
     out = []
     for r in rows:
         if not any(

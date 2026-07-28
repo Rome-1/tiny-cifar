@@ -1,0 +1,38 @@
+{
+  "name": "lin-rgb16-2b-codebook",
+  "method": "ridge linear on rgb16 (768d), 2-bit codebook",
+  "notes": "weight reconstruction rel. error 0.4398",
+  "split": "test",
+  "accuracy": 0.2762,
+  "n": 10000,
+  "per_class": [
+    0.206,
+    0.42,
+    0.354,
+    0.024,
+    0.073,
+    0.154,
+    0.015,
+    0.49,
+    0.845,
+    0.181
+  ],
+  "size": {
+    "raw": 2415,
+    "gzip": 2173,
+    "xz": 2200,
+    "n_files": 2,
+    "description_length": 2173,
+    "best_codec": "gzip"
+  },
+  "description_length": 2173,
+  "inference_seconds": 0.87,
+  "eval_wall_seconds": 1.14,
+  "train_seconds": 6.979089824992116,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 463,
+    "w": 1932
+  }
+}

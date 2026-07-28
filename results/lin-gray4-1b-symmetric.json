@@ -1,0 +1,38 @@
+{
+  "name": "lin-gray4-1b-symmetric",
+  "method": "ridge linear on gray4 (16d), 1-bit symmetric",
+  "notes": "weight reconstruction rel. error 0.6053",
+  "split": "test",
+  "accuracy": 0.1373,
+  "n": 10000,
+  "per_class": [
+    0.725,
+    0.047,
+    0.001,
+    0.019,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.047,
+    0.534
+  ],
+  "size": {
+    "raw": 496,
+    "gzip": 386,
+    "xz": 389,
+    "n_files": 2,
+    "description_length": 386,
+    "best_codec": "gzip"
+  },
+  "description_length": 386,
+  "inference_seconds": 0.4,
+  "eval_wall_seconds": 0.61,
+  "train_seconds": 1.8540104040002916,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 446,
+    "w": 31
+  }
+}

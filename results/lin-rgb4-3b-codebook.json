@@ -1,0 +1,38 @@
+{
+  "name": "lin-rgb4-3b-codebook",
+  "method": "ridge linear on rgb4 (48d), 3-bit codebook",
+  "notes": "weight reconstruction rel. error 0.2232",
+  "split": "test",
+  "accuracy": 0.2593,
+  "n": 10000,
+  "per_class": [
+    0.162,
+    0.163,
+    0.012,
+    0.003,
+    0.012,
+    0.393,
+    0.261,
+    0.86,
+    0.522,
+    0.205
+  ],
+  "size": {
+    "raw": 681,
+    "gzip": 591,
+    "xz": 564,
+    "n_files": 2,
+    "description_length": 564,
+    "best_codec": "xz"
+  },
+  "description_length": 564,
+  "inference_seconds": 0.5,
+  "eval_wall_seconds": 0.71,
+  "train_seconds": 1.9132664189964999,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 460,
+    "w": 201
+  }
+}

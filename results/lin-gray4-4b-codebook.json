@@ -1,0 +1,38 @@
+{
+  "name": "lin-gray4-4b-codebook",
+  "method": "ridge linear on gray4 (16d), 4-bit codebook",
+  "notes": "weight reconstruction rel. error 0.0881",
+  "split": "test",
+  "accuracy": 0.2408,
+  "n": 10000,
+  "per_class": [
+    0.375,
+    0.22,
+    0.042,
+    0.248,
+    0.179,
+    0.417,
+    0.033,
+    0.013,
+    0.289,
+    0.592
+  ],
+  "size": {
+    "raw": 603,
+    "gzip": 503,
+    "xz": 483,
+    "n_files": 2,
+    "description_length": 483,
+    "best_codec": "xz"
+  },
+  "description_length": 483,
+  "inference_seconds": 0.4,
+  "eval_wall_seconds": 0.67,
+  "train_seconds": 1.8540104040002916,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 466,
+    "w": 118
+  }
+}

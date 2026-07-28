@@ -1,0 +1,38 @@
+{
+  "name": "lin-rgb8-6b-affine",
+  "method": "ridge linear on rgb8 (192d), 6-bit affine",
+  "notes": "weight reconstruction rel. error 0.0447",
+  "split": "test",
+  "accuracy": 0.4013,
+  "n": 10000,
+  "per_class": [
+    0.445,
+    0.547,
+    0.162,
+    0.171,
+    0.308,
+    0.367,
+    0.529,
+    0.428,
+    0.553,
+    0.503
+  ],
+  "size": {
+    "raw": 1918,
+    "gzip": 1796,
+    "xz": 1779,
+    "n_files": 2,
+    "description_length": 1779,
+    "best_codec": "xz"
+  },
+  "description_length": 1779,
+  "inference_seconds": 0.49,
+  "eval_wall_seconds": 0.67,
+  "train_seconds": 3.1755491240037372,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 441,
+    "w": 1457
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "lin-rgb8-3b-symmetric",
+  "method": "ridge linear on rgb8 (192d), 3-bit symmetric",
+  "notes": "weight reconstruction rel. error 0.5023",
+  "split": "test",
+  "accuracy": 0.2649,
+  "n": 10000,
+  "per_class": [
+    0.128,
+    0.307,
+    0.601,
+    0.066,
+    0.078,
+    0.398,
+    0.568,
+    0.065,
+    0.424,
+    0.014
+  ],
+  "size": {
+    "raw": 1194,
+    "gzip": 877,
+    "xz": 859,
+    "n_files": 2,
+    "description_length": 859,
+    "best_codec": "xz"
+  },
+  "description_length": 859,
+  "inference_seconds": 0.47,
+  "eval_wall_seconds": 0.69,
+  "train_seconds": 3.1755491240037372,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 441,
+    "w": 733
+  }
+}
