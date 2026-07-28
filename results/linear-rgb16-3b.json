@@ -1,0 +1,38 @@
+{
+  "name": "linear-rgb16-3b",
+  "method": "ridge linear on rgb16 (768d), 3-bit weights",
+  "notes": "lambda=100.0; 7,690 params",
+  "split": "test",
+  "accuracy": 0.2202,
+  "n": 10000,
+  "per_class": [
+    0.0,
+    0.823,
+    0.032,
+    0.0,
+    0.416,
+    0.063,
+    0.223,
+    0.549,
+    0.0,
+    0.096
+  ],
+  "size": {
+    "raw": 3356,
+    "gzip": 1852,
+    "xz": 1796,
+    "n_files": 2,
+    "description_length": 1796,
+    "best_codec": "xz"
+  },
+  "description_length": 1796,
+  "inference_seconds": 0.83,
+  "eval_wall_seconds": 1.01,
+  "train_seconds": 6.089423376994091,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 443,
+    "w": 2893
+  }
+}

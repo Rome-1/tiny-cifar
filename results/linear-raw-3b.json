@@ -1,0 +1,38 @@
+{
+  "name": "linear-raw-3b",
+  "method": "ridge linear on raw (3072d), 3-bit weights",
+  "notes": "lambda=100.0; 30,730 params",
+  "split": "test",
+  "accuracy": 0.2281,
+  "n": 10000,
+  "per_class": [
+    0.134,
+    0.3,
+    0.048,
+    0.574,
+    0.097,
+    0.192,
+    0.127,
+    0.504,
+    0.285,
+    0.02
+  ],
+  "size": {
+    "raw": 11959,
+    "gzip": 6210,
+    "xz": 5854,
+    "n_files": 2,
+    "description_length": 5854,
+    "best_codec": "xz"
+  },
+  "description_length": 5854,
+  "inference_seconds": 0.41,
+  "eval_wall_seconds": 0.63,
+  "train_seconds": 16.1068685289938,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 406,
+    "w": 11533
+  }
+}

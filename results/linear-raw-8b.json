@@ -1,0 +1,38 @@
+{
+  "name": "linear-raw-8b",
+  "method": "ridge linear on raw (3072d), 8-bit weights",
+  "notes": "lambda=100.0; 30,730 params",
+  "split": "test",
+  "accuracy": 0.401,
+  "n": 10000,
+  "per_class": [
+    0.515,
+    0.48,
+    0.267,
+    0.178,
+    0.24,
+    0.291,
+    0.53,
+    0.45,
+    0.553,
+    0.506
+  ],
+  "size": {
+    "raw": 31166,
+    "gzip": 22005,
+    "xz": 21560,
+    "n_files": 2,
+    "description_length": 21560,
+    "best_codec": "xz"
+  },
+  "description_length": 21560,
+  "inference_seconds": 0.39,
+  "eval_wall_seconds": 0.59,
+  "train_seconds": 17.851292777995695,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 406,
+    "w": 30739
+  }
+}

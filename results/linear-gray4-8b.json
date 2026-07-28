@@ -1,0 +1,38 @@
+{
+  "name": "linear-gray4-8b",
+  "method": "ridge linear on gray4 (16d), 8-bit weights",
+  "notes": "lambda=100.0; 170 params",
+  "split": "test",
+  "accuracy": 0.2622,
+  "n": 10000,
+  "per_class": [
+    0.402,
+    0.19,
+    0.06,
+    0.108,
+    0.166,
+    0.347,
+    0.27,
+    0.099,
+    0.468,
+    0.512
+  ],
+  "size": {
+    "raw": 645,
+    "gzip": 561,
+    "xz": 542,
+    "n_files": 2,
+    "description_length": 542,
+    "best_codec": "xz"
+  },
+  "description_length": 542,
+  "inference_seconds": 0.4,
+  "eval_wall_seconds": 0.6,
+  "train_seconds": 1.8993443439976545,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 446,
+    "w": 179
+  }
+}

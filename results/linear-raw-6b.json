@@ -1,0 +1,38 @@
+{
+  "name": "linear-raw-6b",
+  "method": "ridge linear on raw (3072d), 6-bit weights",
+  "notes": "lambda=100.0; 30,730 params",
+  "split": "test",
+  "accuracy": 0.3918,
+  "n": 10000,
+  "per_class": [
+    0.488,
+    0.436,
+    0.358,
+    0.115,
+    0.154,
+    0.372,
+    0.476,
+    0.531,
+    0.472,
+    0.516
+  ],
+  "size": {
+    "raw": 23484,
+    "gzip": 18328,
+    "xz": 16400,
+    "n_files": 2,
+    "description_length": 16400,
+    "best_codec": "xz"
+  },
+  "description_length": 16400,
+  "inference_seconds": 0.63,
+  "eval_wall_seconds": 0.8,
+  "train_seconds": 17.450923483993392,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 406,
+    "w": 23057
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "constant",
+  "method": "majority class",
+  "notes": "the floor: the smallest artifact that runs at all",
+  "split": "test",
+  "accuracy": 0.1,
+  "n": 10000,
+  "per_class": [
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "size": {
+    "raw": 85,
+    "gzip": 88,
+    "xz": 93,
+    "n_files": 1,
+    "description_length": 85,
+    "best_codec": "raw"
+  },
+  "description_length": 85,
+  "inference_seconds": 0.0,
+  "eval_wall_seconds": 0.2,
+  "train_seconds": 0.0,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 70
+  }
+}

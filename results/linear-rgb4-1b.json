@@ -1,0 +1,38 @@
+{
+  "name": "linear-rgb4-1b",
+  "method": "ridge linear on rgb4 (48d), 1-bit weights",
+  "notes": "lambda=100.0; 490 params",
+  "split": "test",
+  "accuracy": 0.1474,
+  "n": 10000,
+  "per_class": [
+    0.0,
+    0.0,
+    0.0,
+    0.222,
+    0.002,
+    0.021,
+    0.002,
+    0.001,
+    0.841,
+    0.385
+  ],
+  "size": {
+    "raw": 530,
+    "gzip": 445,
+    "xz": 429,
+    "n_files": 2,
+    "description_length": 429,
+    "best_codec": "xz"
+  },
+  "description_length": 429,
+  "inference_seconds": 0.38,
+  "eval_wall_seconds": 0.59,
+  "train_seconds": 1.815378219995182,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 440,
+    "w": 71
+  }
+}

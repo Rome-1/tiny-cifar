@@ -20,7 +20,7 @@ CACHE = DATA / "cifar10.npz"
 
 CLASSES = (
     "airplane", "automobile", "bird", "cat", "deer",
-    "frog", "dog", "horse", "ship", "truck",
+    "dog", "frog", "horse", "ship", "truck",
 )
 
 
@@ -43,6 +43,39 @@ def _load_batch(path: Path) -> tuple[np.ndarray, np.ndarray]:
     x = d[b"data"].reshape(-1, 3, 32, 32).transpose(0, 2, 3, 1)
     y = np.array(d[b"labels"], dtype=np.int64)
     return np.ascontiguousarray(x, dtype=np.uint8), y
+
+
+def from_parquet(train: Path, test: Path) -> None:
+    """Build the npz cache from HuggingFace `uoft-cs/cifar10` parquet files.
+
+    The canonical toronto.edu tarball is served slowly enough (~1 MB/min from
+    this box) to be unusable; the HF mirror is the same data over a fast CDN.
+    Images are stored there as PNG bytes, so they are decoded here once.
+    """
+    import io
+
+    import pyarrow.parquet as pq
+    from PIL import Image
+
+    def decode(path: Path):
+        t = pq.read_table(path)
+        blobs = t.column("img").combine_chunks().field("bytes").to_pylist()
+        y = np.array(t.column("label").to_pylist(), dtype=np.int64)
+        x = np.stack([
+            np.asarray(Image.open(io.BytesIO(b)).convert("RGB"), dtype=np.uint8)
+            for b in blobs
+        ])
+        if x.shape[1:] != (32, 32, 3):
+            raise ValueError(f"{path}: unexpected image shape {x.shape[1:]}")
+        return x, y
+
+    xtr, ytr = decode(train)
+    xte, yte = decode(test)
+    if len(xtr) != 50000 or len(xte) != 10000:
+        raise ValueError(f"expected 50000/10000, got {len(xtr)}/{len(xte)}")
+
+    DATA.mkdir(exist_ok=True)
+    np.savez(CACHE, xtr=xtr, ytr=ytr, xte=xte, yte=yte)
 
 
 def load(cache: bool = True):

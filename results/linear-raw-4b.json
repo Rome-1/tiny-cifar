@@ -1,0 +1,38 @@
+{
+  "name": "linear-raw-4b",
+  "method": "ridge linear on raw (3072d), 4-bit weights",
+  "notes": "lambda=100.0; 30,730 params",
+  "split": "test",
+  "accuracy": 0.2821,
+  "n": 10000,
+  "per_class": [
+    0.353,
+    0.129,
+    0.062,
+    0.156,
+    0.022,
+    0.303,
+    0.835,
+    0.317,
+    0.46,
+    0.184
+  ],
+  "size": {
+    "raw": 15800,
+    "gzip": 7411,
+    "xz": 6529,
+    "n_files": 2,
+    "description_length": 6529,
+    "best_codec": "xz"
+  },
+  "description_length": 6529,
+  "inference_seconds": 0.45,
+  "eval_wall_seconds": 0.8,
+  "train_seconds": 19.67280675598886,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 406,
+    "w": 15374
+  }
+}

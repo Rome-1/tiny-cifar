@@ -1,0 +1,38 @@
+{
+  "name": "linear-rgb8-3b",
+  "method": "ridge linear on rgb8 (192d), 3-bit weights",
+  "notes": "lambda=100.0; 1,930 params",
+  "split": "test",
+  "accuracy": 0.2842,
+  "n": 10000,
+  "per_class": [
+    0.349,
+    0.551,
+    0.112,
+    0.164,
+    0.025,
+    0.476,
+    0.117,
+    0.723,
+    0.285,
+    0.04
+  ],
+  "size": {
+    "raw": 1194,
+    "gzip": 995,
+    "xz": 1000,
+    "n_files": 2,
+    "description_length": 995,
+    "best_codec": "gzip"
+  },
+  "description_length": 995,
+  "inference_seconds": 0.54,
+  "eval_wall_seconds": 0.81,
+  "train_seconds": 2.6185188140079845,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 441,
+    "w": 733
+  }
+}
