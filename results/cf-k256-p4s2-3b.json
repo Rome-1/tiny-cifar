@@ -1,0 +1,38 @@
+{
+  "name": "cf-k256-p4s2-3b",
+  "method": "random 4x4 conv features (k=256) + ridge head, 3-bit codebook",
+  "notes": "filters from 4-byte seed 1; 2304-d pooled features; 23,050-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.5932,
+  "n": 10000,
+  "per_class": [
+    0.585,
+    0.765,
+    0.325,
+    0.476,
+    0.232,
+    0.581,
+    0.783,
+    0.811,
+    0.722,
+    0.652
+  ],
+  "size": {
+    "raw": 9634,
+    "gzip": 9177,
+    "xz": 9161,
+    "n_files": 2,
+    "description_length": 9161,
+    "best_codec": "xz"
+  },
+  "description_length": 9161,
+  "inference_seconds": 11.98,
+  "eval_wall_seconds": 12.21,
+  "train_seconds": 57.41344203100016,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 953,
+    "w": 8661
+  }
+}

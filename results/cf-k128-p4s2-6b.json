@@ -1,0 +1,38 @@
+{
+  "name": "cf-k128-p4s2-6b",
+  "method": "random 4x4 conv features (k=128) + ridge head, 6-bit codebook",
+  "notes": "filters from 4-byte seed 1; 1152-d pooled features; 11,530-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.6083,
+  "n": 10000,
+  "per_class": [
+    0.614,
+    0.809,
+    0.359,
+    0.382,
+    0.496,
+    0.581,
+    0.807,
+    0.663,
+    0.752,
+    0.62
+  ],
+  "size": {
+    "raw": 9750,
+    "gzip": 9541,
+    "xz": 9491,
+    "n_files": 2,
+    "description_length": 9491,
+    "best_codec": "xz"
+  },
+  "description_length": 9491,
+  "inference_seconds": 5.48,
+  "eval_wall_seconds": 5.67,
+  "train_seconds": 33.12629103999643,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 953,
+    "w": 8777
+  }
+}
