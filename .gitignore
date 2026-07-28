@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+data/cifar*
+*.pt
+*.ckpt
+*.npz
+runs/
+wandb/
+.env
+.beads/
+.DS_Store
