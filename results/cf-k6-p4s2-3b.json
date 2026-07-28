@@ -1,0 +1,38 @@
+{
+  "name": "cf-k6-p4s2-3b",
+  "method": "random 4x4 conv features (k=6) + ridge head, 3-bit global codebook, flip TTA",
+  "notes": "filters from 4-byte seed 1; 54-d pooled features; 550-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.3727,
+  "n": 10000,
+  "per_class": [
+    0.578,
+    0.579,
+    0.104,
+    0.18,
+    0.488,
+    0.501,
+    0.086,
+    0.135,
+    0.555,
+    0.521
+  ],
+  "size": {
+    "raw": 1210,
+    "gzip": 902,
+    "xz": 873,
+    "n_files": 2,
+    "description_length": 873,
+    "best_codec": "xz"
+  },
+  "description_length": 873,
+  "inference_seconds": 5.8,
+  "eval_wall_seconds": 5.97,
+  "train_seconds": 24.25249173800694,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 966,
+    "w": 224
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "cf-k32-p4s2-6b-pc",
+  "method": "random 4x4 conv features (k=32) + ridge head, 6-bit percol codebook, flip TTA",
+  "notes": "filters from 4-byte seed 1; 800-d pooled features; 8,010-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.6044,
+  "n": 10000,
+  "per_class": [
+    0.624,
+    0.802,
+    0.397,
+    0.359,
+    0.48,
+    0.56,
+    0.767,
+    0.703,
+    0.729,
+    0.623
+  ],
+  "size": {
+    "raw": 8312,
+    "gzip": 8073,
+    "xz": 7961,
+    "n_files": 2,
+    "description_length": 7961,
+    "best_codec": "xz"
+  },
+  "description_length": 7961,
+  "inference_seconds": 4.82,
+  "eval_wall_seconds": 5.42,
+  "train_seconds": 33.622208428991144,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1003,
+    "w": 7289
+  }
+}

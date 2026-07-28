@@ -1,0 +1,38 @@
+{
+  "name": "cf-k32-p3s1-6b-pc",
+  "method": "random 3x3 conv features (k=32) + ridge head, 6-bit percol codebook, flip TTA",
+  "notes": "filters from 4-byte seed 1; 800-d pooled features; 8,010-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.6247,
+  "n": 10000,
+  "per_class": [
+    0.696,
+    0.791,
+    0.462,
+    0.431,
+    0.424,
+    0.53,
+    0.805,
+    0.717,
+    0.65,
+    0.741
+  ],
+  "size": {
+    "raw": 8312,
+    "gzip": 8075,
+    "xz": 7953,
+    "n_files": 2,
+    "description_length": 7953,
+    "best_codec": "xz"
+  },
+  "description_length": 7953,
+  "inference_seconds": 20.74,
+  "eval_wall_seconds": 21.03,
+  "train_seconds": 97.56263798900181,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1003,
+    "w": 7289
+  }
+}

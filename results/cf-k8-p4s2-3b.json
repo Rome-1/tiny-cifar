@@ -1,0 +1,38 @@
+{
+  "name": "cf-k8-p4s2-3b",
+  "method": "random 4x4 conv features (k=8) + ridge head, 3-bit global codebook, flip TTA",
+  "notes": "filters from 4-byte seed 1; 72-d pooled features; 730-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.3557,
+  "n": 10000,
+  "per_class": [
+    0.544,
+    0.717,
+    0.085,
+    0.139,
+    0.07,
+    0.818,
+    0.127,
+    0.374,
+    0.413,
+    0.27
+  ],
+  "size": {
+    "raw": 1277,
+    "gzip": 973,
+    "xz": 939,
+    "n_files": 2,
+    "description_length": 939,
+    "best_codec": "xz"
+  },
+  "description_length": 939,
+  "inference_seconds": 5.08,
+  "eval_wall_seconds": 5.47,
+  "train_seconds": 24.175492797003244,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 966,
+    "w": 291
+  }
+}
