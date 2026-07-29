@@ -18,10 +18,13 @@ Numbers that could not be verified are absent, not guessed.
 ## The one-sentence finding
 
 Two mature traditions measure bytes of a self-contained artifact — **data compression
-competitions** (Hutter Prize, LTCB, Calgary) and the **demoscene** — and neither has
-anything to do with image classification;
-the machine-learning world measures parameters, FLOPs, latency, energy, and dollars,
-and treats size as a *fairness bucket or hard constraint, never the ranked quantity*.
+competitions** (Hutter Prize, LTCB, Calgary) and the **demoscene / code golf** — and
+neither has anything to do with image classification;
+the machine-learning world measures parameters, FLOPs, latency, energy, and dollars, and
+treats size as a *fairness bucket or hard constraint, never the ranked quantity*.
+Exactly one live ML effort scores bytes of a shipped artifact — **OpenAI's
+parameter-golf (2026)** — and it is language modeling, with bytes as a cap rather than
+the objective.
 The cross-product is essentially unoccupied, and the CIFAR-10 cell of it is empty.
 
 ---
@@ -111,11 +114,21 @@ accounting.
   not MiB), and the rules state that *"the submission artifact is computed as code bytes
   plus compressed model bytes. All counted code should live in the `train_gpt.py`
   script."* Training is capped at 10 minutes on 8×H100; no network access at eval.
-- **Leaderboard:** top entry **1.0565 BPB**, `codemath3000`, "Calib32 Token-Only N-gram
-  + AsymLogit Stack", **1 May 2026**; baseline ~1.2244 BPB. A new record must beat the
-  prior by ≥0.005 nats at p<0.01.
+- **Leaderboard:** **1.0565** (codemath3000, 1 May 2026), 1.0576 (simonbissonnette),
+  1.0586 (andrewbaggio1); baseline ~1.2244 BPB. Submission window closed 30 Apr 2026.
+  A new record must *"beat the existing SOTA by at least 0.005 nats"* with run logs
+  showing that improvement at **p<0.01**.
 - **Bytes measured? Yes** — code + compressed weights, exactly the accounting in
   `harness.md`.
+- **Why code bytes are counted at all**, and this is the crisp justification for our own
+  most-contested rule: otherwise you smuggle weights into the training script and evade
+  the weight cap. Merging code and weights into one budget is what makes an
+  artifact-bytes metric well-posed. `harness.md` reaches the same conclusion in its own
+  words ("without it, any amount of model could be smuggled into source as literals").
+- Techniques visible in leaderboard entry descriptions: test-time training, GPTQ/AWQ-Lite
+  quantization, LoRA-TTT, n-gram+neural hybrids, custom tokenizers, gated attention.
+- Community volume is thinner than the press coverage implies — the main HN thread ran
+  to about two comments. The activity is in the PR stream, not the discourse.
 
 **This is the single most important find in the survey.** The measurement rule we
 adopted independently is the one OpenAI adopted for language modeling. The differences
@@ -160,33 +173,107 @@ and the code-vs-weights tradeoff are exactly the axis a parameter count cannot s
   - Its design flaws are instructive: the test set is 1,000 images drawn from MNIST's
     *training* split, and the scalar score conflates bytes with accuracy instead of
     tracing a frontier. Our harness avoids both.
-- **codegolf.SE "Machine Learning Golf: Multiplication"** (Q187562) — minimize the
-  *number of weights* in a net that multiplies two integers; best found 43. `[V]`
-- The `machine-learning` tag on codegolf.SE is **empty — 0 questions.** `[V]`
+  - **The winning approach is the interesting part.** Reduce the image to **6 raw
+    pixels**; evaluate every (pixel, threshold) pair, keep 18 promising ones,
+    brute-force 6-element subsets; six thresholds give a 6-bit index into a **64-entry
+    lookup table**, base-converted into a printable-ASCII string. His 207-byte entry
+    tiles into 3×3 → a 9-bit index → an RLE-compressed table — and he **chose thresholds
+    partly because they compress better**, trading accuracy for table compressibility.
 
-### Demoscene / size-coding `[V]`
+- **"Write Moby Dick, approximately"** (codegolf.SE Q152856, score 323, 25 answers) —
+  the best *structural* precedent found anywhere. **Score = 2·L + E**, where L is
+  submission size in bytes with **data files counted at full price**, and E is wrong
+  next-character predictions out of 1,215,235. Two verified answers: Anders Kaseorg,
+  Python 3, `2·267 + 510,193 = 510,727` (hill-climbed mixture of order-0..16 Markov
+  models); A. Rex, Perl, `2·70,525 + 326,508 = 467,558` (582 bytes of code plus a
+  **69,942-byte trained data file**, Markov mixture + arithmetic coding). `[V]` This is
+  a code-plus-weights budget with an explicit exchange rate between bytes and errors —
+  structurally our two-part MDL total, invented independently on a puzzle site.
+- **codegolf.SE's `neural-networks` tag has exactly 6 questions**, split across two
+  incompatible scoring traditions. `[V]` *Parameter-scored:* "Machine Learning Golf:
+  Multiplication" (Q187562 — smallest number of weights; best **7 weights** via an
+  exp-activation Taylor trick, vs 43 for the only entry that actually trains) and "Can a
+  neural network recognize primes?" (Q183036 — 100% on all 2²⁰ inputs; memorize-all
+  baseline 1,804,551 params, best trial-division construction **59,407**).
+  *Source-byte-scored:* max-pooling and CNN-shape-validity puzzles, ML only in subject
+  matter. The `machine-learning` tag is **empty — 0 questions**.
+- **Adjacent OCR golf, all converging on the same trick** `[V]`: "Recognize a Roboto
+  Mono character" — Python 3 at **209 bytes** (magic-constant bit table indexed by
+  `sum(bytes)%203`), Python 2 at **133 bytes** (`lambda s:'…'[hash(s)%619914302%99]`, a
+  hand-searched minimal perfect hash). "Number Plate Golf" — Mathematica **498 bytes**
+  (10 fixed pixel coordinates per glyph packed as one base-36 number), C **409 bytes**
+  (brute-forced 4×5 grid, table packed via `%101`).
+- **No CIFAR-flavored codegolf challenge exists** — searched via the SE API, zero
+  results. `[V, negative]`
 
-<https://www.sizecoding.org> — *"the size of these tiny programs is measured by their
-total size in opcode bytes, and are usually presented as an executable binary."*
-Categories at 256 bytes, 1K, 4K; entries down to 16 and even 8 bytes.
-**Zero mention of machine learning anywhere on the wiki.**
+> **The convergence is the finding.** Four independent source-byte challenges — MNIST
+> digits, Roboto Mono, number plates, Moby Dick — each arrived separately at the *same*
+> architecture: **project to a handful of thresholded or hashed bits, then index a
+> compressed lookup table, and treat the table's compressibility as part of the
+> objective rather than an afterthought.** We have half of this already (random conv
+> features are the cheap projection; codebooks are the table), and `findings.md`'s
+> observation that "codebooks destroy the redundancy the entropy coder was eating" is
+> exactly the tension these golfers resolved by optimizing accuracy and compressibility
+> *jointly* instead of sequentially. That is a concrete, untried lever.
 
-This is the purest byte-minimization culture in existence and it is entirely disjoint
-from ML. It is also where the procedural-generation instinct comes from — and that
-instinct is precisely our "a PRNG seed is four bytes no matter how much it draws."
+### js1k and the demoscene, concretely `[V]`
 
-**What we'd steal:** the discipline that *everything* in the artifact is generated, not
-stored. `findings.md` already found this independently; the demoscene has forty years of
-practice at it.
+- **js1k** (2010–2019): 1024 bytes, server-enforced, no externals. Grepping every year
+  for neural/perceptron/classifier gives **hits only in 2019**: "Retro Neural Network"
+  (**994 bytes**) renders an "X" with `fillText`, reads it back via `getImageData`, and
+  trains an MLP with layer sizes `[2,24,16,…]` — live training plus framework plus
+  rendering in under 1 KB. It is reconstruction, not classification.
+- **pouet.net's size categories are institutional**: 32b, 64b, 128b, 256b, 512b, 1k, 4k,
+  8k, 16k, 32k, 64k and up. Measured throughout: **compressed executable bytes**, never
+  source.
+- **One verified NN-in-a-demo datapoint**: Benjamin Blundell's NOVA (2025) bakes a
+  **SIREN** (sine-activated implicit net) trained on photogrammetry data into a GLSL
+  shader inside the executable, as an SDF of a statue — **28 KiB** targeting the 64k
+  compo. Weights are compiled into shader source, not stored separately.
+- **Could not verify** any 4k intro shipping a neural network; pouet has no full-text
+  search over descriptions and demozoo is Cloudflare-blocked. Treat "nobody has done it"
+  as unproven either way.
 
-### tinygrad's line limit `[V]`
+<https://www.sizecoding.org> states the metric plainly — *"the size of these tiny
+programs is measured by their total size in opcode bytes, and are usually presented as
+an executable binary"* — with entries down to 16 and even 8 bytes, and **zero mention of
+machine learning anywhere on the wiki**. `[V]`
 
-<https://github.com/tinygrad/tinygrad> — the folklore is wrong. There is **no
-CI-enforced line or byte cap**. The contributing guide says low line count is *"a
-guiding light"* but that *"anything that remotely looks like code golf will be closed"*
-and *"deleting `\n`s does nothing to help"*. Ethos-adjacent, metric-hostile — do not
-overclaim kinship. Same pattern in **llama2.c** (*"one simple 700-line C file"*) and
-**micrograd**: lines and dependency count, never bytes.
+This is the purest byte-minimization culture in existence and it is almost entirely
+disjoint from ML. It is also where the procedural-generation instinct comes from, which
+is precisely our "a PRNG seed is four bytes no matter how much it draws."
+
+**What we'd steal:** two things. The discipline that *everything* in the artifact is
+generated rather than stored — `findings.md` found this independently; the scene has
+forty years of practice at it. And **packer discipline**: score the compressed artifact
+and treat "which bytes cost the most" as a first-class debugging view. Our leaderboard
+already reports raw/gzip/xz side by side for exactly this reason.
+
+### tinygrad's line limit — real, enforced, and 25,000 `[V]`
+
+The README states only philosophy — low line count is *"a guiding light"*, but
+*"anything that remotely looks like code golf will be closed"*. **The actual limit is in
+CI.** `.github/workflows/test.yml` runs:
+
+```
+- name: Repo line count < 25000 lines
+  run: MAX_LINE_COUNT=25000 python sz.py
+```
+
+`sz.py` walks `tinygrad/` (excluding `runtime/autogen` and `viz/assets`) counting `.py`
+and `.js`. **Python lines are counted by token span** —
+`len(set(x for t in tokens for x in range(t.start[0], t.end[0]+1)))` over a whitelist of
+`OP, NAME, NUMBER, STRING` — so **comments, blank lines, and docstrings are free**, and
+semicolon-joining does not help.
+
+Two lessons. The token-based counter is the right anti-gaming design: measure the thing
+you care about, not its textual proxy. And the trajectory is the cautionary tale — Issue
+#405, *"Get back to 1000 lines"* (geohot, Oct 2022), against a limit now at 25,000. **A
+size limit with no adversarial pressure behind it ratchets.** `teenygrad` preserves the
+original discipline with its own `sz.py` asserting <1000 lines.
+
+The same "lines, never bytes" pattern holds for **llama2.c** (*"one simple 700-line C
+file"*) and **micrograd**. Ethos-adjacent, metric-hostile — do not overclaim kinship.
 
 ---
 
@@ -336,6 +423,32 @@ one axis with µNAS's int8 rows without normalizing.
 direct-convolution line (64.3% at 19.91 KB, unquantized) at half the size, and well
 below µNAS. Our **961 B / 42.72%** point is in a cell with no published 10-class
 competitor at all.
+
+### Sub-KB artifacts that do exist — on MNIST, and mostly unreplicated `[V]`
+
+The CIFAR-10 sub-KB cell is empty, but the *techniques* that get there exist and were
+found on other tasks. These are a baseline menu, not results to cite as bars:
+
+- **Bonsai** (Kumar, Goyal & Varma, ICML 2017) — a single shallow sparse tree over a
+  sparse low-dimensional projection, fitting in **2 KB RAM**, and beating Bing's L3
+  ranker restricted to **300 bytes**. The strongest peer-reviewed sub-KB precedent, and
+  it measures real model bytes. Note the shape: *project down first, then a tiny
+  decision structure* — the same move as the code golfers.
+- **TBNN (Tiled Binary Normalized NNs)** —
+  <https://github.com/joaocarvalhoopen/TBNN__Tiled_Binary_Normalized_Neural_Networks_in_Odin>.
+  A shared circulant **bit tile** regenerates the weight matrix; LayerNorm with 3 floats
+  per layer replaces biases. The `milli` preset claims 784-2048-2048-10 with 5,820,416
+  virtual weights from 5,408 stored bits — a **720-byte model at ~0.00093 bits/weight,
+  ~91–92% MNIST**. **This is the only route below 1 bit/weight found in the whole
+  survey.** Author's own claim, unreplicated — but the mechanism is exactly our
+  "generate, don't store" asymmetry pushed one step further than a PRNG seed, because a
+  *learned* tile is cheap and still regenerates a large matrix.
+- **ATtiny85-MNIST-RNN-EEPROM** — RNN weights in a **512-byte** internal EEPROM, author
+  claims ~95% MNIST. A hardware ceiling rather than an optimization target, but it is an
+  existence proof at half a kilobyte.
+- **optaeg `mnist_tiny.py`** — **702 parameters at 98.2% MNIST** (logged v1 687/97.3% →
+  v3 702/98.2%). Parameter count only; the author never converts to bytes (~2.8 KB at
+  fp32, which is the whole point about bytes ≠ parameters).
 
 **Coverage limit, stated plainly:** the search that established the empty cell exhausted
 its web-search budget mid-sweep. **OpenReview full-text, Google Scholar, and GitHub code
@@ -689,7 +802,11 @@ Bytes = "is the ranked quantity the byte size of a self-contained artifact?"
 | **GDCC** (Huawei) | data + bzip2 -9 of decompressor | **✅** | 2020 edition; later editions unverified |
 | **OpenAI parameter-golf** | BPB on FineWeb, subject to 16 MB of code+weights | **✅ (as constraint)** | 1.0565 BPB, May 2026 |
 | **Demoscene / sizecoding** | opcode bytes of the binary | **✅** | live; 8 B–4 KB categories; zero ML |
-| **codegolf.SE Q28207** | source bytes × accuracy penalty | **✅** | 101 B / 56.7%, 2014; 2 answers ever |
+| **codegolf.SE Q28207** (MNIST) | `bytes × (1200−correct)/1000` | **✅** | 101 B / 56.7%, 2014; 2 answers ever |
+| **codegolf.SE Q152856** (Moby Dick) | `2×bytes + errors`, data files at full price | **✅** | 25 answers; best seen 467,558 |
+| **js1k** | ≤1024 B, server-enforced | **✅ (as cap)** | ran 2010–2019; one NN entry, 994 B |
+| **Bonsai** (ICML 2017) | accuracy in 2 KB / 300 B | **✅** | peer-reviewed sub-KB precedent |
+| **TBNN** | bits/weight via a shared circulant tile | **✅** | 720 B / ~91% MNIST, unreplicated |
 | **NeuroGolf 2026** (Kaggle) | params + memory bytes, ARC-AGI | ⚠️ `[V-1]` | title verified, formula single-sourced |
 | **Silesia** (Mahoney) | total compressed size | ❌ | paq8px_v215; updated May 2026 |
 | **Squash** | ratio, comp/decomp speed | ❌ | dormant |
@@ -702,7 +819,7 @@ Bytes = "is the ranked quantity the byte size of a self-contained artifact?"
 | **Edge Impulse** | — (product) | ❌ | no leaderboard; claims self-contradict |
 | **modded-nanogpt** | minutes to val loss 3.28 on 8×H100 | ❌ | 1.266 min, May 2026, record #86 |
 | **cifar10-airbench** | seconds to 94% / 96% on one A100 | ❌ | 94.01% in 2.59s; successor 1.98s |
-| **tinygrad** | line count, as ethos only | ❌ | no CI cap; code golf explicitly rejected |
+| **tinygrad** | token-aware line count | ❌ | CI-enforced at 25,000; began as 1,000 |
 | **neuralgolfing.com** | parameter count | ❌ | CIFAR-10 page 404s; leaderboard empty |
 | **ARC Prize** | accuracy under a dollar budget | ❌ | live; no size term |
 | **BabyLM** | accuracy under a training-*data* budget | ❌ | live, EMNLP 2026; no model-size limit |
@@ -753,15 +870,16 @@ changes the conclusion, but both should be closed before "first ever" appears in
 
 ## (c) Three things this project should adopt
 
-**1. A significance gate on new records — borrowed from OpenAI parameter-golf.**
-They require a new entry to beat the prior by ≥0.005 nats at p<0.01; Hutter requires 1%
-relative; Calgary requires 1000 absolute bytes. `findings.md` already concedes a ~1 pp
-selection-noise fog and flags sub-1.5 pp effects as unresolved. **Turn that caveat into
-a rule**: a Pareto point only enters the frontier if it beats the incumbent by more than
-the binomial standard error at n=10,000 (0.482 pp, so a ~1 pp threshold), *and* it is
-scored on a fixed validation split with test touched once per method family. This is the
-already-filed fix, and the competitions show it is standard practice rather than
-pedantry.
+**1. A significance gate on new records — and note that all four serious contests have
+one.**
+OpenAI parameter-golf requires ≥0.005 nats at p<0.01; modded-nanogpt requires enough run
+logs for p<0.01 on the loss target; Hutter requires 1% relative; Calgary requires 1,000
+absolute bytes. `findings.md` already concedes a ~1 pp selection-noise fog and flags
+sub-1.5 pp effects as unresolved. **Turn that caveat into a rule**: a Pareto point enters
+the frontier only if it beats the incumbent by more than the binomial standard error at
+n=10,000 (0.482 pp, so a ~1 pp threshold), *and* it was selected on a fixed validation
+split with test touched once per method family. This is the already-filed fix; the
+unanimity across four independent contests says it is standard practice, not pedantry.
 
 **2. Report the decoder as a typed, separate line item — borrowed from LTCB and the
 enwik8-era Hutter table.**
@@ -775,17 +893,36 @@ down, not up") is precisely a bet about the decoder-bound regime. Consider also 
 normalization (charge the decoder at its bzip2 -9 size) as a *diagnostic* column: it
 prices source by information content rather than character count.
 
-**3. Adopt MicroNet's anti-gaming clauses, and Hutter's charge-the-producer principle.**
-MicroNet's rules are the most transferable in the survey — additions are always billed
-at 32-bit, and the 16-bit freebie is all-or-nothing — and they exist because clever
-entrants will otherwise claim discounts the hardware never gives. More importantly,
-Hutter charges the *compressor* as well as the decompressor, precisely to close the
-"precompute the artifact offline and ship a trivial replayer" hole. Our harness is
-already partly defended here — the artifact cannot read the dataset, and it is re-run
-from its own bytes in a clean process — but the training procedure is unmeasured. That
-is defensible for a deployment-oriented leaderboard and *not* defensible for the MDL
-track, where the prequential program is the whole artifact. **The two tracks should say
-explicitly which of them charges the producer.**
+**3. Optimize accuracy and compressibility jointly, not sequentially — the one
+technical lever the survey turned up that we have not pulled.**
+Four independent source-byte challenges converged on the same architecture (cheap
+projection to a few bits → compressed lookup table), and in at least two of them the
+winner **chose parameters because they compressed better**, accepting worse accuracy for
+a smaller table. We currently do the opposite: fit the head, then quantize, then measure
+what gzip happens to recover — which is exactly why `findings.md` records that "codebooks
+destroy the redundancy the entropy coder was eating." That finding is framed as a
+puzzle; the golfers treat it as the objective. Concretely: make the codebook assignment
+aware of the code length it induces, rather than minimizing reconstruction error and
+reading the size off afterward. This also sits well with the existing negative result
+that reconstruction error is not a proxy for accuracy — neither is it a proxy for size.
+
+Two further rules worth adopting as they come up, both cheap:
+
+- **MicroNet's anti-gaming clauses** — additions always billed at 32-bit, the 16-bit
+  freebie all-or-nothing — if a mixed-precision method ever lands on the board.
+- **Hutter's charge-the-producer principle.** Hutter counts the *compressor* as well as
+  the decompressor, closing the "precompute offline, ship a trivial replayer" hole. Our
+  harness is partly defended already (the artifact cannot read the dataset, and is re-run
+  from its own bytes in a clean process), but training is unmeasured. That is defensible
+  for a deployment-oriented leaderboard and *not* for the MDL track, where the
+  prequential program is the whole artifact. **The two tracks should state explicitly
+  which of them charges the producer.**
+
+One thing *not* to adopt: a single scalar score. Q28207 uses `bytes × error` and Moby
+Dick uses `2·bytes + errors`; both produce one ranking and hide the tradeoff. Our
+deliverable is a Pareto frontier, and airbench's tiered records (94% / 95% / 96%) are the
+better shape — byte tiers with the best accuracy in each. The MDL track already supplies
+the principled scalar where one is wanted.
 
 ---
 
@@ -796,9 +933,20 @@ Speedruns and golf: [modded-nanogpt](https://github.com/KellerJordan/modded-nano
 [hiverge/cifar10-speedrun](https://github.com/hiverge/cifar10-speedrun) ·
 [openai/parameter-golf](https://github.com/openai/parameter-golf) ·
 [tinygrad](https://github.com/tinygrad/tinygrad) ·
-[codegolf.SE Q28207](https://codegolf.stackexchange.com/questions/28207/recognize-handwritten-digits) ·
+[codegolf.SE Q28207 (MNIST)](https://codegolf.stackexchange.com/questions/28207/recognize-handwritten-digits) ·
+[Q152856 (Moby Dick)](https://codegolf.stackexchange.com/questions/152856) ·
+[Q187562 (ML golf: multiplication)](https://codegolf.stackexchange.com/questions/187562) ·
 [Neural Golfing](https://hexhowells.com/posts/neural-golfing.html) ·
-[sizecoding.org](https://www.sizecoding.org)
+[Muon](https://kellerjordan.github.io/posts/muon/) ·
+[airbench paper arXiv:2404.00498](https://arxiv.org/abs/2404.00498) ·
+[hlb-CIFAR10](https://github.com/tysam-code/hlb-CIFAR10) ·
+[teenygrad](https://github.com/tinygrad/teenygrad) ·
+[sizecoding.org](https://www.sizecoding.org) ·
+[js1k Retro Neural Network](https://js1k.com/2019-x/details/4099) ·
+[NOVA demo writeup](https://tilde.club/~oni/posts/2025-06-30-nova.html) ·
+[TBNN](https://github.com/joaocarvalhoopen/TBNN__Tiled_Binary_Normalized_Neural_Networks_in_Odin) ·
+[ATtiny85 MNIST](https://github.com/GiorgosXou/ATTiny85-MNIST-RNN-EEPROM) ·
+[optaeg mnist_tiny](https://github.com/mountain/optaeg/blob/main/mnist_tiny.py)
 
 TinyML: [MLPerf Tiny](https://mlcommons.org/benchmarks/inference-tiny/) ·
 [arXiv:2106.07597](https://arxiv.org/abs/2106.07597) ·
