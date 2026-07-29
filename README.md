@@ -99,6 +99,10 @@ no model at all costs 4,152 bytes; only our smallest artifact beats that. See
 
 ## Status
 
+**[docs/what-to-try.md](docs/what-to-try.md)** is the decision document: the
+complete method space ranked, what our measurements rule out, and the strategic
+fork between the two scoreboards.
+
 See **[LEADERBOARD.md](LEADERBOARD.md)** for the current frontier and
 **[docs/harness.md](docs/harness.md)** for how size is measured and how to
 submit a point. Method research is in [docs/method-survey.md](docs/method-survey.md)
