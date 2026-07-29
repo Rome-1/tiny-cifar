@@ -89,15 +89,17 @@ def plot(ours: list[dict], sota: list[dict]) -> None:
             label="this repo (Pareto frontier)", zorder=5)
 
     ax.axhline(10, c="#ddd", lw=0.8, zorder=1)
-    ax.annotate("chance (10 classes)", (1.3e6, 10.6), fontsize=6.5, color="#999")
+    ax.annotate("chance (10 classes)", (62, 11.4), fontsize=6.5, color="#999")
 
     ax.set_xscale("log")
     ax.set_xlabel("artifact size (bytes, log scale)")
     ax.set_ylabel("CIFAR-10 test accuracy (%)")
     ax.set_title("CIFAR-10: accuracy vs. artifact size", fontsize=11)
     ax.grid(alpha=0.18, lw=0.6)
-    ax.legend(loc="lower right", fontsize=8, framealpha=0.9)
+    ax.legend(loc="upper left", fontsize=8, framealpha=0.9)
     ax.set_ylim(0, 100)
+    allb = [p["bytes"] for p in ours + sota]
+    ax.set_xlim(min(allb) * 0.55, max(allb) * 6)   # headroom for point labels
     fig.tight_layout()
     PLOT.parent.mkdir(exist_ok=True)
     fig.savefig(PLOT)
