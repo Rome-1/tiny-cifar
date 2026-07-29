@@ -59,8 +59,15 @@ measured, not a trophy.
 *µNAS is the wall.* 86.49% in 11.4 KB dominates every artifact we have above
 about 8 KB, and the reason is not subtle: it ships *trained* filters and we ship
 none. Our whole frontier is closed-form ridge regression on random filters drawn
-from a free PRNG seed. That family plateaus around 71% at 49 KB. Closing the gap
-needs backprop, which is in progress.
+from a free PRNG seed. Widening that family to k=256 reaches 71.33% at 69 KB and
+buys under half a point per doubling — it is done. Closing the gap needs
+backprop, which is in progress.
+
+**A second scoreboard disagrees with this one.** Priced in bits — artifact bytes
+plus the cost of arithmetic-coding the 10,000 test labels — most of this frontier
+does not pay for itself, and the ranking nearly inverts. Sending the labels with
+no model at all costs 4,152 bytes; only our smallest artifact beats that. See
+[the MDL track](docs/findings.md#the-mdl-track--pricing-accuracy-in-bits).
 
 ## Status
 
