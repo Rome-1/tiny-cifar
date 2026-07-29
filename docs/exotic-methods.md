@@ -1,6 +1,6 @@
 # Exotic methods: the non-obvious space for a byte-minimal CIFAR-10 classifier
 
-Author: rissanen. Date: 2026-07-28. Companion to `docs/method-survey.md`.
+Compiled 2026-07-28. Companion to `docs/method-survey.md`.
 
 **Scope.** This document deliberately *excludes* the mainstream families (tiny/depthwise
 CNNs, int8/int4/ternary/binary quantization, Deep-Compression clustering+Huffman,

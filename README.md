@@ -49,7 +49,10 @@ primary sources. The 10-class cell under 10 KB is empty, so our points there hav
 no published rival — a statement about what has been measured, not a trophy.
 
 *Accuracy is top-1 on the full 10,000-image test set,* scored by re-running each
-artifact from its serialized bytes in a clean subprocess.
+artifact from its serialized bytes in a clean subprocess. Most rows predate a
+validation split, so their configurations were chosen on test — which inflates
+the best of a large sweep by roughly a point. Treat differences under ~1.5 points
+as unresolved. New work tunes on a held-out split of train.
 
 ## How size is measured
 

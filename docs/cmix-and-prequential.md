@@ -400,7 +400,7 @@ current harness too: a closed-form ridge solve is deterministic numpy — if an
 artifact were allowed to read the training set at decode time, the entire weight
 matrix becomes "generatable" and the artifact collapses to code. The current
 contract (predict.py may read only sibling files) is what blocks this, and that
-is a **design decision to surface to Rome**, not a law of nature: the prequential
+is a **design decision still open**, not a law of nature: the prequential
 track makes it explicit — anything both sides hold is free; the only honest
 charges are the learner's source and the labels' codelength.
 
@@ -417,7 +417,7 @@ estimate falsifiable in an afternoon. Ranked by expected insight per effort.
 artifact (x_i) sequentially, collect its distribution q_i over 10 classes, score
 −log2 q_i(y_i), then reveal y_i to the artifact's `update(x_i, y_i)`. Report
 `|serialized learner| + ceil(sum/8)` bytes. Two entries: (a) **from scratch** —
-the pure Hutter number; (b) **pretrain-free** variant if Rome approves dataset
+the pure Hutter number; (b) **pretrain-free** variant if we allow dataset
 access at decode time. Learner: online multinomial logistic (or recursive
 least-squares ridge, which is exact and hyperparameter-light) on the existing
 seed-generated random conv features; the feature code is already written.

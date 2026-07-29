@@ -1,5 +1,12 @@
 # The small-model landscape
 
+> **Verification warning.** Part of this survey was drafted in a pass that
+> asserted sources it had not actually read, and the affected claims were removed
+> when that was caught. Items marked unverified below are exactly that, and the
+> verified marks elsewhere in this file have not all been independently
+> re-checked. Treat this document as leads to follow rather than as settled
+> citations, and confirm anything before relying on it.
+
 Who else optimizes for smallness, what they actually measure, and whether anyone
 measures *bytes of a self-contained artifact* — which is the axis this project is on.
 
@@ -90,7 +97,7 @@ a real optimizer rather than a tuned config.
 sibling — same dataset, public record-chasing, one honest number — on the orthogonal
 axis, and *the CIFAR-10 side has the speedrun culture but never built the speedrun
 institution*. A maintained public frontier would be filling a gap the accuracy side left
-open, not competing with it. Rome's read is right that these optimize time, with size
+open, not competing with it. These optimize time, with size
 entering only because bigger models are slower.
 
 Second, and more concretely: `CifarNet`'s first layer is a **fixed, PCA-initialized,

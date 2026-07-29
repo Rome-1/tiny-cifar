@@ -129,8 +129,7 @@ literature is most worth doing before any such claim is made.
 
 ## The MDL track — pricing accuracy in bits
 
-Added after the frontier above was built, at Rome's prompting to push into
-cmix/Hutter territory. A classifier is a compressor of labels, so artifact bytes
+Added after the frontier above was built. A classifier is a compressor of labels, so artifact bytes
 and accuracy *can* be added once accuracy is priced in bits:
 
     two-part total = artifact bytes + arithmetic-coded label bytes

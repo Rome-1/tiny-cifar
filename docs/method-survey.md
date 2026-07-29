@@ -1,7 +1,6 @@
 # Method survey: minimizing CIFAR-10 classifier artifact size in bytes
 
-Bead: tc-b2b. Author: rissanen. Date: 2026-07-28.
-
+Compiled 2026-07-28.
 **Scope.** The objective is the serialized size in bytes (raw and gzipped) of a
 self-contained artifact that classifies CIFAR-10. Runtime is nearly free; bytes are
 the only currency. This is an MDL problem: the artifact is a program, and its length
