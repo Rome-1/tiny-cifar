@@ -138,8 +138,15 @@ class LogisticMixer:
     only on already-coded symbols, the decoder can run it identically.
     """
 
-    def __init__(self, n_models, lr=0.02):
-        self.w = np.ones(n_models) / n_models
+    def __init__(self, n_models, lr=0.05, w_init=None):
+        # Equal weights are the wrong default here. With M models the mixed
+        # logit is (1/M) * log p, which flattens a well-calibrated component
+        # towards uniform: a model worth 1.55 bits/label coded at 3.25. cmix can
+        # afford 1/M because its components are individually calibrated and it
+        # has 10^9 symbols to correct over; we have 10^4 and one strong model.
+        # So start by trusting the strong component and let the gradient move.
+        self.w = np.ones(n_models) / n_models if w_init is None else np.asarray(
+            w_init, dtype=np.float64)
         self.lr = lr
 
     def mix(self, ps):
@@ -197,12 +204,17 @@ def build_models(dim, warm_W=None, use=("prior", "logistic", "centroid")):
 
 
 def code(F, y, dim, warm_W=None, use=("prior", "logistic", "centroid"),
-         apm=True, decode_check=True):
+         apm=True, decode_check=True, w_init=None, lr=None):
     """Encode all labels, then decode them back. Returns a report dict."""
-    models = build_models(dim, warm_W, use)
-    mixer = LogisticMixer(len(models))
-    sse = APM() if apm else None
+    def fresh():
+        ms = build_models(dim, warm_W, use)
+        if lr is not None:
+            for m in ms:
+                if isinstance(m, OnlineLogistic):
+                    m.lr = lr
+        return ms, LogisticMixer(len(ms), w_init=w_init), (APM() if apm else None)
 
+    models, mixer, sse = fresh()
     enc = Encoder()
     ideal = 0.0
     correct = 0
@@ -227,9 +239,7 @@ def code(F, y, dim, warm_W=None, use=("prior", "logistic", "centroid"),
 
     ok = None
     if decode_check:
-        models = build_models(dim, warm_W, use)
-        mixer = LogisticMixer(len(models))
-        sse = APM() if apm else None
+        models, mixer, sse = fresh()
         dec = Decoder(blob)
         out = np.empty(len(F), dtype=np.int64)
         for i in range(len(F)):
@@ -256,18 +266,32 @@ def code(F, y, dim, warm_W=None, use=("prior", "logistic", "centroid"),
     }
 
 
-def program_bytes() -> dict:
-    """Description length of the decoder program: this file plus the coder.
+def program_bytes(feats_src: str, warm: bool) -> dict:
+    """Description length of the decoder program.
 
-    Counted honestly rather than waved away. Both are needed to decode, so both
-    are on the bill. The coder is generic and could be minified; the number is
-    reported as measured, not as it could be.
+    Measuring the whole source files would charge the decoder for argparse,
+    docstrings and experiment scaffolding it never runs — 10 KB, which swamped
+    the label term and made the total meaningless. Instead the source of exactly
+    the definitions the decode loop touches is pulled with `inspect.getsource`,
+    so the measured bytes are the code that actually ran rather than a
+    hand-maintained copy of it that could drift.
+
+    Docstrings are stripped, since they are commentary rather than program.
     """
-    files = {
-        "prequential.py": (REPO / "experiments" / "prequential.py").read_bytes(),
-        "coder.py": (REPO / "tinycifar" / "coder.py").read_bytes(),
-        "conv_features.py": (REPO / "experiments" / "conv_features.py").read_bytes(),
-    }
+    import inspect
+    import re
+
+    parts = [softmax, Prior, OnlineLogistic, NearestCentroid, LogisticMixer,
+             APM, build_models, quantize_probs, Decoder, code]
+    if warm:
+        parts += [fit_head]
+
+    src = "\n".join(inspect.getsource(p) for p in parts)
+    src = re.sub(r'"""[\s\S]*?"""', "", src)          # drop docstrings
+    src = re.sub(r"^\s*#.*$", "", src, flags=re.M)    # drop comments
+    src = re.sub(r"\n\s*\n+", "\n", src)
+
+    files = {"decode.py": src.encode(), "feats.py": feats_src.encode()}
     s = A.measure(files)
     return {"raw": s.raw, "gzip": s.gzip, "xz": s.xz,
             "description_length": s.description_length}
@@ -305,10 +329,7 @@ def main(argv=None) -> int:
     F = featurize(xte) / scale_f
     print(f"features: {F.shape} in {time.perf_counter() - t0:.0f}s")
 
-    prog = program_bytes()
     uniform = len(yte) * np.log2(10) / 8
-    print(f"decoder program: {prog['description_length']:,} B "
-          f"(raw {prog['raw']:,} / xz {prog['xz']:,})")
     print(f"uniform label cost: {uniform:,.0f} B\n")
 
     modes = ["cold", "warm"] if a.mode == "both" else [a.mode]
@@ -340,10 +361,17 @@ def main(argv=None) -> int:
             print(f"warm start: ridge on train in {time.perf_counter() - t0:.0f}s "
                   f"(temperature {temp:.1f}, train CE {best / np.log(2):.3f} bits)")
 
+        prog = program_bytes(src, warm=(mode == "warm"))
         t0 = time.perf_counter()
-        r = code(F, yte, dim, warm_W=warm_W, apm=not a.no_apm)
+        # warm: trust the pretrained head from the start, and take small SGD
+        # steps so online updates refine it instead of destroying it.
+        # cold: start on the prior, which is all that is known at step zero.
+        w_init = [0.0, 1.0, 0.0] if mode == "warm" else [1.0, 0.0, 0.0]
+        r = code(F, yte, dim, warm_W=warm_W, apm=not a.no_apm,
+                 w_init=w_init, lr=0.002 if mode == "warm" else None)
         total = r["bytes"] + prog["description_length"]
-        print(f"[{mode}] labels {r['bytes']:,} B "
+        print(f"[{mode}] program {prog['description_length']:,} B "
+              f"(raw {prog['raw']:,}), labels {r['bytes']:,} B "
               f"({r['bits_per_label']:.3f} bits/label), "
               f"online acc {r['online_accuracy'] * 100:.2f}%, "
               f"roundtrip {'ok' if r['roundtrip'] else 'FAILED'}")
