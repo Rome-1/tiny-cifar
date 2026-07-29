@@ -20,7 +20,7 @@ points nothing smaller matches on accuracy.
 | **◆** | `g-k8-p4s2-4b` | 931 B | 43.79% | **this repo** |
 | **◆** | `cf-k16-p4s2-4b-pc` | 1.7 KB | 50.78% | **this repo** |
 | **◆** | `g-k32-p4s2-8b` | 3.8 KB | 57.33% | **this repo** |
-| **◆** | `cf-k32-p3s1-6b-pc` | 7.8 KB | 62.47% | **this repo** |
+| **◆** | `cnnm-2b-qat` | 6.6 KB | 67.39% | **this repo** |
 | **◆** | µNAS | 11.1 KB | 86.49% | Liberis et al. 2021 |
 |  | `cnnm-4b-qat` | 12.2 KB | 80.74% | **this repo** |
 |  | linear SVM on raw pixels | 30.0 KB | 49.88% | classic baseline |
@@ -53,12 +53,12 @@ for both µNAS and SpArSe. The 10-class cell under 10 KB is empty. Our 961 B
 point at 42.72% has no published rival, which is a statement about what has been
 measured, not a trophy.
 
-*µNAS is the wall.* 86.49% in 11.4 KB dominates every artifact we have above
-about 8 KB, and the reason is not subtle: it ships *trained* filters and we ship
-none. Our whole frontier is closed-form ridge regression on random filters drawn
-from a free PRNG seed. Widening that family to k=256 reaches 71.33% at 69 KB and
-buys under half a point per doubling — it is done. Closing the gap needs
-backprop, which is in progress.
+*µNAS is no longer far.* It was 23 points ahead at 10 KB; trained filters with
+quantization-aware training closed that to **9** — 77.52% in 9,949 B, and 80.74%
+in 12.2 KB. See [docs/trained-cnn.md](docs/trained-cnn.md). Random filters are
+retired above ~4 KB: that family plateaued at 71.33% and needed 69 KB to get
+there. QAT turned out to be the precondition rather than a refinement — at 3 bits
+post-training quantization scores 18.55% and QAT scores 77.52%.
 
 ## Related efforts, and whether this niche is taken
 
