@@ -1,0 +1,14 @@
+import numpy as np
+B=open(__file__[:-10]+"w","rb").read()
+C=np.frombuffer(B,np.float16,16,1).astype(np.float32)
+W=C[(np.frombuffer(B,np.uint8,725,33)[:,None]>>np.array([0,4])&15)].reshape(145,10)
+g=np.random.default_rng(1)
+R=g.standard_normal((16,48),dtype=np.float32)*48**-.5
+t=g.standard_normal(16,dtype=np.float32)*0.1
+def f(x):
+ c=np.lib.stride_tricks.sliding_window_view(x,(4,4),(1,2))[:,::2,::2].transpose(0,1,2,4,5,3).reshape(len(x),15*15,48)
+ c=(c-c.mean(2,keepdims=True))/np.sqrt(c.var(2,keepdims=True)+.01)
+ h=np.maximum(c@R.T-t,0).reshape(len(x),3,5,3,5,16)
+ return h.mean((2,4)).reshape(len(x),-1)
+def predict(x):
+ return np.concatenate([np.argmax((f(z)+f(z[:,:,::-1]))@W[:-1]+W[-1],1)for z in np.array_split(x.astype(np.float32)/255,-(-len(x)//500))])

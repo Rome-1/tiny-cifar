@@ -17,16 +17,13 @@ points nothing smaller matches on accuracy.
 |---|---|---:|---:|---|
 | **◆** | `constant` | 85 B | 10.00% | **this repo** |
 | **◆** | `lin-gray4-5b-symmetric` | 480 B | 26.46% | **this repo** |
-| **◆** | `cf-k6-p4s2-4b` | 961 B | 42.72% | **this repo** |
+| **◆** | `g-k8-p4s2-4b` | 931 B | 43.79% | **this repo** |
 | **◆** | `cf-k16-p4s2-4b-pc` | 1.7 KB | 50.78% | **this repo** |
-| **◆** | `cf-k64-p4s2-4b` | 3.4 KB | 56.82% | **this repo** |
+| **◆** | `g-k32-p4s2-8b` | 3.8 KB | 57.33% | **this repo** |
 | **◆** | `cf-k32-p3s1-6b-pc` | 7.8 KB | 62.47% | **this repo** |
 | **◆** | µNAS | 11.1 KB | 86.49% | Liberis et al. 2021 |
-|  | `cf-k64-p3s1-6b-pc` | 13.6 KB | 65.26% | **this repo** |
-|  | `cf-k128-p3s1-6b-pc` | 25.5 KB | 67.67% | **this repo** |
+|  | `cnnm-4b-qat` | 12.2 KB | 80.74% | **this repo** |
 |  | linear SVM on raw pixels | 30.0 KB | 49.88% | classic baseline |
-|  | `cf-k256-p3s1-6b-pc` | 48.9 KB | 70.88% | **this repo** |
-|  | `cf-k256-p3s1-8b-pc` | 67.6 KB | 71.33% | **this repo** |
 | **◆** | Entropy Penalized Reparam. (VGG-16) | 101.0 KB | 90.00% | Oktay et al. 2020 |
 |  | MIRACLE (VGG-16) | 135.0 KB | 90.00% | Havasi et al. 2019 |
 |  | Coates K-means 1600 + SVM | 242.6 KB | 77.90% | Coates & Ng 2011 |

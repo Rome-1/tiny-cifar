@@ -1,0 +1,38 @@
+{
+  "name": "g-k8-p4s2-8b",
+  "method": "golfed: random 4x4 conv (k=8) + ridge head, 8-bit global codebook, flip TTA",
+  "notes": "source 733 B, weights 1243 B; width-specialized decoder",
+  "split": "test",
+  "accuracy": 0.4715,
+  "n": 10000,
+  "per_class": [
+    0.567,
+    0.6,
+    0.233,
+    0.237,
+    0.336,
+    0.439,
+    0.645,
+    0.54,
+    0.619,
+    0.499
+  ],
+  "size": {
+    "raw": 1996,
+    "gzip": 1834,
+    "xz": 1756,
+    "n_files": 2,
+    "description_length": 1756,
+    "best_codec": "xz"
+  },
+  "description_length": 1756,
+  "inference_seconds": 2.54,
+  "eval_wall_seconds": 2.95,
+  "train_seconds": 15.380337502996554,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 733,
+    "w": 1243
+  }
+}

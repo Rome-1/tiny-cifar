@@ -69,9 +69,13 @@ space than its worse fit costs. The sub-1 KB point uses global; everything above
 
 Every configuration in this document was scored on the test set, and the best
 was reported. `harness.md` says to tune on a split of train; no experiment did.
-An adversarial review measured what that costs: with 45 configurations, a
-per-config binomial standard error of 0.482 pp at n=10,000, the expected
-inflation of the maximum is **+1.06 pp** (95% range +0.68 to +1.56).
+An adversarial review measured what that costs: with a per-config binomial
+standard error of 0.482 pp at n=10,000, the expected inflation of the maximum is
+**+1.06 pp** over 45 configurations, and **~+1.23 pp** now that the board holds
+164. A fixed validation split (`data.load_dev()`, `split="val"`) now exists and
+is used going forward; existing rows are kept and annotated rather than
+rescored, since each individual row remains an unbiased estimate — it is only
+the *maximum* that is inflated.
 
 So **63.41% is realistically about 62.4% as an unbiased estimate**, and any
 effect below roughly 1.5 pp reported here is not distinguishable from selection
@@ -128,14 +132,21 @@ the number every model has to beat, and most of ours do not:
 
 | artifact | accuracy | bits/label | labels | total | verdict |
 |---|---:|---:|---:|---:|---|
-| 961 B | 43.91% | 2.299 | 2,873 B | **3,834 B** | pays, +318 B |
+| 961 B | 42.72% | 2.361 | 2,951 B | **3,912 B** | pays, +241 B |
 | 1,713 B | 50.78% | 2.087 | 2,609 B | 4,322 B | costs 170 B more |
-| 3,441 B | 59.67% | 1.750 | 2,187 B | 5,628 B | costs 1,476 B more |
-| 9,503 B | 64.29% | 1.552 | 1,940 B | 11,443 B | costs 7,291 B more |
+| 3,441 B | 56.77% | 1.833 | 2,292 B | 5,733 B | costs 1,580 B more |
+| 9,503 B | 63.41% | 1.574 | 1,968 B | 11,471 B | costs 7,319 B more |
+
+*(Corrected.* The first version of this table paired the 961 B artifact's size
+with a different model's accuracy — the audit refit with per-class codebooks
+while that artifact ships a global one. The audit now refuses to price an
+artifact its refit does not reproduce. The conclusion is unchanged; the margin
+shrinks from +318 B to +241 B, and golfing the source to 845 B restores it to
+about +356 B.)
 
 **Only the smallest artifact on the board is MDL-positive.** The 9.5 KB model —
 the best point by the leaderboard's own ranking — costs seven kilobytes more
-than transmitting the answers outright. No artifact above **2,212 B** can pay
+than transmitting the answers outright. No artifact above **2,184 B** can pay
 for itself at any accuracy these features reach.
 
 The two tracks rank the same artifacts in nearly opposite orders. That is not a

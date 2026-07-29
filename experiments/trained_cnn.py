@@ -325,9 +325,9 @@ def encode(tensors, sp, bits, cbs=None, refit=1, grid=CLIP_GRID, only=None):
     return blob, deq, cbs
 
 
-def build_artifact(tensors, widths, bits, name, cb="tensor", tta=True):
+def build_artifact(tensors, widths, bits, name, cb="tensor", tta=True, cbs=None):
     sp = spec(widths, cb)
-    blob, deq, _ = encode(tensors, sp, bits)
+    blob, deq, _ = encode(tensors, sp, bits, cbs)
     src = ARTIFACT_SRC.format(
         W=repr(list(map(int, widths))),
         NCB=max(s[0] for s in sp) + 1,
@@ -466,12 +466,15 @@ def qat(folded, widths, sp, bits, xtr, ytr, xva, yva, epochs, bs, lr, ls, log):
             out.append(p + (t - p).detach())      # STE
         return out
 
+    # The codebook is fit once and then frozen — for training, for scoring, and
+    # for the export. Refitting it per epoch cost 16 points at 4 bits: the STE
+    # pulls weights onto whatever centroids it is shown, and moving the
+    # centroids afterwards throws that adaptation away. The grid the model
+    # trains against has to be the grid that ships.
+    cbs[0] = encode([p.detach().cpu().numpy() for p in net.w], sp, bits)[2]
+
     t0 = time.perf_counter()
     for ep in range(epochs):
-        # refit the codebook once an epoch; nearest-centroid assignment is what
-        # runs every step
-        cur = [p.detach().cpu().numpy() for p in net.w]
-        cbs[0] = fit_codebooks(cur, sp, bits, max(s[0] for s in sp) + 1)
         for xb, yb in make_batches(xpad, yt, bs, rng, torch):
             opt.zero_grad(set_to_none=True)
             crit(net.forward(xb, fake()), yb).backward()
@@ -481,7 +484,7 @@ def qat(folded, widths, sp, bits, xtr, ytr, xva, yva, epochs, bs, lr, ls, log):
         # current weights, exactly as build_artifact will do. Scoring against
         # the epoch's stale codebooks reported a model that was never shipped.
         cur = [p.detach().cpu().numpy() for p in net.w]
-        _, deq, _ = encode(cur, sp, bits)
+        _, deq, _ = encode(cur, sp, bits, cbs[0])
         a = float((evaluate_torch(Folded(deq, widths).forward,
                                   torch.as_tensor(xva))
                    == torch.as_tensor(yva)).float().mean())
@@ -492,7 +495,7 @@ def qat(folded, widths, sp, bits, xtr, ytr, xva, yva, epochs, bs, lr, ls, log):
         log(f"  qat ep {ep + 1}/{epochs} val(quant) {a * 100:.2f}%{star} "
             f"({time.perf_counter() - t0:.0f}s)")
     log(f"  qat best val {best[0] * 100:.2f}%")
-    return best[1], time.perf_counter() - t0
+    return best[1], cbs[0], time.perf_counter() - t0
 
 
 # ---------------------------------------------------------------------------
@@ -609,12 +612,12 @@ def main(argv=None) -> int:
 
     out = []
     for bits in a.bits:
-        tens, qsec = folded, 0.0
+        tens, cbs, qsec = folded, None, 0.0
         if a.qat_epochs:
-            tens, qsec = qat(folded, widths, sp, bits, xfit, yfit, xva, yva,
-                             a.qat_epochs, a.bs, a.qat_lr, a.ls, log)
+            tens, cbs, qsec = qat(folded, widths, sp, bits, xfit, yfit, xva,
+                                  yva, a.qat_epochs, a.bs, a.qat_lr, a.ls, log)
         name = f"cnn{a.arch}{a.tag}-{bits}b" + ("-qat" if a.qat_epochs else "")
-        d, deq = build_artifact(tens, widths, bits, name, cb=a.cb)
+        d, deq = build_artifact(tens, widths, bits, name, cb=a.cb, cbs=cbs)
         vacc = float((evaluate_torch(Folded(deq, widths).forward,
                                      torch.as_tensor(xva))
                       == torch.as_tensor(yva)).float().mean())

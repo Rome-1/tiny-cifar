@@ -1,0 +1,38 @@
+{
+  "name": "g-k24-p4s2-2b",
+  "method": "golfed: random 4x4 conv (k=24) + ridge head, 2-bit global codebook, flip TTA",
+  "notes": "source 785 B, weights 552 B; width-specialized decoder",
+  "split": "test",
+  "accuracy": 0.2775,
+  "n": 10000,
+  "per_class": [
+    0.268,
+    0.868,
+    0.006,
+    0.011,
+    0.003,
+    0.105,
+    0.204,
+    0.48,
+    0.333,
+    0.497
+  ],
+  "size": {
+    "raw": 1357,
+    "gzip": 1113,
+    "xz": 1081,
+    "n_files": 2,
+    "description_length": 1081,
+    "best_codec": "xz"
+  },
+  "description_length": 1081,
+  "inference_seconds": 2.87,
+  "eval_wall_seconds": 3.3,
+  "train_seconds": 18.705290715995943,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 785,
+    "w": 552
+  }
+}
