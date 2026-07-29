@@ -18,6 +18,19 @@ DATA = REPO / "data"
 RAW = DATA / "cifar-10-batches-py"
 CACHE = DATA / "cifar10.npz"
 
+# A fixed validation split, carved off the end of train. Every sweep tunes here;
+# test is touched once per method family. Without this, selecting the best of N
+# configurations on test inflates the winner — measured at +1.06 pp over a
+# 45-config sweep, which is larger than several effects previously reported.
+VAL_N = 5000
+
+
+def load_dev():
+    """(x_fit, y_fit, x_val, y_val) — train minus the validation tail, and it."""
+    xtr, ytr, _, _ = load()
+    return xtr[:-VAL_N], ytr[:-VAL_N], xtr[-VAL_N:], ytr[-VAL_N:]
+
+
 CLASSES = (
     "airplane", "automobile", "bird", "cat", "deer",
     "dog", "frog", "horse", "ship", "truck",

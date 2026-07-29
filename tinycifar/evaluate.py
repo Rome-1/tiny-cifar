@@ -128,7 +128,13 @@ def evaluate(
     blob = A.serialize(files)
 
     xtr, ytr, xte, yte = load()
-    x, y = (xtr, ytr) if split == "train" else (xte, yte)
+    if split == "train":
+        x, y = xtr, ytr
+    elif split == "val":
+        from .data import VAL_N
+        x, y = xtr[-VAL_N:], ytr[-VAL_N:]      # tune here, not on test
+    else:
+        x, y = xte, yte
 
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
@@ -216,7 +222,7 @@ def main(argv=None) -> int:
     ap.add_argument("--name")
     ap.add_argument("--method", default="")
     ap.add_argument("--notes", default="")
-    ap.add_argument("--split", default="test", choices=["test", "train"])
+    ap.add_argument("--split", default="test", choices=["test", "train", "val"])
     ap.add_argument("--train-seconds", type=float)
     ap.add_argument("--no-save", action="store_true")
     a = ap.parse_args(argv)
