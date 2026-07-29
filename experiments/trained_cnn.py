@@ -442,7 +442,11 @@ def qat(folded, widths, sp, bits, xtr, ytr, xva, yva, epochs, bs, lr, ls, log):
     import torch
 
     net = Folded(folded, widths)
-    opt = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.9, nesterov=True)
+    # Adam, not SGD: BN is folded away by this point, so the layers' gradient
+    # scales differ by orders of magnitude and a single global step size either
+    # diverges on the stem or does nothing to the head. SGD at any lr tried
+    # made the quantized model worse than plain PTQ.
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
     crit = torch.nn.CrossEntropyLoss(label_smoothing=ls)
     xpad = torch.nn.functional.pad(torch.as_tensor(xtr), (0, 0, 4, 4, 4, 4))
     yt = torch.as_tensor(ytr)
@@ -451,6 +455,7 @@ def qat(folded, widths, sp, bits, xtr, ytr, xva, yva, epochs, bs, lr, ls, log):
     rng = np.random.default_rng(1)
 
     cbs = [None]
+    best = (-1.0, None)
 
     def fake():
         cur = [p.detach().cpu().numpy() for p in net.w]
@@ -472,14 +477,22 @@ def qat(folded, widths, sp, bits, xtr, ytr, xva, yva, epochs, bs, lr, ls, log):
             crit(net.forward(xb, fake()), yb).backward()
             opt.step()
             sched.step()
+        # Score the epoch through the *export* path — codebooks refit from the
+        # current weights, exactly as build_artifact will do. Scoring against
+        # the epoch's stale codebooks reported a model that was never shipped.
         cur = [p.detach().cpu().numpy() for p in net.w]
-        _, deq, _ = encode(cur, sp, bits, cbs[0])
-        qn = Folded(deq, widths)
-        a = (evaluate_torch(qn.forward, torch.as_tensor(xva))
-             == torch.as_tensor(yva)).float().mean()
-        log(f"  qat ep {ep + 1}/{epochs} val(quant) {a * 100:.2f}% "
+        _, deq, _ = encode(cur, sp, bits)
+        a = float((evaluate_torch(Folded(deq, widths).forward,
+                                  torch.as_tensor(xva))
+                   == torch.as_tensor(yva)).float().mean())
+        star = ""
+        if a > best[0]:
+            best = (a, cur)
+            star = " *"
+        log(f"  qat ep {ep + 1}/{epochs} val(quant) {a * 100:.2f}%{star} "
             f"({time.perf_counter() - t0:.0f}s)")
-    return [p.detach().cpu().numpy() for p in net.w], time.perf_counter() - t0
+    log(f"  qat best val {best[0] * 100:.2f}%")
+    return best[1], time.perf_counter() - t0
 
 
 # ---------------------------------------------------------------------------
@@ -516,7 +529,7 @@ def main(argv=None) -> int:
     ap.add_argument("--ema", type=float, default=0.995)
     ap.add_argument("--bits", nargs="*", type=int, default=[4])
     ap.add_argument("--qat-epochs", type=int, default=0)
-    ap.add_argument("--qat-lr", type=float, default=0.01)
+    ap.add_argument("--qat-lr", type=float, default=3e-4)
     ap.add_argument("--nval", type=int, default=5000)
     ap.add_argument("--threads", type=int, default=3)
     ap.add_argument("--tag", default="")

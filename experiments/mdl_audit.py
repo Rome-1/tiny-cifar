@@ -49,6 +49,17 @@ def quantize_percol(W, bits):
     return out
 
 
+def quantize_global(W, bits):
+    """One codebook over the whole head — what the sub-2 KB artifacts ship."""
+    c, i = lloyd_max(W, bits)
+    return c.astype(np.float32)[i].reshape(W.shape)
+
+
+def artifact_accuracy(name: str):
+    p = REPO / "results" / f"{name}.json"
+    return json.loads(p.read_text())["accuracy"] if p.exists() else None
+
+
 def fit_temperature(logits, y, grid=np.geomspace(0.5, 400.0, 60)):
     """Pick the temperature minimising cross-entropy. Deterministic, so the
     decoder can repeat it."""
@@ -76,7 +87,8 @@ def artifact_bytes(name: str) -> int | None:
     return None
 
 
-def audit(k, bits, patch, stride, pool, seed, lam, data, artifact_name=None):
+def audit(k, bits, patch, stride, pool, seed, lam, data, artifact_name=None,
+          quant="percol"):
     xtr, ytr, xte, yte = data
     src, dim = make_feats_src(k, patch, stride, pool, seed,
                               1.0 / np.sqrt(patch * patch * 3), 0.1)
@@ -84,7 +96,7 @@ def audit(k, bits, patch, stride, pool, seed, lam, data, artifact_name=None):
 
     t0 = time.perf_counter()
     W = fit_head(feats, xtr, ytr, dim, lam, tta=True)
-    Wq = quantize_percol(W, bits)
+    Wq = (quantize_global if quant == "global" else quantize_percol)(W, bits)
 
     def logits_for(imgs):
         F = np.vstack([
@@ -102,6 +114,18 @@ def audit(k, bits, patch, stride, pool, seed, lam, data, artifact_name=None):
 
     label_bytes = ce * len(yte) / 8
     art = artifact_bytes(artifact_name) if artifact_name else None
+
+    # The refit must reproduce the artifact it is being priced against. This
+    # check exists because it once did not: the audit refit with per-class
+    # codebooks while the named 961 B artifact ships a global one, and the table
+    # paired one model's size with another model's accuracy.
+    stored = artifact_accuracy(artifact_name) if artifact_name else None
+    if stored is not None and abs(stored - acc) > 0.015:
+        raise ValueError(
+            f"{artifact_name}: refit scores {acc:.4f} but the shipped artifact "
+            f"scores {stored:.4f} — the audit is not pricing this artifact "
+            f"(check the quantization scheme)")
+
     return {
         "k": k, "bits": bits, "dim": dim, "acc": acc,
         "bits_per_label": ce, "label_bytes": label_bytes,
@@ -135,8 +159,9 @@ def main(argv=None) -> int:
     for spec in a.configs:
         k, bits, name = spec.split(",")
         name = name.split(":", 1)[1] if ":" in name else None
+        quant = "global" if (name and not name.endswith("-pc")) else "percol"
         r = audit(int(k), int(bits), a.patch, a.stride, a.pool, a.seed,
-                  a.lam, data, name)
+                  a.lam, data, name, quant=quant)
         rows.append(r)
         tot = r["total"]
         verdict = "—"

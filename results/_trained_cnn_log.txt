@@ -48,3 +48,33 @@ arch m [32, 64, 128, 128]  fit on 45,000, val 5,000
   cnnm-3b: quantized val 18.14%
   artifact == torch on 2,000 test images
   cnnm-3b: 18.55% on 10000 test images  |  10,162 B (xz; raw 14,119 / gz 10,839 / xz 10,162)
+=== Wed Jul 29 04:59:11 2026 --arch m --resume --qat-epochs 12 --qat-lr 0.02 --bits 4 --no-eval
+arch m [32, 64, 128, 128]  fit on 45,000, val 5,000
+  resumed folded checkpoint _folded-m.npz (1354s of training)
+  qat ep 1/12 val(quant) 21.58% (22s)
+  qat ep 2/12 val(quant) 30.14% (42s)
+  qat ep 3/12 val(quant) 36.66% (57s)
+  qat ep 4/12 val(quant) 38.04% (78s)
+  qat ep 5/12 val(quant) 44.08% (93s)
+  qat ep 6/12 val(quant) 45.98% (108s)
+  qat ep 7/12 val(quant) 43.02% (130s)
+  qat ep 8/12 val(quant) 46.80% (154s)
+  qat ep 9/12 val(quant) 49.42% (170s)
+  qat ep 10/12 val(quant) 46.60% (196s)
+  qat ep 11/12 val(quant) 49.70% (215s)
+  qat ep 12/12 val(quant) 48.38% (232s)
+  cnnm-4b-qat: quantized val 44.80%
+  artifact == torch on 2,000 test images
+=== Wed Jul 29 05:02:57 2026 --arch m --resume --qat-epochs 8 --qat-lr 3e-4 --bits 4 --no-eval
+arch m [32, 64, 128, 128]  fit on 45,000, val 5,000
+  resumed folded checkpoint _folded-m.npz (1354s of training)
+  qat ep 1/8 val(quant) 79.70% (21s)
+  qat ep 2/8 val(quant) 76.52% (42s)
+  qat ep 3/8 val(quant) 78.28% (64s)
+  qat ep 4/8 val(quant) 78.20% (85s)
+  qat ep 5/8 val(quant) 79.62% (107s)
+  qat ep 6/8 val(quant) 80.56% (130s)
+  qat ep 7/8 val(quant) 78.70% (152s)
+  qat ep 8/8 val(quant) 77.08% (176s)
+  cnnm-4b-qat: quantized val 76.54%
+  artifact == torch on 2,000 test images

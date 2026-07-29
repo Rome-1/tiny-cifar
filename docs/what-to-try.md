@@ -22,10 +22,12 @@ these or a composition of them.
 | **D** | more accuracy at fixed parameters | training, distillation, augmentation |
 | **E** | move bits from weights into *code* | lookup tables, decision structures |
 | **F** | change what is measured | prequential / MDL framing |
+| **G** | **shrink the emitted source** | golf the decoder itself |
 
-C and D are where our wins came from, because both are **free in bytes**. E is
-the one we have never touched and is where every prior byte-golf effort
-converged. F reranks the whole board.
+C and D are where our wins came from, because both are free in bytes. **G was
+missing from the first version of this document and is the largest sub-KB lever
+there is** — see below. F reranks the whole board. E, which every prior byte-golf
+effort converged on, has now been measured and does not transfer.
 
 ## What we already know (and it constrains a lot)
 
@@ -50,6 +52,23 @@ Measured here, not recalled:
 9. **Selection noise is ~1.06 pp** across a 45-config sweep. Anything smaller is
    not a result.
 
+## Lever G, and why it leads
+
+Two independent reviews measured the same thing: in the 961 B flagship,
+`predict.py` is 966 B raw and the weight file is 308 B. **Two-thirds of the
+artifact is source.** Every method in the surveys attacks the other third.
+
+The asymmetry is worse than it looks, because xz takes ~35% off source and ~0%
+off the weight indices (near-uniform k-means codes). Source bytes are discounted;
+weight bytes are not; and there are twice as many source bytes.
+
+Golfing the generated decoder — width-specialized unpacking instead of the
+generic `unpackbits` path, `open(__file__[:-10]+"w")` instead of importing
+`pathlib`, `48**-.5` instead of a 17-digit literal — takes the flagship from
+**961 B to 845 B at an unchanged 42.72%**, verified through the harness. At the
+local frontier slope (~1.1 points per 100 B near 1 KB) that is worth about an
+accuracy point, at zero risk and no compute. `experiments/golf.py`.
+
 ## Tier 1 — do these
 
 **1. Trained filters (in progress).** The single largest gap. Everything on our
@@ -59,7 +78,17 @@ plateau. Compose with: BN folding at export, per-class codebooks, TTA.
 *Falsifier:* if a trained CNN at matched bytes fails to beat the random-filter
 frontier by >1.5 pp, the bottleneck is the head, not the filters.
 
-**2. The lookup-table architecture, at sub-1 KB.** Every source-byte precedent
+**2. ~~The lookup-table architecture.~~ Measured; its own falsifier fired.**
+The empirical ceiling of a b-bit thresholded partition of CIFAR-10 is **~32% on
+val, peaking at b=10-11 and then declining** — a generalization ceiling, not a
+selection artifact. A real shipped table reached 575 B / 29.08%. Priced in bits
+it manages 2.757 bits/label against the 961 B ridge model's 2.299, so it is
+barely MDL-positive. The MNIST precedent does not transfer: six thresholded
+pixels reach 56.7% there because MNIST is ~92% linearly separable from raw
+pixels; on CIFAR-10 six bits buys 28.6%. Kept below only as a way into the
+500-700 B band. Original text follows.
+
+*(superseded)* **The lookup-table architecture, at sub-1 KB.** Every source-byte precedent
 independently converged on the same shape: project to a handful of thresholded
 bits, then a compressed lookup table. Code Golf 28207 won MNIST at **101 bytes /
 56.7%** with six thresholded pixels into a 64-entry table (standings verified
@@ -71,9 +100,15 @@ point is exactly where it belongs. Note the second-order trick from that entry:
 the classes it separates, it will not beat a linear head — check H(class|index)
 before building it.
 
-**3. Quantization-aware training.** We only do post-training quantization. At 2–4
-bits — the regime that matters, given lever B is where the bytes are — QAT is
-worth several points and costs only training time.
+**3. Quantization-aware training — a precondition, not an enhancement.** Measured
+in our own in-flight run: at 4 bits, post-training quantization gives 53.15% and
+QAT gives **76.54%** — a 31.7-point gap. At 3 bits PTQ collapses outright to
+18.55%. Below 6 bits, trained filters *without* QAT lose to random filters at the
+same size, so anyone running that comparison without QAT will wrongly conclude
+trained filters do not work. Merge this into item 1.
+*Falsifier:* on the 961 B head the float ridge scores 45.51% against the 4-bit
+codebook's 42.72%, so QAT can recover at most **2.79 pp** there — it is a 10 KB
+lever, not a sub-KB one.
 
 **4. Harder TTA.** We use one flip. Inference is free: multi-crop, small
 rotations, scale jitter. Pure profit until it saturates; measure where.
@@ -83,17 +118,21 @@ sub-KB artifact. Costs zero artifact bytes. Standard, reliable, untried here.
 
 ## Tier 2 — strong bets, more work
 
-**6. Circulant / tiled weight sharing.** The verified route *below* 1 bit per
-weight: TBNN stores a shared circulant bit tile and regenerates the weight
-matrix — 720-byte MNIST model at ~91%, 0.0009 bits/weight. This is lever C
-applied to a *learned* object rather than a random one, and it is the most
-promising untried idea for sub-KB CIFAR.
+**~~6. Circulant / tiled weight sharing.~~ Measured, and cut.** The tile carries
+no signal. Best of 400 searched circulant tiles scores 21.20% on val; a *random*
+binary head of the same size scores 21.64% — statistically indistinguishable. All
+the accuracy came from the 11x10 mixing matrix bolted on top, which costs more
+bytes than the tile saves. And simply dropping k from 6 to 3 saves 139 B and
+lands at 32.50%, dominating the whole approach. The "0.0009 bits/weight" headline
+is a function of matrix size, not compression: 550 weights x 0.0009 bits is half
+a bit in total, which is meaningless at our scale.
 
-**7. Sparse-projection decision trees (Bonsai).** ICML 2017; the abstract claims
-models that "fit in KB of memory" on a 2 KB-RAM 8-bit microcontroller (verified);
-a 300-byte result appears in the body, which I have not read. A
-non-neural baseline that a byte-budgeted entry ought to beat before claiming
-anything at sub-KB. Cheap to test, and it is lever E in a different costume.
+**7. Decision trees — yes, but plain ones, and only for the 500-700 B band.**
+Bonsai's defining trick, sparse learned projections at each node, measured
+*worse* than plain axis-aligned pixel splits at every budget tested (28.91% vs
+30.00% at 64 leaves, and so on up). A plain tree ships at **512 B / 28.31%** and
+**680 B / 30.15%** on val. That does not threaten the flagship, but it enters a
+band the conv-ridge family cannot reach at all — see below.
 
 **8. Learned free-ish stems.** The frozen 2×2 patch-whitening stem (~144 bytes)
 is the best accuracy-per-byte component found anywhere in the survey. Also
@@ -157,15 +196,27 @@ If the MDL board is taken seriously, Tier 1 items 2, 5 and Tier 2 items 6, 7 are
 the *only* ones that matter, because they all target sub-KB. That is a real
 strategic fork and it should be decided deliberately rather than by drift.
 
+## The one genuinely open band: 500-700 B
+
+The conv-ridge family has a **hard floor at ~694 B** — that is source plus a
+minimal head, and at that size it scores 14.6%. It cannot enter the 500-700 B
+band at all. A plain decision tree or an oblivious table can: ~512 B at 28.3%,
+~575 B at 29.1%, against the current best-below-700 B of 26.46% at 480 B.
+
+That is a real new Pareto point, and it is strictly below the flagship rather
+than a threat to it. Build one of the two — a table over b thresholded bits *is*
+an oblivious tree, and the two land within 0.5 pp of each other — not both.
+
 ## The honest summary
 
 The remaining upside splits cleanly:
 
 - **10–100 KB:** trained filters, and only trained filters. We know the wall
   (86.49% @ 11.4 KB) and we know why we are short of it.
-- **Sub-1 KB:** lookup tables, circulant tiles, sparse trees. This is where the
-  literature is empty, where the MDL board says the only real points live, and
-  where we have tried the least. It is the more interesting half.
+- **Sub-1 KB:** **source golf first** — it is two-thirds of the artifact and
+  already worth 116 B. Then a plain tree or table to open the 500-700 B band.
+  The three architectures originally proposed here were measured and all land
+  10-14 points *below* the existing 42.72% @ 961 B; none of them is a flagship.
 
 The methodological debt to clear first, in both cases: a **validation split**, so
 that sweeps stop selecting on test and effects under 1.5 pp mean something.
