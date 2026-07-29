@@ -119,7 +119,9 @@ def render(rows: list[dict]) -> str:
         under = [r for r in rows if prev < r["description_length"] <= cap]
         prev = cap
         if under:
-            b = max(under, key=lambda r: r["accuracy"])
+            # Ties on accuracy break toward the smaller artifact — otherwise a
+            # golfed decoder, which is strictly better, loses to the original.
+            b = max(under, key=lambda r: (r["accuracy"], -r["description_length"]))
             L.append(_row(b).replace("| `", f"| {label} — `", 1))
 
     rest = [r for r in sorted(rows, key=lambda r: r["description_length"])

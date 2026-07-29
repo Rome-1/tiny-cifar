@@ -20,9 +20,9 @@ points nothing smaller matches on accuracy.
 | **◆** | `g-k8-p4s2-4b` | 931 B | 43.79% | **this repo** |
 | **◆** | `cf-k16-p4s2-4b-pc` | 1.7 KB | 50.78% | **this repo** |
 | **◆** | `g-k32-p4s2-8b` | 3.8 KB | 57.33% | **this repo** |
-| **◆** | `cnntsmall-4b-qat` | 5.2 KB | 73.61% | **this repo** |
+| **◆** | `gc-cnntsmall-4b-qat` | 5.1 KB | 73.61% | **this repo** |
 | **◆** | µNAS | 11.1 KB | 86.49% | Liberis et al. 2021 |
-|  | `cnnm-4b-qat` | 12.2 KB | 80.74% | **this repo** |
+|  | `gc-cnnm-4b-qat` | 12.1 KB | 80.74% | **this repo** |
 |  | `cnnmqat2-4b-qat` | 16.7 KB | 81.64% | **this repo** |
 |  | linear SVM on raw pixels | 30.0 KB | 49.88% | classic baseline |
 | **◆** | Entropy Penalized Reparam. (VGG-16) | 101.0 KB | 90.00% | Oktay et al. 2020 |

@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnntsmall-3b-qat",
+  "method": "golfed decoder for cnntsmall-3b-qat (weights unchanged)",
+  "notes": "source 1232 B (was 1329 B)",
+  "split": "test",
+  "accuracy": 0.69,
+  "n": 10000,
+  "per_class": [
+    0.785,
+    0.801,
+    0.609,
+    0.364,
+    0.654,
+    0.646,
+    0.748,
+    0.706,
+    0.829,
+    0.758
+  ],
+  "size": {
+    "raw": 4617,
+    "gzip": 4198,
+    "xz": 4097,
+    "n_files": 2,
+    "description_length": 4097,
+    "best_codec": "xz"
+  },
+  "description_length": 4097,
+  "inference_seconds": 14.88,
+  "eval_wall_seconds": 16.33,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1232,
+    "w": 3365
+  }
+}

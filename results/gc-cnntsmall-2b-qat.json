@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnntsmall-2b-qat",
+  "method": "golfed decoder for cnntsmall-2b-qat (weights unchanged)",
+  "notes": "source 1172 B (was 1329 B)",
+  "split": "test",
+  "accuracy": 0.5683,
+  "n": 10000,
+  "per_class": [
+    0.622,
+    0.528,
+    0.478,
+    0.297,
+    0.621,
+    0.545,
+    0.631,
+    0.575,
+    0.708,
+    0.678
+  ],
+  "size": {
+    "raw": 3514,
+    "gzip": 3091,
+    "xz": 3014,
+    "n_files": 2,
+    "description_length": 3014,
+    "best_codec": "xz"
+  },
+  "description_length": 3014,
+  "inference_seconds": 14.02,
+  "eval_wall_seconds": 15.51,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1172,
+    "w": 2322
+  }
+}

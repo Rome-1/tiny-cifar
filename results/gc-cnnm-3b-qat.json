@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnnm-3b-qat",
+  "method": "golfed decoder for cnnm-3b-qat (weights unchanged)",
+  "notes": "source 1236 B (was 1332 B)",
+  "split": "test",
+  "accuracy": 0.7752,
+  "n": 10000,
+  "per_class": [
+    0.785,
+    0.862,
+    0.713,
+    0.588,
+    0.781,
+    0.725,
+    0.807,
+    0.744,
+    0.903,
+    0.844
+  ],
+  "size": {
+    "raw": 14023,
+    "gzip": 10587,
+    "xz": 9920,
+    "n_files": 2,
+    "description_length": 9920,
+    "best_codec": "xz"
+  },
+  "description_length": 9920,
+  "inference_seconds": 31.89,
+  "eval_wall_seconds": 35.99,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1236,
+    "w": 12767
+  }
+}
