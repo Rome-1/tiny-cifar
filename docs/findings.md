@@ -51,14 +51,33 @@ codebooks cost 10·2^b float16 centroids — 160 bytes at 3 bits — and recover
 +15.3 points there.
 
 **6. Stride-1 convolution is free and mildly positive.** 3x3 stride 1 over 4x4
-stride 2 is +2.0 points at k=32/6-bit, +1.0 at k=64/6-bit, for zero bytes. It
-costs only training time.
+stride 2 is +2.0 points at k=32/6-bit for zero bytes. The +1.0 measured at
+k=64/6-bit is **below the selection noise floor** (see the caveat below) and
+should be treated as unresolved, not as a result.
 
 **7. At tiny sizes the codebook overhead flips the ranking.** Per-class
 codebooks cost 10*2^b float16 centroids — 320 bytes at 4 bits, a third of a
 1 KB artifact. Below ~2 KB the single global codebook (32 bytes) wins back more
 space than its worse fit costs. The sub-1 KB point uses global; everything above
 ~4 KB uses per-class.
+
+## A caveat that applies to every number above
+
+Every configuration in this document was scored on the test set, and the best
+was reported. `harness.md` says to tune on a split of train; no experiment did.
+An adversarial review measured what that costs: with 45 configurations, a
+per-config binomial standard error of 0.482 pp at n=10,000, the expected
+inflation of the maximum is **+1.06 pp** (95% range +0.68 to +1.56).
+
+So **63.41% is realistically about 62.4% as an unbiased estimate**, and any
+effect below roughly 1.5 pp reported here is not distinguishable from selection
+noise. The large effects — conv over dense (+14), TTA (+2.6 to +3.1), codebooks
+at low bits (up to +17.6), per-class codebooks (+15.3) — survive this comfortably.
+The small ones do not, and are flagged where they appear.
+
+The fix is a fixed validation split carved from train, with test touched once per
+method family. That is filed and not yet done; until it is, treat the leaderboard
+as a ranking with a ~1 pp fog over it rather than a set of point estimates.
 
 ## What did not work, and what that rules out
 

@@ -41,11 +41,27 @@ _allow = [os.path.realpath(ART),
           os.path.realpath(OUT + ".npy"),
           os.path.realpath(OUT + ".npy.meta.json")]
 _tmp = os.path.realpath(os.path.dirname(IMGS))
-for p in list(sysconfig.get_paths().values()) + sys.path:
+# Fixed interpreter roots only. sys.path would admit whatever PYTHONPATH
+# happens to hold, which on this box included another crew's source tree.
+for p in list(sysconfig.get_paths().values()) + [sys.prefix, sys.base_prefix,
+                                                 np.__path__[0]]:
     if p and os.path.isdir(p) and os.path.realpath(p) != _tmp:
         _allow.append(os.path.realpath(p))
 
+# An audit hook is telemetry, not a sandbox: os.popen forks a child that
+# inherits no hook, and ctypes calls libc directly. A 323-byte artifact using
+# os.popen scored 100% against the previous version of this file. Escape routes
+# are refused outright; the process has no legitimate need for any of them.
+_BANNED = ("subprocess.Popen", "os.system", "os.exec", "os.posix_spawn",
+           "os.spawn", "os.fork", "os.forkpty", "pty.spawn",
+           "ctypes.dlopen", "ctypes.dlsym", "ctypes.call_function",
+           "ctypes.addressof", "ctypes.create_string_buffer",
+           "socket.__new__", "socket.connect", "urllib.Request",
+           "mmap.__new__", "os.putenv", "os.truncate")
+
 def _audit(event, args):
+    if event in _BANNED or event.startswith(("subprocess.", "ctypes.", "socket.")):
+        raise PermissionError("artifact attempted " + event)
     if event in ("open", "os.open"):
         p = args[0]
         if isinstance(p, (str, bytes, os.PathLike)):
@@ -65,8 +81,19 @@ t0 = time.perf_counter()
 p = np.asarray(M.predict(x)).reshape(-1)
 dt = time.perf_counter() - t0
 
+# predict() is handed the whole test set at once, so nothing structural stops
+# an artifact from clustering it, self-training on its own confident guesses, or
+# exploiting the known class balance — all of which raise accuracy at zero
+# shipped bytes and are not comparable to a per-image inference model. Re-run a
+# shuffled subset: any method whose prediction for an image depends on the other
+# images in the batch disagrees with itself here.
+sub = np.random.default_rng(12345).permutation(len(x))[:1000]
+q = np.asarray(M.predict(x[sub])).reshape(-1)
+consistent = int((q == p[sub]).sum())
+
 np.save(OUT, p.astype(np.int64))
-json.dump({"inference_seconds": dt, "n": int(p.shape[0])},
+json.dump({"inference_seconds": dt, "n": int(p.shape[0]),
+           "batch_consistent": consistent, "batch_checked": len(sub)},
           open(OUT + ".npy.meta.json", "w"))
 '''
 
@@ -89,6 +116,13 @@ def evaluate(
     if "predict.py" not in files:
         raise ValueError(f"{path}: artifact has no predict.py")
     violations = A.check_imports(files)
+
+    if violations:
+        # Previously this was recorded and the artifact still ranked, so an
+        # artifact could import a framework, load a pretrained network, and land
+        # on the board at 200 bytes with a warning emoji next to it.
+        raise ValueError(
+            f"{path}: not self-contained — " + "; ".join(violations))
 
     size = A.measure(files)
     blob = A.serialize(files)
@@ -127,6 +161,13 @@ def evaluate(
 
     if p.shape[0] != y.shape[0]:
         raise ValueError(f"predict returned {p.shape[0]} labels for {y.shape[0]} images")
+
+    consistent = meta["batch_consistent"] / meta["batch_checked"]
+    if consistent < 1.0:
+        raise ValueError(
+            f"{path}: predictions depend on batch composition "
+            f"({consistent:.1%} agreement on a shuffled subset) — transductive "
+            "methods are not comparable to per-image inference")
 
     scored = {
         "accuracy": float((p == y).mean()),

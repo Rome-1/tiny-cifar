@@ -307,6 +307,9 @@ def main(argv=None) -> int:
     ap.add_argument("--lam", type=float, default=1e2)
     ap.add_argument("--mode", default="both", choices=["cold", "warm", "both"])
     ap.add_argument("--no-apm", action="store_true")
+    ap.add_argument("--stream", default="test", choices=["test", "train"],
+                    help="which label stream to code; train has 50,000 symbols "
+                         "and is where fixed program cost should amortize")
     a = ap.parse_args(argv)
 
     xtr, ytr, xte, yte = load()
@@ -326,10 +329,11 @@ def main(argv=None) -> int:
     scale_f = float(np.abs(Ftr_head).mean()) or 1.0
     Ftr_head /= scale_f
 
-    F = featurize(xte) / scale_f
-    print(f"features: {F.shape} in {time.perf_counter() - t0:.0f}s")
+    xs, ys = (xtr, ytr) if a.stream == "train" else (xte, yte)
+    F = featurize(xs) / scale_f
+    print(f"features: {F.shape} ({a.stream} stream) in {time.perf_counter() - t0:.0f}s")
 
-    uniform = len(yte) * np.log2(10) / 8
+    uniform = len(ys) * np.log2(10) / 8
     print(f"uniform label cost: {uniform:,.0f} B\n")
 
     modes = ["cold", "warm"] if a.mode == "both" else [a.mode]
@@ -367,7 +371,7 @@ def main(argv=None) -> int:
         # steps so online updates refine it instead of destroying it.
         # cold: start on the prior, which is all that is known at step zero.
         w_init = [0.0, 1.0, 0.0] if mode == "warm" else [1.0, 0.0, 0.0]
-        r = code(F, yte, dim, warm_W=warm_W, apm=not a.no_apm,
+        r = code(F, ys, dim, warm_W=warm_W, apm=not a.no_apm,
                  w_init=w_init, lr=0.002 if mode == "warm" else None)
         total = r["bytes"] + prog["description_length"]
         print(f"[{mode}] program {prog['description_length']:,} B "
