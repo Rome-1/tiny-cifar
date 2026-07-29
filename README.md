@@ -63,6 +63,34 @@ from a free PRNG seed. Widening that family to k=256 reaches 71.33% at 69 KB and
 buys under half a point per doubling — it is done. Closing the gap needs
 backprop, which is in progress.
 
+## Related efforts, and whether this niche is taken
+
+Full survey in [docs/small-model-landscape.md](docs/small-model-landscape.md).
+Three things worth pulling out.
+
+**Someone large converged on the same metric.** OpenAI's *Parameter Golf* (2026)
+scores "code bytes plus compressed model bytes" against a 16,000,000-byte cap —
+counting the training script for exactly the reason we count `predict.py`:
+otherwise weights hide in the source. The name is misleading; it does not score
+parameters. That two independent efforts landed on the same rule is the best
+evidence we have that the rule is right.
+
+**Nearly every other "small model" effort counts something else.** nanoGPT
+speedruns optimize time-to-target. Machine Learning Golf (2019) and Neural
+Golfing count *parameters*. TinyML budgets bytes as a constraint but never
+scores them. The traditions that do count bytes properly are the compression
+ones — the Hutter Prize includes the decompressor, which is structurally our
+rule.
+
+**The CIFAR-10-by-bytes niche is open.** No canonical contest, no shared rules,
+no leaderboard. The nearest precedent is a 2014 Code Golf challenge scoring MNIST
+classifiers by source bytes — won by a 101-byte GolfScript entry at 56.7%, which
+projected images onto six thresholded pixels and looked the answer up in a
+64-entry table. Every source-byte precedent converged on that same shape: cheap
+projection to a few bits, then a compressed lookup table. We have not tried it.
+The sub-KB baselines to beat are Bonsai (ICML 2017, 300-byte models) and TBNN
+(720-byte MNIST at ~91% via circulant bit-tile weight sharing).
+
 **A second scoreboard disagrees with this one.** Priced in bits — artifact bytes
 plus the cost of arithmetic-coding the 10,000 test labels — most of this frontier
 does not pay for itself, and the ranking nearly inverts. Sending the labels with
