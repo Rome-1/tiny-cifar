@@ -124,8 +124,8 @@ def table(ours: list[dict], sota: list[dict]) -> str:
 
     L = ["| | model | size | accuracy | source |", "|---|---|---:|---:|---|"]
     for p in rows:
-        mark = "**◆**" if id(p) in front else ""
-        who = "**this repo**" if p["ours"] else p.get("source", "")
+        mark = "◆" if id(p) in front else ""
+        who = "this repo" if p["ours"] else p.get("source", "")
         name = f"`{p['name']}`" if p["ours"] else p["name"]
         L.append(f"| {mark} | {name} | {fmt_bytes(p['bytes'])} | "
                  f"{p['accuracy']:.2f}% | {who} |")
