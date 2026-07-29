@@ -26,29 +26,48 @@ from .data import CACHE, load
 REPO = Path(__file__).resolve().parent.parent
 RESULTS = REPO / "results"
 
+# Stage one runs in its own process and never holds the labels. Everything the
+# artifact can reach is either its own directory or the images it was handed.
 _DRIVER = r'''
-import json, sys, time
+import json, os, sys, sysconfig, time
 import numpy as np
-sys.path.insert(0, sys.argv[1])
-import predict as M
 
-z = np.load(sys.argv[2])
-x, y = z["xte"], z["yte"]
-if len(sys.argv) > 4 and sys.argv[4] == "train":
-    x, y = z["xtr"], z["ytr"]
+ART, IMGS, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
+x = np.load(IMGS)["x"]
+
+# Past this point the artifact may read nothing outside its own directory.
+# Without this a 111-byte artifact opens the dataset and reports 100%.
+_allow = [os.path.realpath(ART),
+          os.path.realpath(OUT + ".npy"),
+          os.path.realpath(OUT + ".npy.meta.json")]
+_tmp = os.path.realpath(os.path.dirname(IMGS))
+for p in list(sysconfig.get_paths().values()) + sys.path:
+    if p and os.path.isdir(p) and os.path.realpath(p) != _tmp:
+        _allow.append(os.path.realpath(p))
+
+def _audit(event, args):
+    if event in ("open", "os.open"):
+        p = args[0]
+        if isinstance(p, (str, bytes, os.PathLike)):
+            try:
+                rp = os.path.realpath(os.fsdecode(p))
+            except Exception:
+                return
+            if not any(rp == a or rp.startswith(a + os.sep) for a in _allow):
+                raise PermissionError("artifact read outside its directory: " + rp)
+
+sys.addaudithook(_audit)
+sys.argv = ["predict"]          # leave no dataset paths lying around
+sys.path.insert(0, ART)
+import predict as M
 
 t0 = time.perf_counter()
 p = np.asarray(M.predict(x)).reshape(-1)
 dt = time.perf_counter() - t0
-if p.shape[0] != y.shape[0]:
-    raise SystemExit(f"predict returned {p.shape[0]} labels for {y.shape[0]} images")
 
-json.dump({
-    "accuracy": float((p == y).mean()),
-    "n": int(y.shape[0]),
-    "inference_seconds": dt,
-    "per_class": [float((p[y == c] == c).mean()) for c in range(10)],
-}, open(sys.argv[3], "w"))
+np.save(OUT, p.astype(np.int64))
+json.dump({"inference_seconds": dt, "n": int(p.shape[0])},
+          open(OUT + ".npy.meta.json", "w"))
 '''
 
 
@@ -74,8 +93,8 @@ def evaluate(
     size = A.measure(files)
     blob = A.serialize(files)
 
-    if not CACHE.exists():          # materialize the npz the driver reads
-        load()
+    xtr, ytr, xte, yte = load()
+    x, y = (xtr, ytr) if split == "train" else (xte, yte)
 
     with tempfile.TemporaryDirectory() as td:
         td = Path(td)
@@ -83,15 +102,19 @@ def evaluate(
         unpacked.mkdir()
         A.write_dir(A.deserialize(blob), unpacked)   # round trip through bytes
 
+        # The sandboxed process is handed images and nothing else.
+        imgs = td / "images.npz"
+        np.savez(imgs, x=x)
+
         driver = td / "_driver.py"
         driver.write_text(_DRIVER)
-        out = td / "out.json"
+        out = td / "preds"
 
         env = dict(os.environ, OMP_NUM_THREADS="2", MKL_NUM_THREADS="2")
         t0 = time.perf_counter()
         proc = subprocess.run(
             ["nice", "-n", "15", sys.executable, str(driver),
-             str(unpacked), str(CACHE), str(out), split],
+             str(unpacked), str(imgs), str(out)],
             capture_output=True, text=True, timeout=timeout, env=env,
         )
         wall = time.perf_counter() - t0
@@ -99,7 +122,18 @@ def evaluate(
             raise RuntimeError(
                 f"artifact failed to run:\n{proc.stderr[-3000:]}"
             )
-        scored = json.loads(out.read_text())
+        p = np.load(str(out) + ".npy")
+        meta = json.loads((td / "preds.npy.meta.json").read_text())
+
+    if p.shape[0] != y.shape[0]:
+        raise ValueError(f"predict returned {p.shape[0]} labels for {y.shape[0]} images")
+
+    scored = {
+        "accuracy": float((p == y).mean()),
+        "n": int(y.shape[0]),
+        "inference_seconds": meta["inference_seconds"],
+        "per_class": [float((p[y == c] == c).mean()) for c in range(10)],
+    }
 
     record = {
         "name": name,
