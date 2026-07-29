@@ -92,8 +92,75 @@ size to compare against — which makes it the most likely place to claim
 something genuinely new, and the place where an independent check of the
 literature is most worth doing before any such claim is made.
 
+## The MDL track — pricing accuracy in bits
+
+Added after the frontier above was built, at Rome's prompting to push into
+cmix/Hutter territory. A classifier is a compressor of labels, so artifact bytes
+and accuracy *can* be added once accuracy is priced in bits:
+
+    two-part total = artifact bytes + arithmetic-coded label bytes
+
+Sending the 10,000 test labels with no model at all costs 4,152 bytes. That is
+the number every model has to beat, and most of ours do not:
+
+| artifact | accuracy | bits/label | labels | total | verdict |
+|---|---:|---:|---:|---:|---|
+| 961 B | 43.91% | 2.299 | 2,873 B | **3,834 B** | pays, +318 B |
+| 1,713 B | 50.78% | 2.087 | 2,609 B | 4,322 B | costs 170 B more |
+| 3,441 B | 59.67% | 1.750 | 2,187 B | 5,628 B | costs 1,476 B more |
+| 9,503 B | 64.29% | 1.552 | 1,940 B | 11,443 B | costs 7,291 B more |
+
+**Only the smallest artifact on the board is MDL-positive.** The 9.5 KB model —
+the best point by the leaderboard's own ranking — costs seven kilobytes more
+than transmitting the answers outright. No artifact above **2,212 B** can pay
+for itself at any accuracy these features reach.
+
+The two tracks rank the same artifacts in nearly opposite orders. That is not a
+contradiction; they answer different questions. The leaderboard asks for the
+smallest deployable model at a given accuracy, which is a real engineering
+question and the one the rig was chartered on. The MDL total asks whether the
+model is worth its own transmission, which is the Hutter question. Both stay.
+
+Cross-entropy is measured on the *quantized* weights actually shipped, with a
+temperature fitted on the training set. That step is not cosmetic: ridge margins
+are not logits, and softmax of raw margins is nearly uniform, which would price
+even a good model at ~3.3 bits/label.
+
+### Prequential coding — and why it loses here
+
+The full Hutter reframing ships no weights at all. The decoder holds the images,
+decodes label i, updates its model on (x_i, y_i), and decodes label i+1
+(Dawid's prequential principle). What is transmitted is the learning algorithm.
+
+    cold  program 2,479 B + labels 4,541 B = 7,020 B
+    warm  program 2,748 B + labels 2,376 B = 5,124 B
+
+The warm learner codes labels better than any artifact we have — 1.901
+bits/label — and still loses, because it pays 2.7 KB of fixed program to do it.
+Cold, learning from scratch on 10,000 examples, does worse than sending the
+labels raw. The lesson is about amortization: prequential machinery is a fixed
+cost spread over symbols, and 10,000 labels is too few to spread it over. It
+should win on the 50,000-label training stream.
+
+Both variants are verified by decoding back with a real arithmetic coder. A
+codelength that does not round-trip is not a codelength.
+
+### The load-bearing assumption
+
+The prequential track only works because the training set is free to both sides.
+If that is granted, then a decoder can *re-derive* weights instead of receiving
+them, and the artifact track's size axis is partly an artifact of forbidding the
+model to look at data it could have had. This is worth stating plainly because
+it is the assumption the whole comparison rests on, and it is a choice rather
+than a fact. The harness now enforces the strict reading — artifacts cannot read
+the dataset at all — and the prequential track is where the other reading lives.
+
+
 ## What to try next, ranked
 
+0. **Go down, not up.** The MDL audit says the whole region above ~2.2 KB is
+   dead in two-part terms. The 961 B point is the only one that pays, and it has
+   had the least attention.
 1. **Train the filters.** Every gain above came from free structure; the largest
    remaining lever is the one component we have never learned. A small trained
    CNN, quantized and entropy-coded, is what the 86% bar is made of. This is the
