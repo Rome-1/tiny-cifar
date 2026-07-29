@@ -26,6 +26,7 @@ points nothing smaller matches on accuracy.
 |  | `cf-k128-p3s1-6b-pc` | 25.5 KB | 67.67% | **this repo** |
 |  | linear SVM on raw pixels | 30.0 KB | 49.88% | classic baseline |
 |  | `cf-k256-p3s1-6b-pc` | 48.9 KB | 70.88% | **this repo** |
+|  | `cf-k256-p3s1-8b-pc` | 67.6 KB | 71.33% | **this repo** |
 | **◆** | Entropy Penalized Reparam. (VGG-16) | 101.0 KB | 90.00% | Oktay et al. 2020 |
 |  | MIRACLE (VGG-16) | 135.0 KB | 90.00% | Havasi et al. 2019 |
 |  | Coates K-means 1600 + SVM | 242.6 KB | 77.90% | Coates & Ng 2011 |
