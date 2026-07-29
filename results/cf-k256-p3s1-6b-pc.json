@@ -1,0 +1,38 @@
+{
+  "name": "cf-k256-p3s1-6b-pc",
+  "method": "random 3x3 conv features (k=256) + ridge head, 6-bit percol codebook, flip TTA",
+  "notes": "filters from 4-byte seed 1; 6400-d pooled features; 64,010-param head shipped; lambda=100.0",
+  "split": "test",
+  "accuracy": 0.7088,
+  "n": 10000,
+  "per_class": [
+    0.711,
+    0.821,
+    0.609,
+    0.502,
+    0.618,
+    0.605,
+    0.824,
+    0.774,
+    0.819,
+    0.805
+  ],
+  "size": {
+    "raw": 50318,
+    "gzip": 50077,
+    "xz": 50326,
+    "n_files": 2,
+    "description_length": 50077,
+    "best_codec": "gzip"
+  },
+  "description_length": 50077,
+  "inference_seconds": 41.45,
+  "eval_wall_seconds": 63.85,
+  "train_seconds": 222.9114289949939,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1008,
+    "w": 49289
+  }
+}

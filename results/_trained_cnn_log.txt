@@ -1,0 +1,26 @@
+=== Wed Jul 29 04:22:33 2026 --arch t --epochs 1 --bits 4 --nval 2000 --no-eval
+arch t [16, 32, 48, 64]  fit on 48,000, val 2,000
+  7,056 conv/linear params, 7,578 total
+  ep   1/1 loss 1.698 val 56.25% ema 15.75% (10s)
+  float val: raw 56.25% ema 15.75% -> using raw
+  cnnt-4b: quantized val 51.70%
+  artifact == torch on 2,000 test images
+=== Wed Jul 29 04:23:28 2026 --arch l --epochs 1 --bits 4 --nval 2000 --no-eval
+arch l [48, 96, 192, 256]  fit on 48,000, val 2,000
+  79,072 conv/linear params, 80,938 total
+  ep   1/1 loss 1.557 val 67.75% ema 10.40% (27s)
+  float val: raw 67.75% ema 10.40% -> using raw
+  cnnl-4b: quantized val 54.55%
+  artifact == torch on 2,000 test images
+=== Wed Jul 29 04:27:31 2026 --arch l --epochs 2 --bits 6 4 3 --nval 2000 --no-eval
+arch l [48, 96, 192, 256]  fit on 48,000, val 2,000
+  79,072 conv/linear params, 80,938 total
+  ep   1/2 loss 1.618 val 55.80% ema 9.80% (25s)
+  ep   2/2 loss 1.262 val 72.30% ema 60.20% (53s)
+  float val: raw 72.30% ema 60.20% -> using raw
+  cnnl-6b: quantized val 72.60%
+  artifact == torch on 2,000 test images
+  cnnl-4b: quantized val 68.60%
+  artifact == torch on 2,000 test images
+  cnnl-3b: quantized val 45.25%
+  artifact == torch on 2,000 test images

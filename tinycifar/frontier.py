@@ -130,13 +130,33 @@ def table(ours: list[dict], sota: list[dict]) -> str:
     return "\n".join(L)
 
 
+README = REPO / "README.md"
+START, END = "<!-- FRONTIER:START -->", "<!-- FRONTIER:END -->"
+
+
+def write_readme(body: str) -> bool:
+    """Replace the generated block in README.md, leaving the prose alone."""
+    if not README.exists():
+        return False
+    t = README.read_text()
+    if START not in t or END not in t:
+        return False
+    head, rest = t.split(START, 1)
+    _, tail = rest.split(END, 1)
+    README.write_text(f"{head}{START}\n{body}\n{END}{tail}")
+    return True
+
+
 def main() -> int:
     ours, sota = load_ours(), load_sota()
     if not sota:
         print(f"note: {SOTA} missing — plotting our points only")
     plot(ours, sota)
     print(f"wrote {PLOT}  ({len(ours)} ours, {len(sota)} published)\n")
-    print(table(ours, sota))
+    body = table(ours, sota)
+    if write_readme(body):
+        print("updated README.md frontier block")
+    print(body)
     print(f"\n({len(ours)} frontier points ours, {len(curate(ours))} shown)")
     return 0
 

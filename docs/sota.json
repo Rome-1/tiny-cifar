@@ -1,0 +1,92 @@
+[
+  {
+    "name": "µNAS",
+    "accuracy": 86.49,
+    "bytes": 11400,
+    "params": 11400,
+    "byte_source": "reported (authors' params x int8 arithmetic, not a measured file)",
+    "source": "Liberis et al. 2021",
+    "verified": true,
+    "note": "10-class. The strongest published sub-100KB point."
+  },
+  {
+    "name": "linear SVM on raw pixels",
+    "accuracy": 49.88,
+    "bytes": 30730,
+    "params": 30730,
+    "byte_source": "derived (params x int8)",
+    "source": "classic baseline",
+    "verified": true,
+    "note": "Dominated by our 3.4 KB point on both axes."
+  },
+  {
+    "name": "Entropy Penalized Reparam. (VGG-16)",
+    "accuracy": 90.0,
+    "bytes": 103424,
+    "params": null,
+    "byte_source": "reported (compressed bitstream)",
+    "source": "Oktay et al. 2020",
+    "verified": true,
+    "note": "One of the few published numbers that is a real bitstream size."
+  },
+  {
+    "name": "MIRACLE (VGG-16)",
+    "accuracy": 90.0,
+    "bytes": 138240,
+    "params": null,
+    "byte_source": "reported (compressed bitstream)",
+    "source": "Havasi et al. 2019",
+    "verified": true,
+    "note": "Bits-back / variational compression."
+  },
+  {
+    "name": "Coates K-means 1600 + SVM",
+    "accuracy": 77.9,
+    "bytes": 248464,
+    "params": 248464,
+    "byte_source": "derived (params x int8)",
+    "source": "Coates & Ng 2011",
+    "verified": true,
+    "note": "Single-layer features, learned filter bank. Our random-filter family is this with the filters made free."
+  },
+  {
+    "name": "ResNet-20",
+    "accuracy": 91.25,
+    "bytes": 1090000,
+    "params": 272000,
+    "byte_source": "derived (params x fp32)",
+    "source": "He et al. 2016",
+    "verified": true,
+    "note": null
+  },
+  {
+    "name": "ResNet-56",
+    "accuracy": 93.03,
+    "bytes": 3400000,
+    "params": 850000,
+    "byte_source": "derived (params x fp32)",
+    "source": "He et al. 2016",
+    "verified": true,
+    "note": null
+  },
+  {
+    "name": "airbench94 (TTA)",
+    "accuracy": 94.01,
+    "bytes": 7880000,
+    "params": 1970000,
+    "byte_source": "derived (params x fp32)",
+    "source": "Jordan 2024",
+    "verified": true,
+    "note": "Uses test-time augmentation; 93.2% without."
+  },
+  {
+    "name": "hlb-CIFAR10",
+    "accuracy": 94.0,
+    "bytes": 17300000,
+    "params": 4340000,
+    "byte_source": "derived (params x fp32; param count re-derived from source)",
+    "source": "tysam-code 2023",
+    "verified": true,
+    "note": "The rig's reference model. Optimized for speed, not size."
+  }
+]
