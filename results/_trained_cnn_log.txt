@@ -129,3 +129,93 @@ arch m [32, 64, 128, 128]  fit on 45,000, val 5,000
   cnnm-2b-qat: quantized val 67.32%
   artifact == torch on 2,000 test images
   cnnm-2b-qat: 67.39% on 10000 test images  |  6,725 B (xz; raw 10,070 / gz 7,105 / xz 6,725)
+=== Wed Jul 29 18:37:13 2026 --arch t --bits 2 3 4 --qat-epochs 8 --resume --threads 3 --tag small
+arch t [16, 32, 48, 64]  fit on 45,000, val 5,000
+  7,056 conv/linear params, 7,578 total
+  ep   1/30 loss 1.889 val 42.46% ema 10.66% (14s)
+  ep   4/30 loss 1.434 val 58.96% ema 64.52% (46s)
+  ep   7/30 loss 1.336 val 62.96% ema 68.62% (74s)
+  ep  10/30 loss 1.296 val 61.78% ema 69.96% (106s)
+  ep  13/30 loss 1.267 val 62.12% ema 71.12% (138s)
+  ep  16/30 loss 1.251 val 57.84% ema 72.56% (171s)
+  ep  19/30 loss 1.226 val 63.30% ema 73.70% (207s)
+  ep  22/30 loss 1.194 val 68.24% ema 73.92% (249s)
+  ep  25/30 loss 1.158 val 72.92% ema 75.66% (287s)
+  ep  28/30 loss 1.109 val 75.32% ema 76.20% (324s)
+  ep  30/30 loss 1.091 val 76.26% ema 76.26% (345s)
+  float val: raw 76.26% ema 76.26% -> using raw
+  qat ep 1/8 val(quant) 38.08% * (11s)
+  qat ep 2/8 val(quant) 49.28% * (31s)
+  qat ep 3/8 val(quant) 49.16% (43s)
+  qat ep 4/8 val(quant) 46.24% (56s)
+  qat ep 5/8 val(quant) 48.96% (70s)
+  qat ep 6/8 val(quant) 55.30% * (81s)
+  qat ep 7/8 val(quant) 50.96% (93s)
+  qat ep 8/8 val(quant) 57.36% * (104s)
+  qat best val 57.36%
+  cnntsmall-2b-qat: quantized val 57.36%
+  artifact == torch on 2,000 test images
+  cnntsmall-2b-qat: 56.83% on 10000 test images  |  3,077 B (xz; raw 3,671 / gz 3,164 / xz 3,077)
+  qat ep 1/8 val(quant) 51.42% * (12s)
+  qat ep 2/8 val(quant) 63.72% * (25s)
+  qat ep 3/8 val(quant) 59.64% (41s)
+  qat ep 4/8 val(quant) 59.12% (61s)
+  qat ep 5/8 val(quant) 66.56% * (74s)
+  qat ep 6/8 val(quant) 66.12% (89s)
+  qat ep 7/8 val(quant) 66.76% * (103s)
+  qat ep 8/8 val(quant) 69.44% * (118s)
+  qat best val 69.44%
+  cnntsmall-3b-qat: quantized val 69.44%
+  artifact == torch on 2,000 test images
+  cnntsmall-3b-qat: 69.00% on 10000 test images  |  4,133 B (xz; raw 4,714 / gz 4,243 / xz 4,133)
+  qat ep 1/8 val(quant) 71.10% * (14s)
+  qat ep 2/8 val(quant) 70.98% (31s)
+  qat ep 3/8 val(quant) 73.26% * (47s)
+  qat ep 4/8 val(quant) 73.84% * (66s)
+  qat ep 5/8 val(quant) 72.88% (79s)
+  qat ep 6/8 val(quant) 73.36% (89s)
+  qat ep 7/8 val(quant) 74.02% * (97s)
+  qat ep 8/8 val(quant) 74.54% * (104s)
+  qat best val 74.54%
+  cnntsmall-4b-qat: quantized val 74.54%
+  artifact == torch on 2,000 test images
+  cnntsmall-4b-qat: 73.61% on 10000 test images  |  5,298 B (xz; raw 5,885 / gz 5,405 / xz 5,298)
+=== Wed Jul 29 18:40:56 2026 --arch m --bits 3 4 --qat-epochs 8 --resume --threads 3 --tag qat2
+arch m [32, 64, 128, 128]  fit on 45,000, val 5,000
+  30,784 conv/linear params, 31,946 total
+  ep   1/30 loss 1.782 val 42.98% ema 9.60% (22s)
+  ep   4/30 loss 1.272 val 54.10% ema 71.52% (73s)
+  ep   7/30 loss 1.184 val 60.02% ema 75.98% (132s)
+  ep  10/30 loss 1.160 val 64.30% ema 77.08% (195s)
+  ep  13/30 loss 1.135 val 71.58% ema 78.76% (261s)
+  ep  16/30 loss 1.113 val 69.88% ema 78.80% (347s)
+  ep  19/30 loss 1.091 val 73.18% ema 79.80% (415s)
+  ep  22/30 loss 1.060 val 74.04% ema 80.08% (496s)
+  ep  25/30 loss 1.019 val 77.94% ema 81.26% (564s)
+  ep  28/30 loss 0.963 val 81.74% ema 82.16% (643s)
+  ep  30/30 loss 0.945 val 82.18% ema 82.24% (695s)
+  float val: raw 82.18% ema 82.24% -> using ema
+  qat ep 1/8 val(quant) 78.62% * (27s)
+  qat ep 2/8 val(quant) 77.20% (57s)
+  qat ep 3/8 val(quant) 77.56% (86s)
+  qat ep 4/8 val(quant) 76.44% (103s)
+  qat ep 5/8 val(quant) 78.68% * (117s)
+  qat ep 6/8 val(quant) 79.16% * (129s)
+  qat ep 7/8 val(quant) 74.82% (142s)
+  qat ep 8/8 val(quant) 79.52% * (154s)
+  qat best val 79.52%
+  cnnmqat2-3b-qat: quantized val 79.52%
+  artifact == torch on 2,000 test images
+  cnnmqat2-3b-qat: 78.90% on 10000 test images  |  13,313 B (xz; raw 14,119 / gz 13,448 / xz 13,313)
+  qat ep 1/8 val(quant) 80.12% * (15s)
+  qat ep 2/8 val(quant) 81.06% * (29s)
+  qat ep 3/8 val(quant) 80.90% (43s)
+  qat ep 4/8 val(quant) 79.56% (57s)
+  qat ep 5/8 val(quant) 80.96% (71s)
+  qat ep 6/8 val(quant) 81.72% * (86s)
+  qat ep 7/8 val(quant) 80.78% (103s)
+  qat ep 8/8 val(quant) 81.82% * (122s)
+  qat best val 81.82%
+  cnnmqat2-4b-qat: quantized val 81.82%
+  artifact == torch on 2,000 test images
+  cnnmqat2-4b-qat: 81.64% on 10000 test images  |  17,148 B (xz; raw 18,297 / gz 17,297 / xz 17,148)

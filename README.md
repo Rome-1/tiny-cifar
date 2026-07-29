@@ -20,9 +20,10 @@ points nothing smaller matches on accuracy.
 | **◆** | `g-k8-p4s2-4b` | 931 B | 43.79% | **this repo** |
 | **◆** | `cf-k16-p4s2-4b-pc` | 1.7 KB | 50.78% | **this repo** |
 | **◆** | `g-k32-p4s2-8b` | 3.8 KB | 57.33% | **this repo** |
-| **◆** | `cnnm-2b-qat` | 6.6 KB | 67.39% | **this repo** |
+| **◆** | `cnntsmall-4b-qat` | 5.2 KB | 73.61% | **this repo** |
 | **◆** | µNAS | 11.1 KB | 86.49% | Liberis et al. 2021 |
 |  | `cnnm-4b-qat` | 12.2 KB | 80.74% | **this repo** |
+|  | `cnnmqat2-4b-qat` | 16.7 KB | 81.64% | **this repo** |
 |  | linear SVM on raw pixels | 30.0 KB | 49.88% | classic baseline |
 | **◆** | Entropy Penalized Reparam. (VGG-16) | 101.0 KB | 90.00% | Oktay et al. 2020 |
 |  | MIRACLE (VGG-16) | 135.0 KB | 90.00% | Havasi et al. 2019 |
@@ -121,11 +122,16 @@ python experiments/conv_features.py      # the current best family
 python tests/test_artifact.py            # the metric's own tests
 ```
 
-The frontier so far is built entirely from closed-form ridge regression — no
-backprop anywhere — on features that cost nothing to ship. The single idea
-carrying most of it: **a PRNG seed is four bytes no matter how much it draws**,
-so random convolutional filters are free and only the classifier head is real
-weight.
+The frontier has two halves. **Below ~4 KB** it is closed-form ridge regression
+with no backprop, on features that cost nothing to ship — the idea carrying it is
+that **a PRNG seed is four bytes no matter how much it draws**, so random
+convolutional filters are free and only the classifier head is real weight. Two
+thirds of a sub-KB artifact turns out to be *source code*, so golfing the emitted
+decoder is the largest lever down there (`experiments/golf.py`).
+
+**Above ~4 KB** it is trained depthwise-separable CNNs with quantization-aware
+training (`experiments/trained_cnn.py`), which retired the random-filter family:
+73.61% in 5.2 KB, 77.52% in 9.9 KB, 81.64% in 16.7 KB.
 
 ## Framing — this is a Minimum Description Length problem
 

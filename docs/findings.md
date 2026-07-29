@@ -4,9 +4,15 @@ Everything below was measured on this box against the full 10,000-image CIFAR-10
 test set, with the artifact re-run from its serialized bytes in a fresh process.
 Sizes are description length as defined in [harness.md](harness.md).
 
-The whole frontier to date is closed-form ridge regression. **No backprop has
-been run yet.** That is worth stating plainly, because it bounds what these
-numbers mean: they are the floor a few free tricks reach, not a ceiling.
+**Read this as the record of the random-filter era.** Everything below is
+closed-form ridge regression on random filters, which was the whole frontier when
+it was written and is now only the sub-4 KB half of it. Trained CNNs with
+quantization-aware training have since taken everything above that — see
+[trained-cnn.md](trained-cnn.md) — and the source-golf result in
+[what-to-try.md](what-to-try.md) has moved the sub-KB numbers down. The findings
+here about quantization, free structure and free-at-inference tricks still hold
+and still compose; the frontier figures quoted are superseded by
+[LEADERBOARD.md](../LEADERBOARD.md).
 
 ## The one idea carrying most of the frontier
 
@@ -83,9 +89,10 @@ noise. The large effects — conv over dense (+14), TTA (+2.6 to +3.1), codebook
 at low bits (up to +17.6), per-class codebooks (+15.3) — survive this comfortably.
 The small ones do not, and are flagged where they appear.
 
-The fix is a fixed validation split carved from train, with test touched once per
-method family. That is filed and not yet done; until it is, treat the leaderboard
-as a ranking with a ~1 pp fog over it rather than a set of point estimates.
+The fix — a fixed validation split carved from train, with test touched once per
+method family — **now exists** as `data.load_dev()` and `split="val"`, and the
+trained-CNN work uses it. The rows above predate it, so treat them as a ranking
+with a ~1 pp fog rather than a set of point estimates.
 
 ## What did not work, and what that rules out
 
@@ -107,9 +114,10 @@ relative weight error scored worse. Do not tune against it.
 ## Where this stands against the literature
 
 The survey puts the published bar at **µNAS, 86.49% in 11.4 KB** (int8,
-structured pruning, no entropy coding). We are at 63.41% in 9.5 KB. The gap is
-not mysterious — µNAS ships *trained* filters and we ship none. Closing it means
-training, which is exactly the direction not yet attempted.
+structured pruning, no entropy coding). At the time of writing we were at 63.41%
+in 9.5 KB, and the diagnosis was that µNAS ships *trained* filters and we shipped
+none. That has since been acted on: **77.52% in 9,949 B**, closing the gap from
+23 points to 9.
 
 The survey also reports the **~1 KB, 10-class cell is empty in the literature**:
 every sub-KB CIFAR-10 result it found is a 2-class relabeling where chance is
