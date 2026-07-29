@@ -62,7 +62,8 @@ frontier by >1.5 pp, the bottleneck is the head, not the filters.
 **2. The lookup-table architecture, at sub-1 KB.** Every source-byte precedent
 independently converged on the same shape: project to a handful of thresholded
 bits, then a compressed lookup table. Code Golf 28207 won MNIST at **101 bytes /
-56.7%** with six thresholded pixels into a 64-entry table; the Number Plate and
+56.7%** with six thresholded pixels into a 64-entry table (standings verified
+directly against the Stack Exchange API); the Number Plate and
 Roboto Mono challenges rediscovered it. We have never tried it, and our 961 B
 point is exactly where it belongs. Note the second-order trick from that entry:
 **choose thresholds partly for table compressibility**, not accuracy alone.
@@ -88,7 +89,9 @@ matrix — 720-byte MNIST model at ~91%, 0.0009 bits/weight. This is lever C
 applied to a *learned* object rather than a random one, and it is the most
 promising untried idea for sub-KB CIFAR.
 
-**7. Sparse-projection decision trees (Bonsai).** 300-byte models, ICML 2017. A
+**7. Sparse-projection decision trees (Bonsai).** ICML 2017; the abstract claims
+models that "fit in KB of memory" on a 2 KB-RAM 8-bit microcontroller (verified);
+a 300-byte result appears in the body, which I have not read. A
 non-neural baseline that a byte-budgeted entry ought to beat before claiming
 anything at sub-KB. Cheap to test, and it is lever E in a different costume.
 

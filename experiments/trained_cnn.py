@@ -243,13 +243,20 @@ def _assign(v, c):
     return np.abs(v[:, None] - c[None, :]).argmin(1)
 
 
-def _best_scale(w2, c):
+FP16_MIN = 6.2e-5      # below this a float16 scale underflows to zero
+
+
+def _max_scale(w2, a=1.0):
+    base = np.abs(w2).max(1) * a
+    base = np.maximum(base, FP16_MIN)
+    return base.astype(np.float16).astype(np.float32)
+
+
+def _best_scale(w2, c, grid=CLIP_GRID):
     """Per-group scale minimizing squared reconstruction error."""
-    base = np.abs(w2).max(1)
-    base[base == 0] = 1e-8
     best_s, best_e = None, None
-    for a in CLIP_GRID:
-        s = (base * a).astype(np.float16).astype(np.float32)
+    for a in grid:
+        s = _max_scale(w2, a)
         idx = _assign((w2 / s[:, None]).reshape(-1), c).reshape(w2.shape)
         e = ((c[idx] * s[:, None] - w2) ** 2).sum(1)
         if best_e is None:
@@ -261,43 +268,56 @@ def _best_scale(w2, c):
     return best_s.astype(np.float32)
 
 
-def fit_codebooks(tensors, sp, bits, ncb):
-    """Lloyd-max over the max-normalized values of every tensor in each group."""
+def _fit(pool, bits, rng):
+    if len(pool) > 100_000:
+        pool = pool[rng.choice(len(pool), 100_000, False)]
+    c, _ = lloyd_max(pool, bits)
+    return np.asarray(c, np.float16)
+
+
+def fit_codebooks(tensors, sp, bits, ncb, scales=None):
+    """Lloyd-max over the normalized values of every tensor in each group."""
     pools = [[] for _ in range(ncb)]
-    for t, (u, ng, _) in zip(tensors, sp):
+    for j, (t, (u, ng, _)) in enumerate(zip(tensors, sp)):
         v = np.asarray(t, np.float32).reshape(ng, -1)
-        s = np.abs(v).max(1)
-        s[s == 0] = 1e-8
+        s = _max_scale(v) if scales is None else scales[j]
         pools[u].append((v / s[:, None]).reshape(-1))
     rng = np.random.default_rng(0)
-    cbs = []
-    for pool in pools:
-        p = np.concatenate(pool)
-        if len(p) > 100_000:
-            p = p[rng.choice(len(p), 100_000, False)]
-        c, _ = lloyd_max(p, bits)
-        cbs.append(np.asarray(c, np.float16))
-    return cbs
+    return [_fit(np.concatenate(p), bits, rng) for p in pools]
 
 
-def encode(tensors, sp, bits, cbs=None):
+def encode(tensors, sp, bits, cbs=None, refit=1, grid=CLIP_GRID, only=None):
     """Quantize. Returns (blob, dequantized tensors, codebooks).
 
+    The scale and the codebook are fit against each other: a codebook fit on
+    max-normalized weights is the wrong grid once the scales clip, so after the
+    scales move the codebook is refit on the values it will actually see.
+    `refit=0` skips that and is the naive version.
+
     `cbs` may be reused across calls: refitting Lloyd-max is seconds of work,
-    which is fine once an epoch and far too slow once a step.
+    which is fine once an epoch and far too slow once a step. `only`, if given,
+    is the set of tensor indices to quantize — the rest pass through in float,
+    which is how per-tensor sensitivity is measured.
     """
     ncb = max(s[0] for s in sp) + 1
-    if cbs is None:
+    w2s = [np.asarray(t, np.float32).reshape(s[1], -1) for t, s in zip(tensors, sp)]
+    fixed = cbs is not None
+    if not fixed:
         cbs = fit_codebooks(tensors, sp, bits, ncb)
+        for _ in range(refit):
+            sc = [_best_scale(w, np.asarray(cbs[u], np.float32), grid)
+                  for w, (u, _, _) in zip(w2s, sp)]
+            cbs = fit_codebooks(tensors, sp, bits, ncb, sc)
+
     codes, deq, scales = [], [], []
-    for t, (u, ng, sh) in zip(tensors, sp):
+    for j, (w2, (u, ng, sh)) in enumerate(zip(w2s, sp)):
         c = np.asarray(cbs[u], np.float32)
-        w2 = np.asarray(t, np.float32).reshape(ng, -1)
-        s = _best_scale(w2, c)
+        s = _best_scale(w2, c, grid)
         idx = _assign((w2 / s[:, None]).reshape(-1), c).astype(np.uint16)
         codes.append(idx)
         scales.append(s)
-        deq.append((c[idx].reshape(ng, -1) * s[:, None]).reshape(sh))
+        q = (c[idx].reshape(ng, -1) * s[:, None]).reshape(sh)
+        deq.append(w2.reshape(sh) if (only is not None and j not in only) else q)
     blob = (struct.pack("<B", bits)
             + b"".join(np.asarray(c, np.float16).tobytes() for c in cbs)
             + np.concatenate(scales).astype(np.float16).tobytes()
@@ -501,6 +521,8 @@ def main(argv=None) -> int:
     ap.add_argument("--threads", type=int, default=3)
     ap.add_argument("--tag", default="")
     ap.add_argument("--cb", default="tensor", choices=["tensor", "shared"])
+    ap.add_argument("--study", action="store_true",
+                    help="report quantization variants and per-tensor sensitivity")
     ap.add_argument("--resume", action="store_true",
                     help="reuse the folded checkpoint instead of training again")
     ap.add_argument("--no-eval", action="store_true",
@@ -525,6 +547,7 @@ def main(argv=None) -> int:
         lines.append(s)
 
     log(f"arch {a.arch} {widths}  fit on {len(yfit):,}, val {len(yva):,}")
+    pick = "checkpoint"
     if a.resume and ckpt.exists():
         z = np.load(ckpt)
         folded = [z[f"t{i}"] for i in range(len(sp))]
@@ -546,6 +569,30 @@ def main(argv=None) -> int:
         ckpt.parent.mkdir(parents=True, exist_ok=True)
         np.savez(ckpt, train_seconds=tsec,
                  **{f"t{i}": t for i, t in enumerate(folded)})
+
+    if a.study:
+        vx, vy = torch.as_tensor(xva), torch.as_tensor(yva)
+
+        def vacc_of(tens):
+            return float((evaluate_torch(Folded(tens, widths).forward, vx)
+                          == vy).float().mean()) * 100
+
+        log(f"  float val {vacc_of(folded):.2f}%")
+        names = ["c1w", "c1b"] + sum(
+            [[f"dw{i}w", f"dw{i}b", f"pw{i}w", f"pw{i}b"] for i in range(1, 4)],
+            []) + ["fcw", "fcb"]
+        for bits in a.bits:
+            for label, kw in (("naive", dict(refit=0, grid=(1.0,))),
+                              ("clip", dict(refit=0)),
+                              ("clip+refit", dict(refit=1))):
+                _, deq, _ = encode(folded, sp, bits, **kw)
+                log(f"  {bits}b {label:<11} {vacc_of(deq):.2f}%")
+            _, deq, _ = encode(folded, sp, bits)
+            log(f"  {bits}b per-tensor sensitivity (only that tensor quantized):")
+            for j, nm in enumerate(names):
+                _, d1, _ = encode(folded, sp, bits, only={j})
+                log(f"    {nm:<5} {vacc_of(d1):.2f}%")
+        return 0
 
     out = []
     for bits in a.bits:

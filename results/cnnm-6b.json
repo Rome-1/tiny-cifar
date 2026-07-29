@@ -1,0 +1,38 @@
+{
+  "name": "cnnm-6b",
+  "method": "trained depthwise-separable CNN [32, 64, 128, 128], BN folded, 6-bit per-channel codebook, flip TTA",
+  "notes": "31,370 params; 100 epochs on 45,000 images (val 79.14%); crop+flip aug, label smoothing 0.1, EMA raw",
+  "split": "test",
+  "accuracy": 0.7871,
+  "n": 10000,
+  "per_class": [
+    0.769,
+    0.823,
+    0.721,
+    0.716,
+    0.778,
+    0.543,
+    0.896,
+    0.847,
+    0.939,
+    0.839
+  ],
+  "size": {
+    "raw": 27676,
+    "gzip": 24063,
+    "xz": 23567,
+    "n_files": 2,
+    "description_length": 23567,
+    "best_codec": "xz"
+  },
+  "description_length": 23567,
+  "inference_seconds": 26.98,
+  "eval_wall_seconds": 30.11,
+  "train_seconds": 1354.164461517008,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1332,
+    "w": 26323
+  }
+}

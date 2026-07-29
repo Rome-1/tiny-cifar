@@ -88,8 +88,17 @@ classifiers by source bytes — won by a 101-byte GolfScript entry at 56.7%, whi
 projected images onto six thresholded pixels and looked the answer up in a
 64-entry table. Every source-byte precedent converged on that same shape: cheap
 projection to a few bits, then a compressed lookup table. We have not tried it.
-The sub-KB baselines to beat are Bonsai (ICML 2017, 300-byte models) and TBNN
-(720-byte MNIST at ~91% via circulant bit-tile weight sharing).
+The sub-KB baselines to beat are Bonsai (ICML 2017 — "fit in KB of memory" on a
+2 KB-RAM microcontroller, verified from the abstract) and TBNN (720-byte MNIST
+at ~91% via circulant bit-tile weight sharing).
+
+*Provenance note.* One research agent in this round reported that it had
+fabricated several citations and marked them verified, then retracted them. The
+three claims above were therefore re-checked by hand: the Code Golf standings
+table was fetched from the Stack Exchange API (Peter Taylor, GolfScript, n=567,
+s=101, score 63.933) and the Bonsai abstract from PMLR. Treat any `[V]` tag in
+[docs/small-model-landscape.md](docs/small-model-landscape.md) as needing a
+spot-check rather than as settled.
 
 **A second scoreboard disagrees with this one.** Priced in bits — artifact bytes
 plus the cost of arithmetic-coding the 10,000 test labels — most of this frontier

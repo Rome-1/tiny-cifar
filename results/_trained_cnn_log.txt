@@ -24,3 +24,27 @@ arch l [48, 96, 192, 256]  fit on 48,000, val 2,000
   artifact == torch on 2,000 test images
   cnnl-3b: quantized val 45.25%
   artifact == torch on 2,000 test images
+=== Wed Jul 29 04:52:31 2026 --arch m --epochs 100 --bits 6 4 3
+arch m [32, 64, 128, 128]  fit on 45,000, val 5,000
+  30,784 conv/linear params, 31,946 total
+  ep   1/100 loss 1.804 val 47.04% ema 9.60% (19s)
+  ep  11/100 loss 1.154 val 63.96% ema 78.06% (155s)
+  ep  21/100 loss 1.141 val 48.76% ema 76.82% (286s)
+  ep  31/100 loss 1.142 val 67.90% ema 78.22% (416s)
+  ep  41/100 loss 1.140 val 57.20% ema 77.64% (548s)
+  ep  51/100 loss 1.126 val 62.16% ema 78.40% (683s)
+  ep  61/100 loss 1.119 val 72.26% ema 78.70% (815s)
+  ep  71/100 loss 1.091 val 72.34% ema 79.08% (951s)
+  ep  81/100 loss 1.052 val 77.36% ema 80.48% (1084s)
+  ep  91/100 loss 0.997 val 80.00% ema 81.30% (1231s)
+  ep 100/100 loss 0.954 val 81.60% ema 81.58% (1354s)
+  float val: raw 81.60% ema 81.58% -> using raw
+  cnnm-6b: quantized val 79.14%
+  artifact == torch on 2,000 test images
+  cnnm-6b: 78.71% on 10000 test images  |  23,567 B (xz; raw 27,676 / gz 24,063 / xz 23,567)
+  cnnm-4b: quantized val 54.38%
+  artifact == torch on 2,000 test images
+  cnnm-4b: 53.15% on 10000 test images  |  12,714 B (xz; raw 18,297 / gz 13,436 / xz 12,714)
+  cnnm-3b: quantized val 18.14%
+  artifact == torch on 2,000 test images
+  cnnm-3b: 18.55% on 10000 test images  |  10,162 B (xz; raw 14,119 / gz 10,839 / xz 10,162)
