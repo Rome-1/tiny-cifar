@@ -10,7 +10,11 @@ numbers mean: they are the floor a few free tricks reach, not a ceiling.
 
 ## The one idea carrying most of the frontier
 
-**A PRNG seed is four bytes no matter how much it draws.** Anything a short
+**A PRNG seed is four bytes no matter how much it draws** — true of the *sample*
+it emits, and the phrasing needs that qualifier: selecting the best of 2^k seeds
+encodes at most k bits, so a search is bounded by the 32 bits the seed field
+already pays for. All results here use seed 1 and no experiment searches seeds;
+the rule going forward is that seeds are selected on the train split only. Anything a short
 piece of code can generate is free, so the only weights that cost bytes are the
 ones that cannot be generated — here, the classifier head. That single asymmetry
 took the frontier from 41% to 63% without a single trained filter:
