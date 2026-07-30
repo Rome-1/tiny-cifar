@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnnlqat-4b-qat",
+  "method": "golfed decoder for cnnlqat-4b-qat (weights unchanged)",
+  "notes": "source 1167 B (was 1332 B)",
+  "split": "test",
+  "accuracy": 0.8421,
+  "n": 10000,
+  "per_class": [
+    0.866,
+    0.911,
+    0.769,
+    0.68,
+    0.838,
+    0.778,
+    0.901,
+    0.863,
+    0.897,
+    0.918
+  ],
+  "size": {
+    "raw": 42932,
+    "gzip": 39914,
+    "xz": 39798,
+    "n_files": 2,
+    "description_length": 39798,
+    "best_codec": "xz"
+  },
+  "description_length": 39798,
+  "inference_seconds": 52.53,
+  "eval_wall_seconds": 57.56,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1167,
+    "w": 41744
+  }
+}

@@ -100,10 +100,12 @@ def build(art: Path) -> dict[str, bytes]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("artifacts", nargs="+")
+    ap.add_argument("artifacts", nargs="+",
+                    help="artifact names, with or without the artifacts/ prefix")
     a = ap.parse_args(argv)
 
     for spec in a.artifacts:
+        spec = Path(spec).name  # tolerate a tab-completed artifacts/<name> path
         art = REPO / "artifacts" / spec
         if not (art / "predict.py").exists():
             print(f"  ! {spec}: no artifact")
