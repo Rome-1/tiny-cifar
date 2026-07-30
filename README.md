@@ -21,8 +21,10 @@ nothing smaller matches on accuracy.
 | ◆ | `gc-cnntsmall-4b-qat` | 5.1 KB | 73.61% | this repo |
 | ◆ | µNAS | 11.1 KB | 86.49% | Liberis et al. 2021 |
 |  | `gc-cnnm-4b-qat` | 12.1 KB | 80.74% | this repo |
-|  | `cnnmqat2-4b-qat` | 16.7 KB | 81.64% | this repo |
+|  | `gc-cnnlqat-3b-qat` | 29.9 KB | 82.49% | this repo |
 |  | linear SVM on raw pixels | 30.0 KB | 49.88% | classic baseline |
+|  | `gc-cnnlqat-4b-qat` | 38.9 KB | 84.21% | this repo |
+|  | `gc-cnnxlqat-4b-qat` | 69.3 KB | 85.37% | this repo |
 | ◆ | Entropy Penalized Reparam. (VGG-16) | 101.0 KB | 90.00% | Oktay et al. 2020 |
 |  | MIRACLE (VGG-16) | 135.0 KB | 90.00% | Havasi et al. 2019 |
 |  | Coates K-means 1600 + SVM | 242.6 KB | 77.90% | Coates & Ng 2011 |
@@ -89,6 +91,12 @@ entirely — 73.61% in 5.1 KB against 71.33% in 69 KB.
 
 QAT turned out to be a precondition rather than a refinement: at 3 bits,
 post-training quantization scores 18.55% and QAT scores 77.52%.
+
+Scaling that family up to 85.37% in 69 KB costs six times the bytes µNAS spends
+to beat it, so the gap at 10 KB is architecture and not training budget. Within
+the family, precision beats width at fixed bytes as reliably as it did for random
+filters: 4 bits on the smaller net wins 84.21% in 38.9 KB against 3 bits on the
+larger net's 83.26% in 51.9 KB.
 
 Results and reasoning: [findings.md](docs/findings.md),
 [trained-cnn.md](docs/trained-cnn.md), [what-to-try.md](docs/what-to-try.md).

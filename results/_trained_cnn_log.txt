@@ -258,3 +258,42 @@ arch l [48, 96, 192, 256]  fit on 45,000, val 5,000
   cnnlqat-4b-qat: quantized val 84.46%
   artifact == torch on 2,000 test images
   cnnlqat-4b-qat: 84.21% on 10000 test images  |  39,867 B (xz; raw 43,097 / gz 39,998 / xz 39,867)
+=== Thu Jul 30 07:42:38 2026 --arch xl --bits 3 4 --qat-epochs 8 --threads 3 --tag qat
+arch xl [64, 128, 256, 384]  fit on 45,000, val 5,000
+  148,864 conv/linear params, 151,434 total
+  ep   1/30 loss 1.708 val 50.94% ema 9.60% (57s)
+  ep   4/30 loss 1.175 val 63.90% ema 76.10% (182s)
+  ep   7/30 loss 1.094 val 60.08% ema 79.92% (299s)
+  ep  10/30 loss 1.075 val 70.12% ema 81.00% (405s)
+  ep  13/30 loss 1.069 val 72.82% ema 80.94% (520s)
+  ep  16/30 loss 1.050 val 74.62% ema 81.58% (634s)
+  ep  19/30 loss 1.028 val 71.08% ema 82.62% (740s)
+  ep  22/30 loss 0.997 val 76.10% ema 83.54% (856s)
+  ep  25/30 loss 0.945 val 79.96% ema 84.50% (962s)
+  ep  28/30 loss 0.885 val 85.06% ema 85.32% (1072s)
+  ep  30/30 loss 0.859 val 85.50% ema 85.44% (1172s)
+  float val: raw 85.50% ema 85.44% -> using raw
+  qat ep 1/8 val(quant) 79.74% * (45s)
+  qat ep 2/8 val(quant) 80.78% * (87s)
+  qat ep 3/8 val(quant) 78.96% (143s)
+  qat ep 4/8 val(quant) 81.64% * (188s)
+  qat ep 5/8 val(quant) 82.40% * (229s)
+  qat ep 6/8 val(quant) 82.32% (282s)
+  qat ep 7/8 val(quant) 81.46% (324s)
+  qat ep 8/8 val(quant) 83.46% * (368s)
+  qat best val 83.46%
+  cnnxlqat-3b-qat: quantized val 83.46%
+  artifact == torch on 2,000 test images
+  cnnxlqat-3b-qat: 83.26% on 10000 test images  |  53,192 B (xz; raw 59,626 / gz 55,802 / xz 53,192)
+  qat ep 1/8 val(quant) 83.92% * (66s)
+  qat ep 2/8 val(quant) 85.00% * (143s)
+  qat ep 3/8 val(quant) 84.76% (225s)
+  qat ep 4/8 val(quant) 84.84% (289s)
+  qat ep 5/8 val(quant) 85.40% * (357s)
+  qat ep 6/8 val(quant) 84.78% (430s)
+  qat ep 7/8 val(quant) 85.30% (504s)
+  qat ep 8/8 val(quant) 85.30% (571s)
+  qat best val 85.40%
+  cnnxlqat-4b-qat: quantized val 85.30%
+  artifact == torch on 2,000 test images
+  cnnxlqat-4b-qat: 85.37% on 10000 test images  |  71,048 B (xz; raw 78,651 / gz 71,684 / xz 71,048)

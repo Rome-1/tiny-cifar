@@ -1,0 +1,38 @@
+{
+  "name": "cnnxlqat-3b-qat",
+  "method": "trained depthwise-separable CNN [64, 128, 256, 384], BN folded, 3-bit per-channel codebook, flip TTA, QAT",
+  "notes": "150,154 params; 30 epochs on 45,000 images (val 83.46%); crop+flip aug, label smoothing 0.1, EMA raw",
+  "split": "test",
+  "accuracy": 0.8326,
+  "n": 10000,
+  "per_class": [
+    0.858,
+    0.923,
+    0.774,
+    0.694,
+    0.837,
+    0.743,
+    0.864,
+    0.832,
+    0.918,
+    0.883
+  ],
+  "size": {
+    "raw": 59626,
+    "gzip": 55802,
+    "xz": 53192,
+    "n_files": 2,
+    "description_length": 53192,
+    "best_codec": "xz"
+  },
+  "description_length": 53192,
+  "inference_seconds": 71.83,
+  "eval_wall_seconds": 78.32,
+  "train_seconds": 1540.3217340879783,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1334,
+    "w": 58271
+  }
+}

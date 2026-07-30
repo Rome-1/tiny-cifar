@@ -71,12 +71,23 @@ accuracy point, at zero risk and no compute. `experiments/golf.py`.
 
 ## Tier 1 — do these
 
-**1. Trained filters (in progress).** The single largest gap. Everything on our
-frontier is closed-form ridge on random filters; µNAS reaches 86.49% @ 11.4 KB
-with trained ones. First runs already show 72.60% at 6-bit, past the random-filter
-plateau. Compose with: BN folding at export, per-class codebooks, TTA.
-*Falsifier:* if a trained CNN at matched bytes fails to beat the random-filter
-frontier by >1.5 pp, the bottleneck is the head, not the filters.
+**1. ~~Trained filters.~~ Done, and it took the whole board above 4 KB.**
+Depthwise-separable CNNs with QAT now own every frontier point from 3 KB up:
+73.61% @ 5.1 KB, 77.52% @ 9.9 KB, 84.21% @ 38.9 KB, 85.37% @ 69.3 KB. The
+falsifier did not fire — at 5 KB the trained net beats the entire random-filter
+family, which plateaued at 71.33% @ 69 KB and is retired.
+
+Two things the size sweep [t, s, m, l, xl] settled:
+
+- **Width scales badly against µNAS.** Reaching 85.37% took 69 KB, six times what
+  µNAS spends to beat it at 11.4 KB. Scaling this architecture is not the way to
+  close that gap; the gap is architectural. Nothing above `l` is worth training.
+- **Precision beats width at fixed bytes here too**, matching finding 5 for random
+  filters. 4-bit on `l` gives 84.21% @ 38.9 KB; 3-bit on `xl` gives 83.26% @
+  51.9 KB and is dominated. Prefer a smaller net at higher precision, always.
+
+What is left in this family is not more parameters — it is items 4 and 5 below,
+both of which cost zero artifact bytes.
 
 **2. ~~The lookup-table architecture.~~ Measured; its own falsifier fired.**
 The empirical ceiling of a b-bit thresholded partition of CIFAR-10 is **~32% on
