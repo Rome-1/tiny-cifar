@@ -70,7 +70,7 @@ os.environ.setdefault("MKL_NUM_THREADS", "3")
 from experiments.baselines import emit  # noqa: E402
 from experiments.quant_sweep import lloyd_max  # noqa: E402
 from tinycifar import pack as P  # noqa: E402
-from tinycifar.data import load  # noqa: E402
+from tinycifar.data import load, load_dev  # noqa: E402
 from tinycifar.evaluate import evaluate, summarize  # noqa: E402
 
 ARCHS = {
@@ -533,7 +533,6 @@ def main(argv=None) -> int:
     ap.add_argument("--bits", nargs="*", type=int, default=[4])
     ap.add_argument("--qat-epochs", type=int, default=0)
     ap.add_argument("--qat-lr", type=float, default=3e-4)
-    ap.add_argument("--nval", type=int, default=5000)
     ap.add_argument("--threads", type=int, default=3)
     ap.add_argument("--tag", default="")
     ap.add_argument("--cb", default="tensor", choices=["tensor", "shared"])
@@ -552,9 +551,8 @@ def main(argv=None) -> int:
     widths = ARCHS[a.arch]
     sp = spec(widths, a.cb)
     ckpt = REPO / "artifacts" / f"_folded-{a.arch}{a.tag}.npz"
-    xtr, ytr, xte, yte = load()
-    xva, yva = xtr[-a.nval:], ytr[-a.nval:]
-    xfit, yfit = xtr[:-a.nval], ytr[:-a.nval]
+    _, _, xte, _ = load()
+    xfit, yfit, xva, yva = load_dev()   # one definition of the split, in data.py
 
     lines = []
 

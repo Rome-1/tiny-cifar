@@ -18,10 +18,18 @@ DATA = REPO / "data"
 RAW = DATA / "cifar-10-batches-py"
 CACHE = DATA / "cifar10.npz"
 
-# A fixed validation split, carved off the end of train. Every sweep tunes here;
-# test is touched once per method family. Without this, selecting the best of N
-# configurations on test inflates the winner — measured at +1.06 pp over a
-# 45-config sweep, which is larger than several effects previously reported.
+# A fixed validation split, carved off the end of train, for tuning that must
+# not see test. It exists so a best-of-N choice has somewhere to happen that is
+# not test: picking the winner of N configurations on test inflates it — at
+# +1.06 pp over a 45-config sweep, larger than several effects the docs report.
+#
+# What actually uses it, as of this comment: experiments/trained_cnn.py, for its
+# raw-vs-EMA pick and its QAT best-epoch pick, and `evaluate(split="val")`. The
+# sub-KB sweeps (baselines, conv_features, quant_sweep, random_features, golf)
+# do NOT tune on it — they enumerate a grid and report every point on test
+# without choosing a winner, so their published numbers are measurements of
+# configurations that were nonetheless compared on test. Read differences under
+# ~1.5 pp between them as unresolved.
 VAL_N = 5000
 
 
