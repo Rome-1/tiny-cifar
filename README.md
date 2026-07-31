@@ -14,7 +14,7 @@ nothing smaller matches on accuracy.
 | | model | size | accuracy | source |
 |---|---|---:|---:|---|
 | ◆ | `constant` | 85 B | 10.00% | this repo |
-| ◆ | `lin-gray4-5b-symmetric` | 480 B | 26.46% | this repo |
+| ◆ | `obt-g8-b9` | 470 B | 28.25% | this repo |
 | ◆ | `g-k8-p4s2-4b` | 931 B | 43.79% | this repo |
 | ◆ | `cf-k16-p4s2-4b-pc` | 1.7 KB | 50.78% | this repo |
 | ◆ | `g-k32-p4s2-8b` | 3.8 KB | 57.33% | this repo |
@@ -94,9 +94,15 @@ post-training quantization scores 18.55% and QAT scores 77.52%.
 
 Scaling that family up to 85.37% in 69 KB costs six times the bytes µNAS spends
 to beat it, so the gap at 10 KB is architecture and not training budget. Within
-the family, precision beats width at fixed bytes as reliably as it did for random
-filters: 4 bits on the smaller net wins 84.21% in 38.9 KB against 3 bits on the
-larger net's 83.26% in 51.9 KB.
+the family, 4 bits on the smaller net beats 3 bits on the larger one at fewer
+bytes — 84.21% in 38.9 KB against 83.26% in 51.9 KB — which points the same way
+as the random-filter result, though at 0.95 points the accuracy gap is below the
+noise floor above and only the 13 KB byte difference is resolved.
+
+Below ~500 B neither family reaches: the conv-ridge floor is ~694 B, where it
+scores 14.6%. That band belongs to an oblivious table — nine thresholded 8×8
+block means indexing a 512-entry label table, 28.25% in 470 B, of which the
+decoder is 209 B.
 
 Results and reasoning: [findings.md](docs/findings.md),
 [trained-cnn.md](docs/trained-cnn.md), [what-to-try.md](docs/what-to-try.md).

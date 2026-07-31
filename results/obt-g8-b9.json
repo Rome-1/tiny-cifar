@@ -1,0 +1,38 @@
+{
+  "name": "obt-g8-b9",
+  "method": "oblivious table: 9 thresholded 8x8 RGB block means -> 2^9 label table",
+  "notes": "selected on val; bit order chosen for compressibility (uint8 table)",
+  "split": "test",
+  "accuracy": 0.2825,
+  "n": 10000,
+  "per_class": [
+    0.417,
+    0.302,
+    0.097,
+    0.123,
+    0.245,
+    0.22,
+    0.436,
+    0.227,
+    0.431,
+    0.327
+  ],
+  "size": {
+    "raw": 759,
+    "gzip": 506,
+    "xz": 470,
+    "n_files": 2,
+    "description_length": 470,
+    "best_codec": "xz"
+  },
+  "description_length": 470,
+  "inference_seconds": 0.29,
+  "eval_wall_seconds": 0.45,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 209,
+    "w": 530
+  }
+}
