@@ -190,6 +190,9 @@ counts — the papers report params, not bytes, so these are assumptions to vali
    in the literature (SpArSe, µNAS Tables 2 and 4, Bonsai) is on a **2-class**
    relabeling where chance is 50%. This is the project's clearest opening — and it
    also means there is no baseline to beat there, only one to establish.
+   *Read this at ~1 KB and no wider.* A later check found published 10-class
+   points in the 5-9 KB band — Müksch et al. 2020, 60.4% in 5.39 KB — so the
+   "empty cell" does not extend to 10 KB. See [sota-datapoints.md](sota-datapoints.md).
 
 A caution that applies to the whole table: µNAS Appendix B states its sparse-model
 sizes do **not** account for mask storage *[verified]*, so its sparse rows are

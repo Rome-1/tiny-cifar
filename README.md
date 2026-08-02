@@ -45,10 +45,28 @@ the authors' own `params × int8` arithmetic, not a measured file; the ResNet an
 hlb figures are `params × fp32` derived by us. Only the two VGG-16 rows are real
 bitstreams. Our numbers are bytes of a thing that runs.
 
-*Below ~11 KB there is nothing to compare against.* The published sub-KB
-CIFAR-10 results are 2-class relabelings where chance is 50%, confirmed from the
-primary sources. The 10-class cell under 10 KB is empty, so our points there have
-no published rival — a statement about what has been measured, not a trophy.
+*Below ~11 KB the literature is thin, and the sub-kilobyte results are not what
+they look like.* Every published sub-KB CIFAR-10 number we could find is a
+2-class relabeling where chance is 50%, confirmed from the primary sources. The
+5–9 KB band, though, does have published 10-class points: Müksch et al. 2020
+([arXiv:2005.04968](https://arxiv.org/abs/2005.04968), Table 7) report 60.4% in
+5.39 KB and 48.2% in 7.57 KB on the full test set, selecting on a validation
+split carved from train. Our 5.2 KB point beats the first by 15 points at
+slightly fewer bytes. Our 3.9 KB point is smaller but only 1.0 point better,
+which is inside the noise floor below — smaller, not more accurate.
+
+An earlier version of this README claimed the sub-10 KB 10-class cell was empty
+and that our points there had no published rival. That was false, and it stood
+here for several days. The rest of that paragraph survived checking; that
+sentence did not.
+
+One caution if you go looking. µNAS's own Table 2 prints a 10-class CIFAR-10 row
+crediting LEMONADE with ≈91.77% at 10 K parameters, which at its stated 1 byte
+per parameter would beat everything here. It is not in LEMONADE: that paper's
+smallest reported CIFAR-10 *test* result is 47 K parameters at 8.9% error, and
+its only mention of 10,000 is a stated lower bound on its search space. We think
+the row pairs that bound with an accuracy from elsewhere. Ours is the citation
+that anchors this table, so the error is worth naming rather than inheriting.
 
 *Accuracy is top-1 on the full 10,000-image test set,* scored by re-running each
 artifact from its serialized bytes in a clean subprocess. Most rows predate a

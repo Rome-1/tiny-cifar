@@ -132,6 +132,11 @@ size to compare against — which makes it the most likely place to claim
 something genuinely new, and the place where an independent check of the
 literature is most worth doing before any such claim is made.
 
+That check has since been done, and it matters how narrowly this claim is read.
+At **~1 KB** it survives. Stretched to "under 10 KB" it does not: Müksch et al.
+2020 report 60.4% in 5.39 KB on 10-class CIFAR-10, full test set. See
+[sota-datapoints.md](sota-datapoints.md) and the frontier caveats in the README.
+
 ## The MDL track — pricing accuracy in bits
 
 Added after the frontier above was built. A classifier is a compressor of labels, so artifact bytes

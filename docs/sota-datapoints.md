@@ -75,8 +75,99 @@ SpArSe (<https://ar5iv.labs.arxiv.org/html/1905.12107>): *"we also report on bin
 versions of these datasets, meaning that the classes are split into two groups and
 re-labeled."* Every sub-kilobyte CIFAR result located — µNAS 685 B / 77.49%,
 SpArSe 0.78 KB / 73.84% (Table 3), SpArSe 487 params / 73.08% (Table 2) — is on the
-2-class task, where **chance is 50%, not 10%**. No 10-class sub-kilobyte CIFAR-10
-number was found. The empty cell is real.
+2-class task, where **chance is 50%, not 10%**. No 10-class sub-*kilobyte* CIFAR-10
+number was found.
+
+Both quotes above were re-fetched and re-confirmed independently in the falsification
+pass of 2026-08-02 (µNAS <https://ar5iv.labs.arxiv.org/html/2010.14246>, SpArSe
+<https://ar5iv.labs.arxiv.org/html/1905.12107>). SpArSe reports **no** 10-class
+CIFAR-10 result in any table. That part of this document stands.
+
+**What did not survive that pass: the claim that the 10-class cell under 10 KB is
+empty. It is not. See the next section.**
+
+### Müksch et al. 2020 — the sub-10 KB 10-class cell is NOT empty
+
+**VERIFIED** at <https://ar5iv.labs.arxiv.org/html/2005.04968> (Table 7) and
+<https://arxiv.org/abs/2005.04968> (metadata). Müksch, Olausson, Wilhelm &
+Andreadis, *Quantitative Analysis of Image Classification Techniques for
+Memory-Constrained Devices*, arXiv 11 May 2020. arXiv preprint, 9 pp., derived from
+an Edinburgh MSc thesis — **not peer-reviewed**, but public and specific.
+
+It is unambiguously **10-class CIFAR-10 on the full 10,000-image test set**: *"The
+CIFAR-10 data set consists of 60,000 32×32 3-channel colour images, divided into 10
+classes… It comes split into 50,000 images for training and 10,000 for testing."* The
+held-out validation set is carved out of **train** (*"we join the training batches
+into one set and then extract a hold-out validation set consisting of exactly 1000
+images of each class"*), and model selection is done on it: *"The validation set is
+used to set, for example, hyper-parameters and to select the best models for each
+algorithm… This ensures that the final test set accuracy reported for each model is
+an unbiased estimate of its generalisation accuracy."* That is a cleaner protocol
+than most of our own early rows.
+
+Table 7, caption verbatim: *"Test set accuracies for methods described in Section 2
+for different memory size budgets. Actual model size given in square brackets."*
+The sub-10 KB entries:
+
+| method | accuracy | stated size |
+|---|---:|---:|
+| Direct Convolution (3-channel) | **60.4%** | **5.39 KB** |
+| Direct Convolution (3-channel) | 62.9% | 8.65 KB |
+| FastGRNN (channel-major) | 48.2% | 7.57 KB |
+| FastGRNN (row-major) | 47.1% | 7.57 KB |
+| Multi-FastGRNN | 44.7% | 7.94 KB |
+| Bonsai | 14.9% | 7.88 KB |
+
+Direct Convolution is not theirs — it is Gural & Murmann (ICML 2019), reimplemented
+here (*"Direct Convolution neural network proposed in [7]"*, *"Memory used to store
+the pixels of an input feature map is progressively replaced with the activations of
+the layer"*). Gural & Murmann's own paper reports **MNIST only, no CIFAR-10**; this
+paper is what puts the method on 10-class CIFAR-10.
+
+**Byte-accounting caveats, and why they do not rescue the empty-cell claim:**
+
+- The paper **never defines what the KB figure measures** — weights only, or weights
+  plus the activation buffer. It inherits Gural & Murmann's framing, whose metric is
+  total inference SRAM (weights *and* activations, reported separately and summed).
+  This ambiguity runs in the *counterexample's* favor, not ours: if 5.39 KB includes
+  activations, the weights alone are **smaller** than 5.39 KB. Under either reading
+  the model is under 10 KB.
+- **Precision is never stated** for the CNN rows. If the weights are fp32, an int8
+  version would be roughly 4× smaller again.
+- As with every other published row here, the figure **excludes architecture and
+  inference code**, which our harness charges us for.
+
+So the honest statement is not "the cell is empty" — it is that **we dominate it**.
+Our 61.37% in 3.9 KB beats their 60.4% in 5.39 KB on both axes; our 75.65% in 5.2 KB
+beats it by 15 points at less size; our 50.78% in 1.7 KB beats FastGRNN's 48.2% in
+7.57 KB on both axes; our 43.79% in 931 B beats Bonsai's 14.9% in 7.88 KB. That is a
+comparison rather than an absence, and it is the stronger thing to say.
+
+### µNAS's LEMONADE row — a published 10-class entry printed at 10 K
+
+Also found in the falsification pass, and also fatal to "the cell is empty" as
+literally worded. µNAS's **own Table 2**, in the 10-class CIFAR-10 block, prints a
+comparison row: **LEMONADE, ≈91.77%, model size 10 K** (RAM and MACs "unk."). At
+µNAS's stated 1 byte/parameter convention that is 10,000 B — under 10 KB.
+
+**That row is not supported by LEMONADE's own paper.** Verified by extracting the
+text of <https://arxiv.org/pdf/1804.09081>: Table 1 spans 0.5 M–13.1 M params, and
+Table 2 (*"Comparison between LEMONADE (SS-I), Random Search, NASNet, MobileNet and
+MobileNet V2 on CIFAR-10 for different model sizes"*) bottoms out at **NASNet 38 K /
+12.0%** and **LEMONADE 47 K / 8.9%**. There is no 10 K row anywhere. What the paper
+does say is that the search's Pareto front covers *"model parameters, ranging from
+10 000 to 10 000 000"* — but that is Figure 2, whose axis is labeled **"Validation
+error"**, on the 5,000-image validation split (*"The training set is split up in a
+training (45.000) and a validation (5.000) set"*), not the 10,000-image test set.
+Figure 5 *is* test error (*"Performance on CIFAR-10 test data"*) and its y-axis does
+reach 10⁴, but no numeric value is printed for that point, and a Pareto front cannot
+put 10 K params at a *lower* error than the 47 K / 8.9% row in the same paper.
+
+Verdict: treat µNAS's LEMONADE 10 K row as **unsupported by its cited source** — a
+textbook case of this document's own rule, *never take a size from a rival's
+comparison row*. But it exists in print, in the very paper we cite as our 11.4 KB
+anchor, and any reader who checks will find it. A universal negative over the
+literature cannot survive it.
 
 ### Two negative results, both useful
 
@@ -171,6 +262,8 @@ figures derived at fp32 because none of these papers ships a quantized artifact.
 | Every row without a reported byte count | **Architecture, graph and runtime excluded.** Our artifact pays for its own source; theirs do not. |
 | MobileNet / ShuffleNet / SqueezeNet "93–98% CIFAR-10" figures in circulation | ImageNet-pretrained and fine-tuned on **upsampled 224×224** input. Excluded from this document entirely. |
 | µNAS unstructured-sparse rows | The paper states latency and peak-memory constraints "are not included" for these. Only the dense 11.4 KB row is used here. |
+| LEMONADE @ 10 K, as printed in µNAS Table 2 | **Unsupported by the cited source.** LEMONADE's own tables bottom out at 47 K params / 91.1%. Record it, do not plot it as a rival. |
+| Müksch et al. rows (Direct Conv, FastGRNN, Bonsai) | **Size basis undefined** — may be weights-only or weights+activations, and precision is never stated. The ambiguity runs *for* them, not us: either reading leaves them under 10 KB. Also **not peer-reviewed** (arXiv preprint from an MSc thesis). Fair to plot, with the caveat that, like every other published row, it excludes inference code. |
 
 ---
 
@@ -184,6 +277,11 @@ CIFAR-10 test set unless flagged.
 |---|---:|---:|---:|---|---:|---|---|
 | µNAS (2-class CIFAR) ⚠ | 77.49% | — | 685 | R (params×int8) | 2020 | [arXiv:2010.14246](https://ar5iv.labs.arxiv.org/html/2010.14246) T2 | verified |
 | SpArSe (2-class CIFAR) ⚠ | 73.84% | — | ~799 (0.78 KB) | R | 2019 | [arXiv:1905.12107](https://ar5iv.labs.arxiv.org/html/1905.12107) T3 | verified |
+| **Direct Convolution CNN (Müksch et al.)** | **60.40%** | — | **5,519 (5.39 KB)** | R ("actual model size"; basis undefined) | 2020 | [arXiv:2005.04968](https://ar5iv.labs.arxiv.org/html/2005.04968) T7 | verified |
+| FastGRNN (channel-major, Müksch et al.) ⚠ | 48.20% | — | 7,752 (7.57 KB) | R (basis undefined) | 2020 | [arXiv:2005.04968](https://ar5iv.labs.arxiv.org/html/2005.04968) T7 | verified |
+| Bonsai (Müksch et al.) ⚠ | 14.90% | — | 8,069 (7.88 KB) | R (basis undefined) | 2020 | [arXiv:2005.04968](https://ar5iv.labs.arxiv.org/html/2005.04968) T7 | verified |
+| Direct Convolution CNN (Müksch et al.) | 62.90% | — | 8,857 (8.65 KB) | R (basis undefined) | 2020 | [arXiv:2005.04968](https://ar5iv.labs.arxiv.org/html/2005.04968) T7 | verified |
+| LEMONADE, as cited by µNAS ⚠ unsupported | ≈91.77% | 10 K | 10,000 | R (µNAS's row, not LEMONADE's) | 2020 | [arXiv:2010.14246](https://ar5iv.labs.arxiv.org/html/2010.14246) T2 | verified as printed; **contradicted by the cited source** |
 | **µNAS** | **86.49%** | 11.4 K | **11,400** | R (params×int8) | 2020 | [arXiv:2010.14246](https://ar5iv.labs.arxiv.org/html/2010.14246) T2 | verified |
 | Logistic regression on raw pixels | 41.13% | 30,730 | 30,730 | D — int8 [1] | 2009 | [Krizhevsky TR](https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf) Fig. 3.1 | verified |
 | **Linear SVM on raw pixels** | **49.88%** | 30,730 | **30,730** | D — int8 [1] | 2016 | [arXiv:1611.04905](https://arxiv.org/abs/1611.04905) T2 | verified |
@@ -247,14 +345,25 @@ CIFAR-10 test set unless flagged.
 
 ## What this says about where we stand
 
-Our 63.41% in 9.5 KB sits just under the µNAS point at 86.49% in 11.4 KB, and µNAS
-is the only 10-class published point anywhere near that size. Below ~10 KB the
-literature is empty of 10-class results entirely: the next-smallest verified 10-class
-number in this table is a 30.7 KB linear SVM at 49.88%, which our 3.4 KB conv-feature
-point at 56.82% already beats on both axes.
+µNAS at 86.49% in 11.4 KB is the strongest 10-class published point near our size,
+and it still beats us there.
 
-That is the headline the plot should make, and it is a real one — but two asymmetries
-run in opposite directions and both belong in any caption. Against us: every
-published byte count here excludes the architecture and runtime that our harness
-charges for. For us: no published 10-class artifact under 10 KB exists to be beaten,
-and the 30.7 KB linear-SVM row is genuinely dominated.
+**Below 10 KB the literature is thin, but it is not empty — an earlier version of
+this section said it was, and that was wrong.** Müksch et al. put five 10-class,
+full-test-set CIFAR-10 points in the 5–9 KB band (arXiv:2005.04968, Table 7). The
+correct claim is dominance, not absence:
+
+| our artifact | their best comparable |
+|---|---|
+| 61.37% in 3.9 KB | 60.4% in 5.39 KB — beaten on **both** axes |
+| 75.65% in 5.2 KB | 60.4% in 5.39 KB — +15.3 points at less size |
+| 50.78% in 1.7 KB | FastGRNN 48.2% in 7.57 KB — beaten on both axes |
+| 43.79% in 931 B | Bonsai 14.9% in 7.88 KB — beaten on both axes |
+
+That is the headline the plot should make, and it is a better one than the empty
+cell was: a measured comparison beats an unfalsifiable absence. Two asymmetries run
+in opposite directions and both belong in any caption. Against us: every published
+byte count here, Müksch's included, excludes the architecture and runtime that our
+harness charges for, and Müksch's figure may already include activations. For us:
+the sub-10 KB published points are dominated on both axes, and the 30.7 KB
+linear-SVM row is dominated outright.
