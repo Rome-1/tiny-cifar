@@ -1,0 +1,6 @@
+
+gc-cnnxlqat-4b-qat
+  10 views in 164s
+  flip           2 views  val  85.30%  (+0.00)   71,006 B  (  +0)  paired +0/-0 p=1
+  flip+cross1   10 views  val  85.78%  (+0.48)   71,010 B  (  +4)  paired +82/-58 p=0.0515
+  TEST: gc-cnnxlqat-4b-qat-tta: 85.86% on 10000 test images  |  71,010 B (xz; raw 78,572 / gz 71,639 / xz 71,010)

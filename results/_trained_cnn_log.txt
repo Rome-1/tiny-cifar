@@ -297,3 +297,18 @@ arch xl [64, 128, 256, 384]  fit on 45,000, val 5,000
   cnnxlqat-4b-qat: quantized val 85.30%
   artifact == torch on 2,000 test images
   cnnxlqat-4b-qat: 85.37% on 10000 test images  |  71,048 B (xz; raw 78,651 / gz 71,684 / xz 71,048)
+=== Sun Aug  2 07:33:01 2026 --arch t --tag kd64 --resume --bits 3 --qat-epochs 8 --threads 2
+arch t [16, 32, 48, 64]  fit on 45,000, val 5,000
+  resumed folded checkpoint _folded-tkd64.npz (198s of training)
+  qat ep 1/8 val(quant) 66.30% * (7s)
+  qat ep 2/8 val(quant) 69.64% * (15s)
+  qat ep 3/8 val(quant) 66.88% (22s)
+  qat ep 4/8 val(quant) 67.14% (30s)
+  qat ep 5/8 val(quant) 68.14% (37s)
+  qat ep 6/8 val(quant) 66.10% (45s)
+  qat ep 7/8 val(quant) 67.76% (52s)
+  qat ep 8/8 val(quant) 70.88% * (60s)
+  qat best val 70.88%
+  cnntkd64-3b-qat: quantized val 70.88%
+  artifact == torch on 2,000 test images
+  cnntkd64-3b-qat: 71.26% on 10000 test images  |  4,151 B (xz; raw 4,714 / gz 4,256 / xz 4,151)

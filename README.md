@@ -17,14 +17,14 @@ nothing smaller matches on accuracy.
 | ◆ | `obt-g8-b9` | 470 B | 28.25% | this repo |
 | ◆ | `g-k8-p4s2-4b` | 931 B | 43.79% | this repo |
 | ◆ | `cf-k16-p4s2-4b-pc` | 1.7 KB | 50.78% | this repo |
-| ◆ | `g-k32-p4s2-8b` | 3.8 KB | 57.33% | this repo |
-| ◆ | `gc-cnntsmall-4b-qat` | 5.1 KB | 73.61% | this repo |
+| ◆ | `g-k32-p4s2-8b-tta` | 3.9 KB | 61.37% | this repo |
+| ◆ | `gc-cnntkd64-4b-qat-tta` | 5.2 KB | 75.65% | this repo |
 | ◆ | µNAS | 11.1 KB | 86.49% | Liberis et al. 2021 |
-|  | `gc-cnnm-4b-qat` | 12.1 KB | 80.74% | this repo |
+|  | `gc-cnnm-4b-qat-tta` | 12.2 KB | 81.68% | this repo |
 |  | `gc-cnnlqat-3b-qat` | 29.9 KB | 82.49% | this repo |
 |  | linear SVM on raw pixels | 30.0 KB | 49.88% | classic baseline |
-|  | `gc-cnnlqat-4b-qat` | 38.9 KB | 84.21% | this repo |
-|  | `gc-cnnxlqat-4b-qat` | 69.3 KB | 85.37% | this repo |
+|  | `gc-cnnlqat-4b-qat-tta` | 38.9 KB | 85.07% | this repo |
+|  | `gc-cnnxlqat-4b-qat-tta` | 69.3 KB | 85.86% | this repo |
 | ◆ | Entropy Penalized Reparam. (VGG-16) | 101.0 KB | 90.00% | Oktay et al. 2020 |
 |  | MIRACLE (VGG-16) | 135.0 KB | 90.00% | Havasi et al. 2019 |
 |  | Coates K-means 1600 + SVM | 242.6 KB | 77.90% | Coates & Ng 2011 |
@@ -103,6 +103,15 @@ Below ~500 B neither family reaches: the conv-ridge floor is ~694 B, where it
 scores 14.6%. That band belongs to an oblivious table — nine thresholded 8×8
 block means indexing a 512-entry label table, 28.25% in 470 B, of which the
 decoder is 209 B.
+
+Test-time augmentation cuts across all three. Inference time is unbudgeted, so
+extra views are free to run — but the code that runs them is not free to ship,
+and that is the whole trade. Nine spatial positions plus a flip is where it
+saturates: worth +2.5 points for 58 B at 3.9 KB, +1.1 for 56 B at 12 KB, and
++0.5 for **four** bytes at 69 KB. It does not pay at 931 B, where the single
+flip already shipped is the entire effect. Distillation, which really is free in
+bytes, was retired — against a hard-label twin over the same augmentation cache
+it wins on validation and loses on test.
 
 Results and reasoning: [findings.md](docs/findings.md),
 [trained-cnn.md](docs/trained-cnn.md), [what-to-try.md](docs/what-to-try.md).

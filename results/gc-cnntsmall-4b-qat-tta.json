@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnntsmall-4b-qat-tta",
+  "method": "gc-cnntsmall-4b-qat with flip+box1 TTA (18 views), weights unchanged",
+  "notes": "selected on val (75.46%); source 1278 B",
+  "split": "test",
+  "accuracy": 0.7467,
+  "n": 10000,
+  "per_class": [
+    0.74,
+    0.855,
+    0.629,
+    0.517,
+    0.791,
+    0.681,
+    0.806,
+    0.75,
+    0.848,
+    0.85
+  ],
+  "size": {
+    "raw": 5834,
+    "gzip": 5381,
+    "xz": 5273,
+    "n_files": 2,
+    "description_length": 5273,
+    "best_codec": "xz"
+  },
+  "description_length": 5273,
+  "inference_seconds": 118.24,
+  "eval_wall_seconds": 129.66,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1278,
+    "w": 4536
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "cnntkd-4b-qat",
+  "method": "distilled depthwise-separable CNN [16, 32, 48, 64] (teacher xl), BN folded, 4-bit codebook, flip TTA, QAT",
+  "notes": "alpha=0.9 T=4.0, 16 cached teacher views; 30 epochs on 45,000 images (val 73.70%); EMA raw",
+  "split": "test",
+  "accuracy": 0.7368,
+  "n": 10000,
+  "per_class": [
+    0.685,
+    0.747,
+    0.6,
+    0.498,
+    0.807,
+    0.731,
+    0.842,
+    0.714,
+    0.865,
+    0.879
+  ],
+  "size": {
+    "raw": 5885,
+    "gzip": 5419,
+    "xz": 5290,
+    "n_files": 2,
+    "description_length": 5290,
+    "best_codec": "xz"
+  },
+  "description_length": 5290,
+  "inference_seconds": 13.52,
+  "eval_wall_seconds": 14.82,
+  "train_seconds": 262.4952588030719,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1329,
+    "w": 4536
+  }
+}

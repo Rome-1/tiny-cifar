@@ -1,0 +1,14 @@
+
+gc-cnnm-4b-qat
+  18 views in 127s
+  flip           2 views  val  80.68%  (+0.00)   12,411 B  (  +0)  paired +0/-0 p=1
+  flip+cross1   10 views  val  81.64%  (+0.96)   12,525 B  (+114)  paired +111/-63 p=0.000339
+  flip+diag1    10 views  val  81.36%  (+0.68)   12,435 B  ( +24)  paired +144/-110 p=0.0382
+  flip+box1     18 views  val  81.74%  (+1.06)   12,467 B  ( +56)  paired +143/-90 p=0.000627
+
+gc-cnnlqat-4b-qat
+  18 views in 202s
+  flip           2 views  val  84.46%  (+0.00)   39,798 B  (  +0)  paired +0/-0 p=1
+  flip+cross1   10 views  val  85.12%  (+0.66)   39,839 B  ( +41)  paired +73/-40 p=0.00246
+  flip+diag1    10 views  val  85.10%  (+0.64)   39,849 B  ( +51)  paired +111/-79 p=0.0243
+  flip+box1     18 views  val  85.04%  (+0.58)   39,853 B  ( +55)  paired +94/-65 p=0.0261

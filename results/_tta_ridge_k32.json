@@ -1,0 +1,50 @@
+[
+  {
+    "name": "flip",
+    "val": 0.5848,
+    "bytes": 3940,
+    "lam": 25.0,
+    "nviews": 2,
+    "train_seconds": 18.8,
+    "win": 0,
+    "lose": 0,
+    "p": 1.0,
+    "delta_bytes": 0
+  },
+  {
+    "name": "flip+cross1",
+    "val": 0.601,
+    "bytes": 3989,
+    "lam": 400.0,
+    "nviews": 10,
+    "train_seconds": 90.1,
+    "win": 307,
+    "lose": 226,
+    "p": 0.0005181437189902988,
+    "delta_bytes": 49
+  },
+  {
+    "name": "flip+diag1",
+    "val": 0.592,
+    "bytes": 3986,
+    "lam": 1600.0,
+    "nviews": 10,
+    "train_seconds": 89.0,
+    "win": 345,
+    "lose": 309,
+    "p": 0.17107418377005132,
+    "delta_bytes": 46
+  },
+  {
+    "name": "flip+box1",
+    "val": 0.61,
+    "bytes": 3998,
+    "lam": 400.0,
+    "nviews": 18,
+    "train_seconds": 159.7,
+    "win": 439,
+    "lose": 313,
+    "p": 4.915258913181392e-06,
+    "delta_bytes": 58
+  }
+]

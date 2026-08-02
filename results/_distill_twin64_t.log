@@ -1,0 +1,26 @@
+teacher xl from _folded-xlqat.npz
+  reused teacher cache _teacher-xl-v64.npz (64, 45000, 10)
+  teacher val 85.50%; cache (64, 45000, 10)
+  7,578 params, alpha=0.0 T=4.0
+  ep   1/30 loss 1.890 val 43.50% ema 9.78% (7s)
+  ep   4/30 loss 1.432 val 48.16% ema 63.26% (25s)
+  ep   7/30 loss 1.346 val 53.08% ema 67.58% (44s)
+  ep  10/30 loss 1.310 val 47.94% ema 70.18% (62s)
+  ep  13/30 loss 1.292 val 57.48% ema 69.86% (80s)
+  ep  16/30 loss 1.258 val 58.22% ema 71.24% (98s)
+  ep  19/30 loss 1.229 val 56.76% ema 71.92% (116s)
+  ep  22/30 loss 1.194 val 65.50% ema 73.62% (134s)
+  ep  25/30 loss 1.162 val 72.22% ema 74.40% (152s)
+  ep  28/30 loss 1.112 val 74.86% ema 75.24% (171s)
+  ep  30/30 loss 1.094 val 75.04% ema 75.18% (183s)
+  float val: raw 75.04% ema 75.18% -> using ema
+  qat ep 1/8 val(quant) 71.84% * (7s)
+  qat ep 2/8 val(quant) 73.24% * (14s)
+  qat ep 3/8 val(quant) 71.20% (21s)
+  qat ep 4/8 val(quant) 69.74% (27s)
+  qat ep 5/8 val(quant) 73.28% * (35s)
+  qat ep 6/8 val(quant) 73.82% * (43s)
+  qat ep 7/8 val(quant) 71.42% (51s)
+  qat ep 8/8 val(quant) 74.54% * (58s)
+  qat best val 74.54%
+  cnnthardtwin64-4b-qat: quantized val 74.54%  (5,289 B)

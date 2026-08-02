@@ -1,0 +1,38 @@
+{
+  "name": "cnnthardtwin64-4b-qat",
+  "method": "hard-label twin of the distilled arch-t student, same 64-view cache",
+  "notes": "control for experiments/distill.py",
+  "split": "test",
+  "accuracy": 0.7531,
+  "n": 10000,
+  "per_class": [
+    0.786,
+    0.862,
+    0.622,
+    0.529,
+    0.764,
+    0.689,
+    0.824,
+    0.802,
+    0.806,
+    0.847
+  ],
+  "size": {
+    "raw": 5885,
+    "gzip": 5412,
+    "xz": 5289,
+    "n_files": 2,
+    "description_length": 5289,
+    "best_codec": "xz"
+  },
+  "description_length": 5289,
+  "inference_seconds": 15.32,
+  "eval_wall_seconds": 17.09,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1329,
+    "w": 4536
+  }
+}

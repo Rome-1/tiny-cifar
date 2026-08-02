@@ -1,0 +1,9 @@
+
+gc-cnnxlqat-4b-qat
+  50 views in 830s
+  none           1 views  val  84.34%  (-0.96)   71,013 B  (  +7)  paired +80/-128 p=0.00107
+  flip           2 views  val  85.30%  (+0.00)   71,006 B  (  +0)  paired +0/-0 p=1
+  flip+cross1   10 views  val  85.78%  (+0.48)   71,010 B  (  +4)  paired +82/-58 p=0.0515
+  flip+diag1    10 views  val  85.76%  (+0.46)   71,080 B  ( +74)  paired +118/-95 p=0.132
+  flip+box1     18 views  val  85.78%  (+0.48)   71,060 B  ( +54)  paired +104/-80 p=0.0897
+  flip+box2     50 views  val  85.58%  (+0.28)   71,102 B  ( +96)  paired +123/-109 p=0.393

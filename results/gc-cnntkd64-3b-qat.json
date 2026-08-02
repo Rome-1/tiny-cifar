@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnntkd64-3b-qat",
+  "method": "golfed decoder for cnntkd64-3b-qat (weights unchanged)",
+  "notes": "produced with an xl-teacher distillation loss, but a matched hard-label twin over the identical cache scores the same (val +0.52 pp, McNemar p=0.355; test ordering reverses) - the gain is the augmentation cache, not the loss. See docs/tta-and-distillation.md.",
+  "split": "test",
+  "accuracy": 0.7126,
+  "n": 10000,
+  "per_class": [
+    0.711,
+    0.829,
+    0.675,
+    0.404,
+    0.693,
+    0.658,
+    0.765,
+    0.725,
+    0.847,
+    0.819
+  ],
+  "size": {
+    "raw": 4617,
+    "gzip": 4218,
+    "xz": 4115,
+    "n_files": 2,
+    "description_length": 4115,
+    "best_codec": "xz"
+  },
+  "description_length": 4115,
+  "inference_seconds": 12.34,
+  "eval_wall_seconds": 13.63,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1232,
+    "w": 3365
+  }
+}

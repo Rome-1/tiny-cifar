@@ -48,7 +48,12 @@ from the same four-byte seed. Structure is worth ~14 points (47.01% → 60.83%).
 **3. Flip TTA costs twelve bytes.** The head is linear, so averaging the two
 feature vectors is identical to averaging the two logit vectors — one extra term
 in the source, no second scoring pass. Worth +2.6 to +3.1 points. Inference time
-is free for us; this is under-exploited and should be pushed further.
+is free for us — but the *source* is not, and the original wording here ("this
+is under-exploited and should be pushed further") treated it as though it were.
+Pushing it further has now been measured band by band in
+[tta-and-distillation.md](tta-and-distillation.md): it saturates at nine spatial
+positions, pays everywhere above 3 KB, and at this k=8 point buys nothing beyond
+the single flip already shipped.
 
 **4. Codebooks beat uniform grids below 5 bits.** Lloyd-max quantization wins by
 up to 17.6 points at 2 bits. Ridge weights are heavy-tailed, and a min/max grid

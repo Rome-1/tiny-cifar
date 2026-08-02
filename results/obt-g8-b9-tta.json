@@ -1,0 +1,38 @@
+{
+  "name": "obt-g8-b9-tta",
+  "method": "oblivious table, shipped table, 10-view TTA (4px, flip)",
+  "notes": "selected on val (30.62%)",
+  "split": "test",
+  "accuracy": 0.308,
+  "n": 10000,
+  "per_class": [
+    0.486,
+    0.391,
+    0.087,
+    0.137,
+    0.253,
+    0.272,
+    0.463,
+    0.22,
+    0.446,
+    0.325
+  ],
+  "size": {
+    "raw": 904,
+    "gzip": 591,
+    "xz": 560,
+    "n_files": 2,
+    "description_length": 560,
+    "best_codec": "xz"
+  },
+  "description_length": 560,
+  "inference_seconds": 2.87,
+  "eval_wall_seconds": 3.28,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 354,
+    "w": 530
+  }
+}

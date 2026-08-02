@@ -1,0 +1,38 @@
+{
+  "name": "cnntkd64-4b-qat",
+  "method": "trained depthwise-separable CNN [16, 32, 48, 64] on a 64-view augmentation cache, BN folded, 4-bit codebook, flip TTA, QAT",
+  "notes": "produced with an xl-teacher distillation loss, but a matched hard-label twin over the identical cache scores the same (val +0.52 pp, McNemar p=0.355; test ordering reverses) - the gain is the augmentation cache, not the loss. See docs/tta-and-distillation.md.",
+  "split": "test",
+  "accuracy": 0.7476,
+  "n": 10000,
+  "per_class": [
+    0.761,
+    0.85,
+    0.689,
+    0.54,
+    0.732,
+    0.706,
+    0.787,
+    0.729,
+    0.848,
+    0.834
+  ],
+  "size": {
+    "raw": 5885,
+    "gzip": 5419,
+    "xz": 5302,
+    "n_files": 2,
+    "description_length": 5302,
+    "best_codec": "xz"
+  },
+  "description_length": 5302,
+  "inference_seconds": 12.32,
+  "eval_wall_seconds": 13.78,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1329,
+    "w": 4536
+  }
+}

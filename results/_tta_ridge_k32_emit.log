@@ -1,0 +1,8 @@
+  flip           2 views  val  55.48%    3,942 B  (17s fit)
+  flip+cross1   10 views  val  56.50%    3,982 B  (84s fit)
+
+k=32 bits=8, against the flip incumbent (3,942 B):
+  flip           +0.00 pp     +0 B  paired +0/-0 p=1
+  flip+cross1    +1.02 pp    +40 B  paired +149/-98 p=0.00142
+
+TEST: g-k32-p4s2-8b-tta: 54.51% on 10000 test images  |  3,981 B (xz; raw 4,246 / gz 4,076 / xz 3,981)

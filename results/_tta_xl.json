@@ -1,0 +1,80 @@
+[
+  {
+    "name": "none",
+    "val": 0.8434,
+    "bytes": 71013,
+    "delta_bytes": 7,
+    "mode": "wrap",
+    "nviews": 1,
+    "win": 80,
+    "lose": 128,
+    "p": 0.0010691834257514278,
+    "artifact": "gc-cnnxlqat-4b-qat",
+    "base_bytes": 71006
+  },
+  {
+    "name": "flip",
+    "val": 0.853,
+    "bytes": 71006,
+    "delta_bytes": 0,
+    "mode": "wrap",
+    "nviews": 2,
+    "win": 0,
+    "lose": 0,
+    "p": 1.0,
+    "artifact": "gc-cnnxlqat-4b-qat",
+    "base_bytes": 71006
+  },
+  {
+    "name": "flip+cross1",
+    "val": 0.8578,
+    "bytes": 71010,
+    "delta_bytes": 4,
+    "mode": "wrap",
+    "nviews": 10,
+    "win": 82,
+    "lose": 58,
+    "p": 0.051523568581622346,
+    "artifact": "gc-cnnxlqat-4b-qat",
+    "base_bytes": 71006
+  },
+  {
+    "name": "flip+diag1",
+    "val": 0.8576,
+    "bytes": 71080,
+    "delta_bytes": 74,
+    "mode": "wrap",
+    "nviews": 10,
+    "win": 118,
+    "lose": 95,
+    "p": 0.13151225170378478,
+    "artifact": "gc-cnnxlqat-4b-qat",
+    "base_bytes": 71006
+  },
+  {
+    "name": "flip+box1",
+    "val": 0.8578,
+    "bytes": 71060,
+    "delta_bytes": 54,
+    "mode": "wrap",
+    "nviews": 18,
+    "win": 104,
+    "lose": 80,
+    "p": 0.0896917523028754,
+    "artifact": "gc-cnnxlqat-4b-qat",
+    "base_bytes": 71006
+  },
+  {
+    "name": "flip+box2",
+    "val": 0.8558,
+    "bytes": 71102,
+    "delta_bytes": 96,
+    "mode": "wrap",
+    "nviews": 50,
+    "win": 123,
+    "lose": 109,
+    "p": 0.3934338045986188,
+    "artifact": "gc-cnnxlqat-4b-qat",
+    "base_bytes": 71006
+  }
+]

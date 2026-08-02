@@ -1,0 +1,10 @@
+  flip           2 views  val  58.48%    3,940 B  (lam 25, 19s)
+  flip+cross1   10 views  val  60.10%    3,989 B  (lam 400, 90s)
+  flip+diag1    10 views  val  59.20%    3,986 B  (lam 1600, 89s)
+  flip+box1     18 views  val  61.00%    3,998 B  (lam 400, 160s)
+
+k=32 bits=8, against the flip incumbent (3,940 B):
+  flip           +0.00 pp     +0 B  paired +0/-0 p=1
+  flip+cross1    +1.62 pp    +49 B  paired +307/-226 p=0.000518
+  flip+diag1     +0.72 pp    +46 B  paired +345/-309 p=0.171
+  flip+box1      +2.52 pp    +58 B  paired +439/-313 p=4.92e-06

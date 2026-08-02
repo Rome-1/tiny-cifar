@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnntkd64-3b-qat-tta",
+  "method": "gc-cnntkd64-3b-qat with flip+box1 TTA (18 views), weights unchanged",
+  "notes": "selected on val (71.40%); source 1347 B",
+  "split": "test",
+  "accuracy": 0.7226,
+  "n": 10000,
+  "per_class": [
+    0.705,
+    0.848,
+    0.665,
+    0.439,
+    0.689,
+    0.673,
+    0.779,
+    0.738,
+    0.854,
+    0.836
+  ],
+  "size": {
+    "raw": 4732,
+    "gzip": 4277,
+    "xz": 4163,
+    "n_files": 2,
+    "description_length": 4163,
+    "best_codec": "xz"
+  },
+  "description_length": 4163,
+  "inference_seconds": 121.8,
+  "eval_wall_seconds": 134.29,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1347,
+    "w": 3365
+  }
+}

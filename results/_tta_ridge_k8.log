@@ -1,0 +1,18 @@
+  none           1 views  val  42.00%      920 B  (lam 400, 7s)
+  flip           2 views  val  45.08%      932 B  (lam 25, 14s)
+  cross1         5 views  val  43.48%      958 B  (lam 1600, 33s)
+  flip+cross1   10 views  val  44.06%      965 B  (lam 25, 70s)
+  flip+diag1    10 views  val  43.96%      972 B  (lam 1600, 79s)
+  flip+box1     18 views  val  45.08%      981 B  (lam 6400, 141s)
+  flip+cross2   18 views  val  44.14%      979 B  (lam 6400, 139s)
+  flip+cross1e  10 views  val  45.24%    1,006 B  (lam 1600, 80s)
+
+k=8 bits=4, against the flip incumbent (932 B):
+  none           -3.08 pp    -12 B  paired +479/-633 p=4.33e-06
+  flip           +0.00 pp     +0 B  paired +0/-0 p=1
+  cross1         -1.60 pp    +26 B  paired +437/-517 p=0.0105
+  flip+cross1    -1.02 pp    +33 B  paired +440/-491 p=0.101
+  flip+diag1     -1.12 pp    +40 B  paired +465/-521 p=0.0798
+  flip+box1      +0.00 pp    +49 B  paired +579/-579 p=1
+  flip+cross2    -0.94 pp    +47 B  paired +444/-491 p=0.132
+  flip+cross1e   +0.16 pp    +74 B  paired +457/-449 p=0.816

@@ -24,10 +24,15 @@ BUCKETS = [
 def load_results() -> list[dict]:
     if not RESULTS.exists():
         return []
-    rows = [json.loads(p.read_text()) for p in sorted(RESULTS.glob("*.json"))]
+    # A leading underscore means "working file, not a scored artifact" — sweep
+    # logs live here too, and they are lists, not results. Skipping them by name
+    # keeps one convention; the isinstance guard keeps a stray file from taking
+    # the whole board down with an AttributeError.
+    rows = [json.loads(p.read_text()) for p in sorted(RESULTS.glob("*.json"))
+            if not p.name.startswith("_")]
     # Only test-split results are ranked; validation runs are for tuning and
     # would otherwise pad the board with numbers selected on the same data.
-    return [r for r in rows if r.get("split") == "test"]
+    return [r for r in rows if isinstance(r, dict) and r.get("split") == "test"]
 
 
 def dedupe(rows: list[dict]) -> list[dict]:

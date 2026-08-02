@@ -1,0 +1,6 @@
+
+gc-cnnm-4b-qat
+  18 views in 126s
+  flip           2 views  val  80.68%  (+0.00)   12,411 B  (  +0)  paired +0/-0 p=1
+  flip+box1     18 views  val  81.74%  (+1.06)   12,467 B  ( +56)  paired +143/-90 p=0.000627
+  TEST: gc-cnnm-4b-qat-tta: 81.68% on 10000 test images  |  12,467 B (xz; raw 18,247 / gz 13,217 / xz 12,467)

@@ -37,8 +37,9 @@ Measured here, not recalled:
    the size. Anything a line of numpy generates costs nothing.
 2. **Convolution beats a dense projection at identical seed cost** — +14 points.
    Structure matters more than the projection being learned.
-3. **Free-at-inference tricks pay.** Flip TTA: +2.6 to +3.1 points for 12 bytes.
-   Inference time is unbudgeted and still under-exploited.
+3. **Free-at-inference tricks pay, but they are not free.** Flip TTA: +2.6 to
+   +3.1 points for 12 bytes. Inference *time* is unbudgeted; the source that
+   spends it is not. Now measured per band — see item 4 below.
 4. **Codebooks beat uniform grids below 5 bits** (up to +17.6). Above 5 bits,
    placement stops mattering.
 5. **Precision beats width at fixed bytes**, over the whole range tested. More
@@ -121,11 +122,24 @@ trained filters do not work. Merge this into item 1.
 codebook's 42.72%, so QAT can recover at most **2.79 pp** there — it is a 10 KB
 lever, not a sub-KB one.
 
-**4. Harder TTA.** We use one flip. Inference is free: multi-crop, small
-rotations, scale jitter. Pure profit until it saturates; measure where.
+**4. ~~Harder TTA.~~ Measured, and it pays — but it was never "pure profit".**
+TTA costs *source* bytes, and source is charged at the weight file's rate, so
+the question is per band. Settled in
+[tta-and-distillation.md](tta-and-distillation.md): saturation is at nine
+spatial positions plus a flip (`flip+box1`), two-pixel shifts and edge-replicated
+padding both measure worse, and the trade pays at every size except the 931 B
+conv-ridge point, where the single flip already shipped is the whole effect.
+Worth +2.5 pp for 58 B at 3.9 KB, +1.1 pp for 56 B at 12 KB, and +0.5 pp for
+**four bytes** at 69 KB. Nothing further to chase.
 
-**5. Distillation into the tiny student.** Train a large model, distill into the
-sub-KB artifact. Costs zero artifact bytes. Standard, reliable, untried here.
+**5. ~~Distillation into the tiny student.~~ Falsifier fired.** Against a
+hard-label twin trained through the identical loop over the identical
+augmentation cache, an `xl`-distilled arch-`t` student wins by +0.52 pp on val
+(exact McNemar p = 0.355) and *loses* by 0.55 pp on test, at matched bytes. Soft
+targets into the closed-form ridge head are worse at every temperature. The one
+place it works is when the student's augmentation is starved — at 16 cached
+crops it is worth +1.52 pp, at 64 it is worth nothing — so what it buys is a
+substitute for augmentation these students already have for free. Retired.
 
 ## Tier 2 — strong bets, more work
 

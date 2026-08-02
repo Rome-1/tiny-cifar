@@ -1,0 +1,38 @@
+{
+  "name": "g-k32-p4s2-8b-tta",
+  "method": "golfed: random 4x4 conv (k=32) + ridge head, 8-bit global codebook, flip+box1 TTA (18 views)",
+  "notes": "TTA schedule and lambda=400 selected on val (61.00%); head refit on the full 50,000-image train set",
+  "split": "test",
+  "accuracy": 0.6137,
+  "n": 10000,
+  "per_class": [
+    0.677,
+    0.798,
+    0.421,
+    0.383,
+    0.538,
+    0.572,
+    0.745,
+    0.694,
+    0.646,
+    0.663
+  ],
+  "size": {
+    "raw": 4274,
+    "gzip": 4091,
+    "xz": 3998,
+    "n_files": 2,
+    "description_length": 3998,
+    "best_codec": "xz"
+  },
+  "description_length": 3998,
+  "inference_seconds": 21.48,
+  "eval_wall_seconds": 23.83,
+  "train_seconds": 164.66312561999075,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 851,
+    "w": 3403
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "gc-cnnxlqat-4b-qat-tta",
+  "method": "gc-cnnxlqat-4b-qat with flip+cross1 TTA (10 views), weights unchanged",
+  "notes": "selected on val (85.78%); source 1255 B",
+  "split": "test",
+  "accuracy": 0.8586,
+  "n": 10000,
+  "per_class": [
+    0.878,
+    0.942,
+    0.794,
+    0.704,
+    0.871,
+    0.784,
+    0.888,
+    0.893,
+    0.916,
+    0.916
+  ],
+  "size": {
+    "raw": 78572,
+    "gzip": 71639,
+    "xz": 71010,
+    "n_files": 2,
+    "description_length": 71010,
+    "best_codec": "xz"
+  },
+  "description_length": 71010,
+  "inference_seconds": 323.8,
+  "eval_wall_seconds": 356.03,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 1255,
+    "w": 77296
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "tag": "hard one-hot",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4508,
+    "bytes": 932,
+    "lam": 25.0
+  },
+  {
+    "tag": "teacher soft T=0.5",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4336,
+    "bytes": 932,
+    "lam": 100.0
+  },
+  {
+    "tag": "half soft T=0.5",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4516,
+    "bytes": 931,
+    "lam": 100.0
+  },
+  {
+    "tag": "teacher soft T=1",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4344,
+    "bytes": 932,
+    "lam": 400.0
+  },
+  {
+    "tag": "half soft T=1",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4474,
+    "bytes": 933,
+    "lam": 25.0
+  },
+  {
+    "tag": "teacher soft T=2",
+    "k": 8,
+    "bits": 4,
+    "val": 0.438,
+    "bytes": 933,
+    "lam": 400.0
+  },
+  {
+    "tag": "half soft T=2",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4622,
+    "bytes": 932,
+    "lam": 25.0
+  },
+  {
+    "tag": "teacher soft T=4",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4248,
+    "bytes": 932,
+    "lam": 100.0
+  },
+  {
+    "tag": "half soft T=4",
+    "k": 8,
+    "bits": 4,
+    "val": 0.4484,
+    "bytes": 931,
+    "lam": 25.0
+  }
+]
