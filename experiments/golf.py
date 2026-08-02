@@ -46,7 +46,6 @@ from experiments.conv_features import (  # noqa: E402
     build_feats, fit_head, geometry, make_feats_src,
 )
 from experiments.quant_sweep import lloyd_max  # noqa: E402
-from tinycifar import artifact as A  # noqa: E402
 from tinycifar import pack as P  # noqa: E402
 from tinycifar.data import load  # noqa: E402
 from tinycifar.evaluate import evaluate, summarize  # noqa: E402
@@ -137,7 +136,6 @@ def main(argv=None) -> int:
                                       a.seed, a.lam, data)
             name = f"g-k{k}-p{a.patch}s{a.stride}-{bits}b"
             d = emit(name, files)
-            size = A.measure(files)
             r = evaluate(
                 d, name=name, split=a.split,
                 method=f"golfed: random {a.patch}x{a.patch} conv (k={k}) + ridge "

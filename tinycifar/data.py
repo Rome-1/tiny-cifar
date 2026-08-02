@@ -126,7 +126,8 @@ def load(cache: bool = True):
 def load_flat(dtype=np.float32, scale: float = 1 / 255.0):
     """Same as `load` but images flattened to [N, 3072] and scaled."""
     xtr, ytr, xte, yte = load()
-    f = lambda a: (a.reshape(len(a), -1).astype(dtype) * scale)
+    def f(a):
+        return a.reshape(len(a), -1).astype(dtype) * scale
     return f(xtr), ytr, f(xte), yte
 
 

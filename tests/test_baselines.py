@@ -111,7 +111,6 @@ def test_generated_artifacts_are_self_contained():
 def test_tiny_model_actually_fits_in_a_kilobyte():
     """The headline claim of the small end of the sweep."""
     D, expr = B.FEATURES["gray4"]
-    W = np.zeros((D + 1, 10))
     files = {
         "predict.py": B.TEMPLATE.format(D=D + 1, EXPR=expr).encode(),
         "w": B.build_weight_blob(np.random.default_rng(0).standard_normal(

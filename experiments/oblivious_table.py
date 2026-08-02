@@ -34,7 +34,6 @@ end, through `tinycifar.evaluate`.
 from __future__ import annotations
 
 import argparse
-import itertools
 import sys
 import time
 from pathlib import Path
@@ -312,7 +311,7 @@ def main(argv=None) -> int:
     rows = []
     for g in a.grids:
         t0 = time.perf_counter()
-        Ffit, Fval = feats(xfit, g), feats(xval, g)
+        Ffit = feats(xfit, g)  # val goes through predict_local, not features
         cand = candidates(Ffit, a.thresholds)
         pairs = build_levels(Ffit, yfit, cand, a.depth)
         print(f"grid {g}: {len(cand)} candidates, depth {a.depth} grown in "

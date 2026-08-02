@@ -41,7 +41,6 @@ own entropy coding well. The minimum rewards neither artifact of the container.
 from __future__ import annotations
 
 import ast
-import gzip
 import lzma
 import zlib
 from dataclasses import dataclass, asdict

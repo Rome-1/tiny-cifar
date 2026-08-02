@@ -36,7 +36,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from experiments.baselines import FEATURES, emit, featurize  # noqa: E402
-from experiments.quant_sweep import build_codebook_blob, lloyd_max  # noqa: E402
+from experiments.quant_sweep import build_codebook_blob  # noqa: E402
 from tinycifar import pack as P  # noqa: E402
 from tinycifar.data import load  # noqa: E402
 from tinycifar.evaluate import evaluate, summarize  # noqa: E402

@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 
 from . import artifact as A
-from .data import CACHE, load
+from .data import load
 
 REPO = Path(__file__).resolve().parent.parent
 RESULTS = REPO / "results"

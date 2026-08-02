@@ -30,7 +30,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from experiments.baselines import (  # noqa: E402
-    FEATURES, TEMPLATE, build_weight_blob, emit, featurize, fit_ridge,
+    FEATURES, TEMPLATE, emit, featurize, fit_ridge,
 )
 from tinycifar import pack as P  # noqa: E402
 from tinycifar.data import load  # noqa: E402
