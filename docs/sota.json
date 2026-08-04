@@ -88,5 +88,25 @@
     "source": "tysam-code 2023",
     "verified": true,
     "note": "The rig's reference model. Optimized for speed, not size."
+  },
+  {
+    "name": "Direct Conv. CNN (Müksch et al.)",
+    "accuracy": 60.4,
+    "bytes": 5390,
+    "params": null,
+    "byte_source": "reported (paper states KB but not precision, and not whether activations are included)",
+    "source": "Müksch et al. 2020",
+    "verified": true,
+    "note": "10-class, full test set, selection on a val split from train. arXiv:2005.04968 Table 7. Under every reading of its byte convention it is under 10 KB."
+  },
+  {
+    "name": "Direct Conv. CNN (Müksch et al.)",
+    "accuracy": 62.9,
+    "bytes": 8650,
+    "params": null,
+    "byte_source": "reported (paper states KB but not precision, and not whether activations are included)",
+    "source": "Müksch et al. 2020",
+    "verified": true,
+    "note": "10-class, full test set. arXiv:2005.04968 Table 7, <=16KB budget column."
   }
 ]

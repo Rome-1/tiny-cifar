@@ -19,6 +19,8 @@ nothing smaller matches on accuracy.
 | ◆ | `cf-k16-p4s2-4b-pc` | 1.7 KB | 50.78% | this repo |
 | ◆ | `g-k32-p4s2-8b-tta` | 3.9 KB | 61.37% | this repo |
 | ◆ | `gc-cnntkd64-4b-qat-tta` | 5.2 KB | 75.65% | this repo |
+|  | Direct Conv. CNN (Müksch et al.) | 5.3 KB | 60.40% | Müksch et al. 2020 |
+|  | Direct Conv. CNN (Müksch et al.) | 8.4 KB | 62.90% | Müksch et al. 2020 |
 | ◆ | µNAS | 11.1 KB | 86.49% | Liberis et al. 2021 |
 |  | `gc-cnnm-4b-qat-tta` | 12.2 KB | 81.68% | this repo |
 |  | `gc-cnnlqat-3b-qat` | 29.9 KB | 82.49% | this repo |
@@ -50,10 +52,12 @@ they look like.* Every published sub-KB CIFAR-10 number we could find is a
 2-class relabeling where chance is 50%, confirmed from the primary sources. The
 5–9 KB band, though, does have published 10-class points: Müksch et al. 2020
 ([arXiv:2005.04968](https://arxiv.org/abs/2005.04968), Table 7) report 60.4% in
-5.39 KB and 48.2% in 7.57 KB on the full test set, selecting on a validation
+5.39 KB and 62.9% in 8.65 KB on the full test set, selecting on a validation
 split carved from train. Our 5.2 KB point beats the first by 15 points at
 slightly fewer bytes. Our 3.9 KB point is smaller but only 1.0 point better,
 which is inside the noise floor below — smaller, not more accurate.
+(Their figures are the paper's own decimal KB; the table above renders every row
+in KiB, which is why those rows read 5.3 and 8.4.)
 
 An earlier version of this README claimed the sub-10 KB 10-class cell was empty
 and that our points there had no published rival. That was false, and it stood
