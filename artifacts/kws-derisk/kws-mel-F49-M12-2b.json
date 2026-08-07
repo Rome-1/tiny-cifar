@@ -1,0 +1,39 @@
+{
+  "name": "kws-mel-F49-M12-2b",
+  "method": "mel front end, ridge head, 2-bit codebook",
+  "notes": "lambda=10000 chosen on val; val 21.24%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.20572597137014315,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 2220,
+    "gzip": 1875,
+    "xz": 1681,
+    "n_files": 2,
+    "description_length": 1681,
+    "best_codec": "xz"
+  },
+  "description_length": 1681,
+  "inference_seconds": 2.53,
+  "eval_wall_seconds": 3.31,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 404,
+    "w": 1796
+  },
+  "kind": "mel",
+  "frames": 49,
+  "bands": 12,
+  "bits": 2,
+  "dim": 588,
+  "lam": 10000.0,
+  "val_accuracy": 0.2123734533183352,
+  "split_bias": true,
+  "head_bytes": 1767.0,
+  "src_bytes": 404,
+  "coef_bytes": 1796
+}

@@ -1,0 +1,39 @@
+{
+  "name": "kws-mel-F32-M16-3b",
+  "method": "mel front end, ridge head, 3-bit codebook",
+  "notes": "lambda=10000 chosen on val; val 38.58%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.36768916155419223,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 2837,
+    "gzip": 2652,
+    "xz": 2455,
+    "n_files": 2,
+    "description_length": 2455,
+    "best_codec": "xz"
+  },
+  "description_length": 2455,
+  "inference_seconds": 0.97,
+  "eval_wall_seconds": 1.43,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 473,
+    "w": 2344
+  },
+  "kind": "mel",
+  "frames": 32,
+  "bands": 16,
+  "bits": 3,
+  "dim": 512,
+  "lam": 10000.0,
+  "val_accuracy": 0.3858267716535433,
+  "split_bias": true,
+  "head_bytes": 2308.5,
+  "src_bytes": 473,
+  "coef_bytes": 2344
+}

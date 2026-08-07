@@ -1,0 +1,39 @@
+{
+  "name": "kws-oct-F49-M12-2b",
+  "method": "oct front end, ridge head, 2-bit codebook",
+  "notes": "lambda=100 chosen on val; val 35.68%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.3456032719836401,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 2209,
+    "gzip": 1974,
+    "xz": 1984,
+    "n_files": 2,
+    "description_length": 1974,
+    "best_codec": "gzip"
+  },
+  "description_length": 1974,
+  "inference_seconds": 2.74,
+  "eval_wall_seconds": 3.69,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 393,
+    "w": 1796
+  },
+  "kind": "oct",
+  "frames": 49,
+  "bands": 12,
+  "bits": 2,
+  "dim": 588,
+  "lam": 100.0,
+  "val_accuracy": 0.35680539932508437,
+  "split_bias": true,
+  "head_bytes": 1767.0,
+  "src_bytes": 393,
+  "coef_bytes": 1796
+}

@@ -1,0 +1,39 @@
+{
+  "name": "kwsc-F16-M16-p7-k4-4b",
+  "method": "mel -> 4 random 3x3 conv filters from a seed, 7x7 pool, 4-bit head",
+  "notes": "lambda=100 on val; val 51.50%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.49550102249488753,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 2020,
+    "gzip": 1717,
+    "xz": 1663,
+    "n_files": 2,
+    "description_length": 1663,
+    "best_codec": "xz"
+  },
+  "description_length": 1663,
+  "inference_seconds": 1.34,
+  "eval_wall_seconds": 1.81,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 768,
+    "w": 1232
+  },
+  "kind": "conv",
+  "frames": 16,
+  "bands": 16,
+  "nf": 4,
+  "pool": 7,
+  "bits": 4,
+  "dim": 196,
+  "lam": 100.0,
+  "val_accuracy": 0.5149606299212598,
+  "src_bytes": 768,
+  "coef_bytes": 1232
+}

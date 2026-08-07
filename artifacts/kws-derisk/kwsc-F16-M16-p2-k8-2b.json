@@ -1,0 +1,39 @@
+{
+  "name": "kwsc-F16-M16-p2-k8-2b",
+  "method": "mel -> 8 random 3x3 conv filters from a seed, 2x2 pool, 2-bit head",
+  "notes": "lambda=10000 on val; val 14.71%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.1439672801635992,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 915,
+    "gzip": 627,
+    "xz": 634,
+    "n_files": 2,
+    "description_length": 627,
+    "best_codec": "gzip"
+  },
+  "description_length": 627,
+  "inference_seconds": 1.31,
+  "eval_wall_seconds": 1.83,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 767,
+    "w": 128
+  },
+  "kind": "conv",
+  "frames": 16,
+  "bands": 16,
+  "nf": 8,
+  "pool": 2,
+  "bits": 2,
+  "dim": 32,
+  "lam": 10000.0,
+  "val_accuracy": 0.1471316085489314,
+  "src_bytes": 767,
+  "coef_bytes": 128
+}

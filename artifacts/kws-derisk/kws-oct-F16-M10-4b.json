@@ -1,0 +1,39 @@
+{
+  "name": "kws-oct-F16-M10-4b",
+  "method": "oct front end, ridge head, 4-bit codebook",
+  "notes": "lambda=10 chosen on val; val 33.59%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.3212678936605317,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 1417,
+    "gzip": 1337,
+    "xz": 1308,
+    "n_files": 2,
+    "description_length": 1308,
+    "best_codec": "xz"
+  },
+  "description_length": 1308,
+  "inference_seconds": 1.0,
+  "eval_wall_seconds": 1.51,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 381,
+    "w": 1016
+  },
+  "kind": "oct",
+  "frames": 16,
+  "bands": 10,
+  "bits": 4,
+  "dim": 160,
+  "lam": 10.0,
+  "val_accuracy": 0.3358830146231721,
+  "split_bias": true,
+  "head_bytes": 966.0,
+  "src_bytes": 381,
+  "coef_bytes": 1016
+}

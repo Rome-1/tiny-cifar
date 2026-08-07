@@ -1,0 +1,39 @@
+{
+  "name": "kws-oct-F32-M10-2b",
+  "method": "oct front end, ridge head, 2-bit codebook",
+  "notes": "lambda=10000 chosen on val; val 21.37%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.19918200408997955,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 1394,
+    "gzip": 1015,
+    "xz": 923,
+    "n_files": 2,
+    "description_length": 923,
+    "best_codec": "xz"
+  },
+  "description_length": 923,
+  "inference_seconds": 0.98,
+  "eval_wall_seconds": 1.42,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 382,
+    "w": 992
+  },
+  "kind": "oct",
+  "frames": 32,
+  "bands": 10,
+  "bits": 2,
+  "dim": 320,
+  "lam": 10000.0,
+  "val_accuracy": 0.21372328458942633,
+  "split_bias": true,
+  "head_bytes": 963.0,
+  "src_bytes": 382,
+  "coef_bytes": 992
+}

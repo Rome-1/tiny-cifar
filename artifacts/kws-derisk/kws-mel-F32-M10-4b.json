@@ -1,0 +1,39 @@
+{
+  "name": "kws-mel-F32-M10-4b",
+  "method": "mel front end, ridge head, 4-bit codebook",
+  "notes": "lambda=1000 chosen on val; val 42.11%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.4198364008179959,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 2388,
+    "gzip": 2315,
+    "xz": 2270,
+    "n_files": 2,
+    "description_length": 2270,
+    "best_codec": "xz"
+  },
+  "description_length": 2270,
+  "inference_seconds": 1.01,
+  "eval_wall_seconds": 1.47,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 392,
+    "w": 1976
+  },
+  "kind": "mel",
+  "frames": 32,
+  "bands": 10,
+  "bits": 4,
+  "dim": 320,
+  "lam": 1000.0,
+  "val_accuracy": 0.42114735658042746,
+  "split_bias": true,
+  "head_bytes": 1926.0,
+  "src_bytes": 392,
+  "coef_bytes": 1976
+}

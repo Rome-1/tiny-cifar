@@ -1,0 +1,39 @@
+{
+  "name": "kws-mel-F49-M8-4b",
+  "method": "mel front end, ridge head, 4-bit codebook",
+  "notes": "lambda=1000 chosen on val; val 38.61%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.3773006134969325,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 2829,
+    "gzip": 2692,
+    "xz": 2662,
+    "n_files": 2,
+    "description_length": 2662,
+    "best_codec": "xz"
+  },
+  "description_length": 2662,
+  "inference_seconds": 2.59,
+  "eval_wall_seconds": 3.42,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 401,
+    "w": 2408
+  },
+  "kind": "mel",
+  "frames": 49,
+  "bands": 8,
+  "bits": 4,
+  "dim": 392,
+  "lam": 1000.0,
+  "val_accuracy": 0.3860517435320585,
+  "split_bias": true,
+  "head_bytes": 2358.0,
+  "src_bytes": 401,
+  "coef_bytes": 2408
+}

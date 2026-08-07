@@ -1,0 +1,39 @@
+{
+  "name": "kws-oct-F49-M20-3b",
+  "method": "oct front end, ridge head, 3-bit codebook",
+  "notes": "lambda=1000 chosen on val; val 41.21%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.3987730061349693,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 4942,
+    "gzip": 4620,
+    "xz": 4594,
+    "n_files": 2,
+    "description_length": 4594,
+    "best_codec": "xz"
+  },
+  "description_length": 4594,
+  "inference_seconds": 2.9,
+  "eval_wall_seconds": 3.9,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 472,
+    "w": 4450
+  },
+  "kind": "oct",
+  "frames": 49,
+  "bands": 20,
+  "bits": 3,
+  "dim": 980,
+  "lam": 1000.0,
+  "val_accuracy": 0.41214848143982,
+  "split_bias": true,
+  "head_bytes": 4414.5,
+  "src_bytes": 472,
+  "coef_bytes": 4450
+}

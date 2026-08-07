@@ -1,0 +1,39 @@
+{
+  "name": "kws-oct-F16-M12-1b",
+  "method": "oct front end, ridge head, 1-bit codebook",
+  "notes": "lambda=1000 chosen on val; val 13.79%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.13537832310838446,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 727,
+    "gzip": 621,
+    "xz": 588,
+    "n_files": 2,
+    "description_length": 588,
+    "best_codec": "xz"
+  },
+  "description_length": 588,
+  "inference_seconds": 0.99,
+  "eval_wall_seconds": 1.45,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 391,
+    "w": 316
+  },
+  "kind": "oct",
+  "frames": 16,
+  "bands": 12,
+  "bits": 1,
+  "dim": 192,
+  "lam": 1000.0,
+  "val_accuracy": 0.13790776152980877,
+  "split_bias": true,
+  "head_bytes": 289.5,
+  "src_bytes": 391,
+  "coef_bytes": 316
+}

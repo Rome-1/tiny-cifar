@@ -1,0 +1,39 @@
+{
+  "name": "kws-oct-F32-M8-4b",
+  "method": "oct front end, ridge head, 4-bit codebook",
+  "notes": "lambda=1000 chosen on val; val 34.58%",
+  "split": "test",
+  "n_classes": 12,
+  "accuracy": 0.332719836400818,
+  "chance": 0.08333333333333333,
+  "n": 4890,
+  "size": {
+    "raw": 1992,
+    "gzip": 1884,
+    "xz": 1854,
+    "n_files": 2,
+    "description_length": 1854,
+    "best_codec": "xz"
+  },
+  "description_length": 1854,
+  "inference_seconds": 0.98,
+  "eval_wall_seconds": 1.41,
+  "train_seconds": null,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 380,
+    "w": 1592
+  },
+  "kind": "oct",
+  "frames": 32,
+  "bands": 8,
+  "bits": 4,
+  "dim": 256,
+  "lam": 1000.0,
+  "val_accuracy": 0.34578177727784026,
+  "split_bias": true,
+  "head_bytes": 1542.0,
+  "src_bytes": 380,
+  "coef_bytes": 1592
+}
