@@ -1,0 +1,38 @@
+{
+  "name": "lt-fftabs16k2-5b",
+  "method": "ridge head on the fftabs16k2 stem, 5-bit global codebook",
+  "notes": "stem generated in source, nothing stored; dim 48, lambda=1e+09; selected on val",
+  "split": "test",
+  "accuracy": 0.3762,
+  "n": 10000,
+  "per_class": [
+    0.468,
+    0.457,
+    0.168,
+    0.157,
+    0.277,
+    0.346,
+    0.303,
+    0.569,
+    0.517,
+    0.5
+  ],
+  "size": {
+    "raw": 808,
+    "gzip": 731,
+    "xz": 698,
+    "n_files": 2,
+    "description_length": 698,
+    "best_codec": "xz"
+  },
+  "description_length": 698,
+  "inference_seconds": 0.76,
+  "eval_wall_seconds": 0.96,
+  "train_seconds": 3.378829702967778,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 416,
+    "w": 372
+  }
+}

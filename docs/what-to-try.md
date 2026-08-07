@@ -159,10 +159,32 @@ Bonsai's defining trick, sparse learned projections at each node, measured
 **680 B / 30.15%** on val. That does not threaten the flagship, but it enters a
 band the conv-ridge family cannot reach at all — see below.
 
-**8. Learned free-ish stems.** The frozen 2×2 patch-whitening stem (~144 bytes)
-is the best accuracy-per-byte component found anywhere in the survey. Also
-untested: a **zero-byte analytic DCT stem** in place of a learned basis — no
-published CIFAR-10 result exists for it.
+**8. ~~Analytic DCT stem.~~ Measured, and the prediction was right for the wrong
+reason.** A generated stem does beat the 8×8 RGB block-mean input at matched
+bytes, by +4.1 to +7.0 pp on val from 500 B up — but **not because of the change
+of basis**. A truncated DCT is an exact orthogonal re-encoding of the block
+means, and a linear head inverts a rotation, so it cannot help and does not:
+39.28% against `rgb8`'s 39.63% on test, at *more* bytes. The entire effect is the
+`abs(...)` wrapped around it — three source bytes, two artifact bytes. And the
+modulus of a complex Fourier bin beats `|real cosine coefficient|` by a further
+2.40 pp at 34 *fewer* bytes, because it keeps the sine part instead of throwing
+it away. A rectifier with no transform loses 11.44 pp, so it is not "any
+nonlinearity" either.
+
+The working object is a generated block transform **followed by a magnitude** —
+cheapest as `abs(np.fft.rfft2(blocks, axes=(2,4)))`. Not a DCT.
+
+Lever C priced on CIFAR: generated stems cost +60 to +98 B and store nothing,
+against +285 B for the same thing with item 8's 144-byte patch-whitening basis
+shipped as int8 — so **lever C is worth 193 B here**, against 1,020 B on Speech
+Commands ([kws-derisk.md](kws-derisk.md)), scaling with how much structure the
+transform has. `np.fft` is the cheapest route at +60 B, and the trig-free Walsh
+option is *more* expensive at +94 B — the same ordering the audio work found, and
+the opposite of the intuition that avoiding trig saves bytes.
+
+Five new frontier points, four of them MDL-positive, and the 500–700 B band that
+this document called "the one genuinely open band" now has three occupants. See
+[dct-stem.md](dct-stem.md).
 
 **9. rANS / context coding on weight indices.** Our codebook artifacts barely
 compress (gzip ≈ raw) because k-means indices are near-uniform in entropy. A
@@ -231,6 +253,15 @@ band at all. A plain decision tree or an oblivious table can: ~512 B at 28.3%,
 That is a real new Pareto point, and it is strictly below the flagship rather
 than a threat to it. Build one of the two — a table over b thresholded bits *is*
 an oblivious tree, and the two land within 0.5 pp of each other — not both.
+
+**Both halves of that have now been done, and the band is no longer open.** The
+oblivious table shipped at 470 B / 28.25%. Then the magnitude stem of item 8
+took the band outright: 531 B / 32.72%, 571 B / 35.22%, 698 B / 37.62% — nine
+points above the table at 698 B, and it reaches *below* it too, 418 B / 27.29%.
+The conv-ridge floor argument still holds; it was simply the wrong family to be
+waiting on. Worth noting the prediction quoted above came from numbers with no
+reproducible provenance in this repo, and measured fresh they were roughly right
+at the low end and about 1.3 pp optimistic at the high end.
 
 ## The honest summary
 

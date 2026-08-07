@@ -1,0 +1,38 @@
+{
+  "name": "lt-dct8k2-6b",
+  "method": "ridge head on the dct8k2 stem, 6-bit global codebook",
+  "notes": "stem generated in source, nothing stored; dim 192, lambda=1e+06; selected on val",
+  "split": "test",
+  "accuracy": 0.3928,
+  "n": 10000,
+  "per_class": [
+    0.436,
+    0.491,
+    0.268,
+    0.148,
+    0.179,
+    0.249,
+    0.56,
+    0.596,
+    0.552,
+    0.449
+  ],
+  "size": {
+    "raw": 2063,
+    "gzip": 2016,
+    "xz": 1952,
+    "n_files": 2,
+    "description_length": 1952,
+    "best_codec": "xz"
+  },
+  "description_length": 1952,
+  "inference_seconds": 0.19,
+  "eval_wall_seconds": 0.33,
+  "train_seconds": 0.7447576849954203,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 466,
+    "w": 1577
+  }
+}

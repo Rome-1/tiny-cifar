@@ -1,0 +1,38 @@
+{
+  "name": "lt-rgb8-6b",
+  "method": "ridge head on the rgb8 stem, 6-bit global codebook",
+  "notes": "stem generated in source, nothing stored; dim 192, lambda=100000; selected on val",
+  "split": "test",
+  "accuracy": 0.3963,
+  "n": 10000,
+  "per_class": [
+    0.346,
+    0.428,
+    0.196,
+    0.115,
+    0.376,
+    0.353,
+    0.548,
+    0.467,
+    0.611,
+    0.523
+  ],
+  "size": {
+    "raw": 1984,
+    "gzip": 1962,
+    "xz": 1904,
+    "n_files": 2,
+    "description_length": 1904,
+    "best_codec": "xz"
+  },
+  "description_length": 1904,
+  "inference_seconds": 0.26,
+  "eval_wall_seconds": 0.41,
+  "train_seconds": 1.222576230065897,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 387,
+    "w": 1577
+  }
+}

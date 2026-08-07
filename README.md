@@ -121,10 +121,19 @@ bytes — 84.21% in 38.9 KB against 83.26% in 51.9 KB — which points the same 
 as the random-filter result, though at 0.95 points the accuracy gap is below the
 noise floor above and only the 13 KB byte difference is resolved.
 
-Below ~500 B neither family reaches: the conv-ridge floor is ~694 B, where it
-scores 14.6%. That band belongs to an oblivious table — nine thresholded 8×8
-block means indexing a 512-entry label table, 28.25% in 470 B, of which the
-decoder is 209 B.
+Below ~800 B neither family reaches: the conv-ridge floor is ~694 B, where it
+scores 14.6%. That band belongs to a stem the artifact *generates* rather than
+ships — `abs(np.fft.rfft2(...))` over 8×8 blocks, feeding a ridge head — which
+takes 27.29% in 418 B up to 37.62% in 698 B. An oblivious table over nine
+thresholded block means holds 28.25% in 470 B.
+
+The stem is the clearest illustration of why source and weights are charged at
+the same rate. `np.fft` is inside the declared runtime, so a Fourier basis costs
+only the bytes that *call* it — 60 B — while shipping the same basis as int8
+coefficients costs 285 B. And the basis change is not what helps: a truncated
+DCT is an orthogonal re-encoding of block means and a linear head inverts a
+rotation, so it measures flat. The gain is the magnitude taken afterwards, which
+is three source bytes.
 
 Test-time augmentation cuts across all three. Inference time is unbudgeted, so
 extra views are free to run — but the code that runs them is not free to ship,

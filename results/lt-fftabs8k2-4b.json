@@ -1,0 +1,38 @@
+{
+  "name": "lt-fftabs8k2-4b",
+  "method": "ridge head on the fftabs8k2 stem, 4-bit global codebook",
+  "notes": "stem generated in source, nothing stored; dim 192, lambda=1e+10; selected on val",
+  "split": "test",
+  "accuracy": 0.4557,
+  "n": 10000,
+  "per_class": [
+    0.548,
+    0.516,
+    0.268,
+    0.282,
+    0.493,
+    0.434,
+    0.34,
+    0.549,
+    0.672,
+    0.455
+  ],
+  "size": {
+    "raw": 1352,
+    "gzip": 1287,
+    "xz": 1266,
+    "n_files": 2,
+    "description_length": 1266,
+    "best_codec": "xz"
+  },
+  "description_length": 1266,
+  "inference_seconds": 1.13,
+  "eval_wall_seconds": 1.36,
+  "train_seconds": 5.203093669028021,
+  "self_contained": true,
+  "violations": [],
+  "files": {
+    "predict.py": 334,
+    "w": 998
+  }
+}
